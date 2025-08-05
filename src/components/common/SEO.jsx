@@ -14,7 +14,7 @@ const SEO = ({
   const siteDescription = description || 'Professional cleaning services across NSW including NDIS support, end-of-lease cleaning, deep cleaning and general home cleaning. Reliable, insured and bond-back guaranteed.';
   const siteKeywords = keywords || 'cleaning services NSW, NDIS cleaning, end of lease cleaning, deep cleaning, home cleaning, bond cleaning, professional cleaners Sydney';
   const siteImage = image || '/logo.png';
-  const siteUrl = url || window.location.href;
+  const siteUrl = url || `https://${COMPANY_INFO.domain}`;
 
   return (
     <Helmet>
@@ -65,4 +65,3 @@ const SEO = ({
 };
 
 export default SEO;
-

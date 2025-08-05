@@ -11,7 +11,7 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -32,19 +32,19 @@ const Header = () => {
   };
 
   const servicesDropdown = [
-    { name: 'General Home Cleaning', path: '/services#general' },
-    { name: 'Deep Cleaning', path: '/services#deep' },
-    { name: 'End-of-Lease Cleaning', path: '/services#end-of-lease' },
-    { name: 'NDIS Cleaning Support', path: '/services#ndis' },
-    { name: 'Pet Hair Removal', path: '/services#pet-treatment' },
-    { name: 'Window & Carpet Cleaning', path: '/services#window-carpet' }
+    { name: 'General Home Cleaning', path: '/services#general', icon: '🏠' },
+    { name: 'Deep Cleaning', path: '/services#deep', icon: '✨' },
+    { name: 'End-of-Lease Cleaning', path: '/services#end-of-lease', icon: '🔑' },
+    { name: 'NDIS Cleaning Support', path: '/services#ndis', icon: '🛡️' },
+    { name: 'Pet Hair Removal', path: '/services#pet-treatment', icon: '🐕' },
+    { name: 'Window & Carpet Cleaning', path: '/services#window-carpet', icon: '🪟' }
   ];
 
   const resourcesDropdown = [
-    { name: 'FAQ', path: '/faq' },
-    { name: 'Gallery', path: '/gallery' },
-    { name: 'NDIS Information', path: '/ndis' },
-    { name: 'Cleaning Tips', path: '/blog' }
+    { name: 'FAQ', path: '/faq', icon: '❓' },
+    { name: 'Gallery', path: '/gallery', icon: '📸' },
+    { name: 'NDIS Information', path: '/ndis', icon: '📋' },
+    { name: 'Cleaning Tips', path: '/blog', icon: '💡' }
   ];
 
   const isActivePath = (path) => {
@@ -53,215 +53,208 @@ const Header = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-black/95 backdrop-blur-md shadow-lg' 
-        : 'bg-black/90 backdrop-blur-sm'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          
-          {/* Left Section - Logo/Brand */}
-          <div className="flex-shrink-0">
-            <Link 
-              to="/" 
-              className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
-            >
-              <div className="w-10 h-10 bg-[#00FF66] rounded-lg flex items-center justify-center">
-                <span className="text-black font-bold text-xl">N</span>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-white font-bold text-lg leading-tight">
-                  {COMPANY_INFO.name}
-                </h1>
-                <p className="text-gray-400 text-xs">Professional Cleaning Services</p>
-              </div>
-            </Link>
-          </div>
+    <header className="fixed top-2 left-4 right-4 z-[100] transition-all duration-700 ease-out">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 left-1/4 w-32 h-32 bg-[#00FF66]/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-0 right-1/4 w-24 h-24 bg-[#00cc52]/15 rounded-full blur-2xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-40 h-20 bg-[#00FF66]/10 rounded-full blur-3xl"></div>
+      </div>
 
-          {/* Center Section - Multi-Level Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <Link
-              to="/"
-              className={`text-sm font-medium transition-colors hover:text-[#00FF66] ${
-                isActivePath('/') ? 'text-[#00FF66]' : 'text-white'
-              }`}
-            >
-              Home
-            </Link>
+      <div className={`relative transition-all duration-700 ease-out ${
+        isScrolled 
+          ? 'bg-white/85 backdrop-blur-2xl shadow-2xl border border-white/20' 
+          : 'bg-white/90 backdrop-blur-xl shadow-xl border border-white/30'
+      } rounded-3xl overflow-visible`}>
+        
+        <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/5 via-transparent to-[#00cc52]/5 rounded-3xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+          <div className="flex items-center justify-between h-20 lg:h-24">
+            
+            <div className="flex-shrink-0">
+              <Link 
+                to="/" 
+                className="flex items-center space-x-5 hover:opacity-90 transition-all duration-500 group"
+              >
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl flex items-center justify-center shadow-2xl group-hover:shadow-[0_0_30px_rgba(0,255,102,0.4)] transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                    <span className="text-black font-black text-2xl">N</span>
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#00FF66] rounded-full animate-pulse shadow-lg"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/20 to-[#00cc52]/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                </div>
+                <div className="hidden sm:block">
+                  <h1 className="text-black font-black text-2xl leading-tight tracking-tight group-hover:text-[#00FF66] transition-colors duration-300">
+                    NSWCC
+                  </h1>
+                  <p className="text-gray-600 text-sm font-semibold">Professional • Reliable • Insured</p>
+                </div>
+              </Link>
+            </div>
 
-            <Link
-              to="/about"
-              className={`text-sm font-medium transition-colors hover:text-[#00FF66] ${
-                isActivePath('/about') ? 'text-[#00FF66]' : 'text-white'
-              }`}
-            >
-              About
-            </Link>
-
-            {/* Services Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDropdown('services')}
-                className={`flex items-center text-sm font-medium transition-colors hover:text-[#00FF66] ${
-                  isActivePath('/services') ? 'text-[#00FF66]' : 'text-white'
+            <nav className="hidden lg:flex items-center space-x-2 bg-white/40 backdrop-blur-lg rounded-2xl px-4 py-2 border border-white/30 shadow-lg overflow-visible">
+              <Link
+                to="/"
+                className={`px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                  isActivePath('/') 
+                    ? 'text-white bg-gradient-to-r from-[#00FF66] to-[#00cc52] shadow-lg shadow-[#00FF66]/30' 
+                    : 'text-gray-700 hover:text-black hover:bg-white/60'
                 }`}
               >
-                Services
-                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              
-              {activeDropdown === 'services' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
-                  {servicesDropdown.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#00FF66]/10 hover:text-[#00FF66] transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+                Home
+              </Link>
 
-            <Link
-              to="/quote"
-              className={`text-sm font-medium transition-colors hover:text-[#00FF66] ${
-                isActivePath('/quote') ? 'text-[#00FF66]' : 'text-white'
-              }`}
-            >
-              Get Quote
-            </Link>
-
-            {/* Resources Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDropdown('resources')}
-                className="flex items-center text-sm font-medium text-white transition-colors hover:text-[#00FF66]"
+              <Link
+                to="/about"
+                className={`px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                  isActivePath('/about') 
+                    ? 'text-white bg-gradient-to-r from-[#00FF66] to-[#00cc52] shadow-lg shadow-[#00FF66]/30' 
+                    : 'text-gray-700 hover:text-black hover:bg-white/60'
+                }`}
               >
-                Resources
-                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              
-              {activeDropdown === 'resources' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
-                  {resourcesDropdown.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#00FF66]/10 hover:text-[#00FF66] transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+                About
+              </Link>
 
-            <Link
-              to="/contact"
-              className={`text-sm font-medium transition-colors hover:text-[#00FF66] ${
-                isActivePath('/contact') ? 'text-[#00FF66]' : 'text-white'
-              }`}
-            >
-              Contact
-            </Link>
-          </nav>
-
-          {/* Right Section - User/Action Tools */}
-          <div className="flex items-center space-x-4">
-            <div className="hidden lg:flex items-center space-x-3">
-              <a
-                href={`tel:${COMPANY_INFO.phone}`}
-                className="text-sm text-gray-300 hover:text-white transition-colors"
-              >
-                📞 {COMPANY_INFO.phone}
-              </a>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => window.open(`tel:${COMPANY_INFO.phone}`, '_self')}
-              >
-                Call Now
-              </Button>
-              
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => window.location.href = '/quote'}
-              >
-                Get Quote
-              </Button>
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={toggleMenu}
-              className="lg:hidden p-2 rounded-md text-white hover:text-[#00FF66] hover:bg-white/10 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden bg-black/95 backdrop-blur-md border-t border-gray-800">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {NAVIGATION_LINKS.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    isActivePath(link.path)
-                      ? 'text-[#00FF66] bg-[#00FF66]/10'
-                      : 'text-white hover:text-[#00FF66] hover:bg-white/10'
+              <div className="relative">
+                <button
+                  onClick={() => toggleDropdown('services')}
+                  onMouseEnter={() => setActiveDropdown('services')}
+                  className={`flex items-center px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                    isActivePath('/services') 
+                      ? 'text-white bg-gradient-to-r from-[#00FF66] to-[#00cc52] shadow-lg shadow-[#00FF66]/30' 
+                      : 'text-gray-700 hover:text-black hover:bg-white/60'
                   }`}
                 >
-                  {link.name}
-                </Link>
-              ))}
-              
-              <div className="pt-4 border-t border-gray-800 mt-4">
-                <div className="flex flex-col space-y-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    fullWidth
-                    onClick={() => window.open(`tel:${COMPANY_INFO.phone}`, '_self')}
+                  Services
+                  <svg className={`ml-2 w-4 h-4 transition-transform duration-400 ${activeDropdown === 'services' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {activeDropdown === 'services' && (
+                  <div 
+                    className="absolute top-full left-0 mt-3 w-80 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/40 py-4 z-[9999] animate-in slide-in-from-top-3 duration-500"
+                    onMouseLeave={() => setActiveDropdown(null)}
                   >
-                    📞 Call Now
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    fullWidth
+                    <div className="grid grid-cols-1 gap-1 px-3">
+                      {servicesDropdown.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className="flex items-center px-5 py-4 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-[#00FF66]/10 hover:to-[#00cc52]/10 hover:text-[#00FF66] rounded-2xl transition-all duration-400 group hover:scale-105"
+                        >
+                          <span className="text-xl mr-4 group-hover:scale-125 transition-transform duration-400">{item.icon}</span>
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => toggleDropdown('resources')}
+                  onMouseEnter={() => setActiveDropdown('resources')}
+                  className="flex items-center px-5 py-3 rounded-xl text-sm font-bold text-gray-700 hover:text-black transition-all duration-400 hover:bg-white/60 hover:scale-105"
+                >
+                  Resources
+                  <svg className={`ml-2 w-4 h-4 transition-transform duration-400 ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {activeDropdown === 'resources' && (
+                  <div 
+                    className="absolute top-full left-0 mt-3 w-64 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/40 py-4 z-[9999] animate-in slide-in-from-top-3 duration-500"
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
+                    <div className="px-3">
+                      {resourcesDropdown.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className="flex items-center px-5 py-4 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-[#00FF66]/10 hover:to-[#00cc52]/10 hover:text-[#00FF66] rounded-2xl transition-all duration-400 group hover:scale-105"
+                        >
+                          <span className="text-xl mr-4 group-hover:scale-125 transition-transform duration-400">{item.icon}</span>
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Link
+                to="/contact"
+                className={`px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                  isActivePath('/contact') 
+                    ? 'text-white bg-gradient-to-r from-[#00FF66] to-[#00cc52] shadow-lg shadow-[#00FF66]/30' 
+                    : 'text-gray-700 hover:text-black hover:bg-white/60'
+                }`}
+              >
+                Contact
+              </Link>
+            </nav>
+
+            <div className="flex items-center space-x-4">
+              <div className="hidden lg:flex items-center">
+                <button
+                  onClick={() => window.location.href = '/quote'}
+                  className="relative px-8 py-4 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] text-black font-black rounded-2xl hover:shadow-2xl hover:shadow-[#00FF66]/40 transition-all duration-500 hover:scale-110 hover:-translate-y-1 text-sm overflow-hidden group"
+                >
+                  <span className="relative z-10">Get Quote</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00cc52] via-[#00e65a] to-[#00FF66] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </button>
+              </div>
+
+              <button
+                onClick={toggleMenu}
+                className="lg:hidden p-4 rounded-2xl text-gray-700 hover:text-black hover:bg-white/60 transition-all duration-400 hover:scale-110"
+              >
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {isMenuOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {isMenuOpen && (
+            <div className="lg:hidden bg-white/85 backdrop-blur-2xl border-t border-white/30 rounded-b-3xl shadow-2xl mt-2">
+              <div className="px-6 pt-6 pb-8 space-y-3">
+                {NAVIGATION_LINKS.map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`block px-6 py-4 rounded-2xl text-base font-bold transition-all duration-400 hover:scale-105 ${
+                      isActivePath(link.path)
+                        ? 'text-white bg-gradient-to-r from-[#00FF66] to-[#00cc52] shadow-lg shadow-[#00FF66]/30'
+                        : 'text-gray-700 hover:text-black hover:bg-white/60'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+                
+                <div className="pt-6 border-t border-white/30 mt-6">
+                  <button
                     onClick={() => window.location.href = '/quote'}
+                    className="w-full px-8 py-4 bg-gradient-to-r from-[#00FF66] to-[#00cc52] text-black font-black rounded-2xl hover:shadow-2xl hover:shadow-[#00FF66]/40 transition-all duration-500 hover:scale-105"
                   >
                     Get Free Quote
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </header>
   );
 };
 
 export default Header;
-

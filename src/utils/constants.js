@@ -1,10 +1,10 @@
 export const COMPANY_INFO = {
-    name: 'NSW CLEANING COMPANY',
-    domain: 'nswcleaningcompany.com',
+    name: 'NSWCC',
+    domain: 'nswcc.com',
     abn: '82 512 603 347',
     email: {
-      support: 'support@nswcleaningcompany.com',
-      bookings: 'bookings@nswcleaningcompany.com'
+      support: 'support@nswcc.com',
+      bookings: 'bookings@nswcc.com'
     },
     phone: '+61 0406977014',
     address: {
@@ -85,8 +85,8 @@ export const COMPANY_INFO = {
   ];
   
   export const SOCIAL_LINKS = {
-    facebook: 'https://facebook.com/nswcleaningcompany',
-    instagram: 'https://instagram.com/nswcleaningcompany'
+    facebook: 'https://facebook.com/nswcc',
+    instagram: 'https://instagram.com/nswcc'
   };
   
   export const FILE_UPLOAD = {

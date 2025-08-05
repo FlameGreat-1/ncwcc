@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import SEO from '../components/common/SEO.jsx';
 import AboutSection from '../components/sections/AboutSection.jsx';
 import { COMPANY_INFO, SERVICE_AREAS, BUSINESS_HOURS } from '../utils/constants.js';
@@ -5,6 +6,44 @@ import { formatPhone } from '../utils/helpers.js';
 import Button from '../components/common/Button.jsx';
 
 const About = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [teamVisible, setTeamVisible] = useState(false);
+  const sectionRef = useRef(null);
+  const teamRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const teamObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTeamVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    if (teamRef.current) {
+      teamObserver.observe(teamRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      teamObserver.disconnect();
+    };
+  }, []);
+
   const handleGetQuote = () => {
     window.location.href = '/quote';
   };
@@ -18,38 +57,49 @@ const About = () => {
       name: 'Sarah Johnson',
       role: 'Operations Manager',
       experience: '8+ years',
-      specialization: 'NDIS Services & Quality Control'
+      specialization: 'NDIS Services & Quality Control',
+      color: 'from-[#00FF66] to-[#00cc52]'
     },
     {
       name: 'Michael Chen',
       role: 'Lead Cleaner',
       experience: '6+ years',
-      specialization: 'End-of-Lease & Deep Cleaning'
+      specialization: 'End-of-Lease & Deep Cleaning',
+      color: 'from-[#00cc52] to-[#00FF66]'
     },
     {
       name: 'Emma Williams',
       role: 'Customer Relations',
       experience: '5+ years',
-      specialization: 'Client Support & Scheduling'
+      specialization: 'Client Support & Scheduling',
+      color: 'from-[#00FF66] to-[#00e65a]'
     }
   ];
 
   const companyValues = [
     {
       title: 'Reliability',
-      description: 'We show up on time, every time, and deliver consistent quality service.'
+      description: 'We show up on time, every time, and deliver consistent quality service.',
+      icon: '⏰',
+      color: 'from-[#00FF66] to-[#00cc52]'
     },
     {
       title: 'Respect',
-      description: 'We treat every home and client with the utmost respect and care.'
+      description: 'We treat every home and client with the utmost respect and care.',
+      icon: '🤝',
+      color: 'from-[#00cc52] to-[#00FF66]'
     },
     {
       title: 'Quality',
-      description: 'We use professional-grade equipment and eco-friendly products.'
+      description: 'We use professional-grade equipment and eco-friendly products.',
+      icon: '⭐',
+      color: 'from-[#00FF66] to-[#00e65a]'
     },
     {
       title: 'Transparency',
-      description: 'Clear pricing, detailed invoices, and honest communication always.'
+      description: 'Clear pricing, detailed invoices, and honest communication always.',
+      icon: '💎',
+      color: 'from-[#00e65a] to-[#00cc52]'
     }
   ];
 
@@ -61,14 +111,20 @@ const About = () => {
         keywords="about NSW cleaning company, professional cleaning team, NDIS cleaning specialists, experienced cleaners NSW, reliable cleaning service"
       />
 
-      <main className="pt-20">
-        <section className="section-padding bg-white">
+      <main className="pt-24 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/3 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#00FF66]/2 to-[#00cc52]/2 rounded-full blur-3xl animate-spin-slow"></div>
+        </div>
+
+        <section className="section-padding bg-white relative z-10">
           <div className="container mx-auto">
             <div className="max-w-4xl mx-auto text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
-                About {COMPANY_INFO.name}
-              </h1>
-              <p className="text-xl text-gray-600 leading-relaxed">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-black mb-8 animate-fade-in-up leading-tight">
+              About
+            </h1>
+              <p className="text-base md:text-lg text-[#4B4B4B] leading-relaxed font-medium animate-fade-in-up delay-300">
                 Your trusted local cleaning professionals dedicated to making your space shine
               </p>
             </div>
@@ -77,21 +133,21 @@ const About = () => {
           </div>
         </section>
 
-        <section className="section-padding bg-gray-50">
+        <section ref={sectionRef} className="section-padding bg-gradient-to-br from-gray-50/80 via-white/60 to-gray-50/80 backdrop-blur-xl relative z-10">
           <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+                <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
                   Our Story
                 </h2>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                <div className="animate-fade-in-up delay-300">
+                  <h3 className="text-2xl font-black text-gray-900 mb-8">
                     Founded on Trust and Excellence
                   </h3>
-                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                  <div className="space-y-6 text-[#4B4B4B] leading-relaxed text-base">
                     <p>
                       {COMPANY_INFO.name} was established with a simple mission: to provide reliable, 
                       professional cleaning services that exceed expectations. What started as a small 
@@ -111,38 +167,60 @@ const About = () => {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-8 shadow-lg">
-                  <h4 className="text-xl font-bold text-gray-900 mb-6">Company Details</h4>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                      <span className="text-gray-600">Business Name:</span>
-                      <span className="font-semibold text-gray-900">{COMPANY_INFO.name}</span>
+                <div className="relative group animate-fade-in-up delay-600">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,255,102,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                    
+                    <h4 className="text-lg font-black text-gray-900 mb-8 group-hover:text-[#00FF66] transition-colors duration-500">Company Details</h4>
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                        <span className="text-[#666] font-semibold text-sm">Business Name:</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{COMPANY_INFO.name}</span>
+                      </div>
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                        <span className="text-[#666] font-semibold text-sm">ABN:</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{COMPANY_INFO.abn}</span>
+                      </div>
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                        <span className="text-[#666] font-semibold text-sm">Phone:</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{formatPhone(COMPANY_INFO.phone)}</span>
+                      </div>
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                        <span className="text-[#666] font-semibold text-sm">Email:</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{COMPANY_INFO.email.support}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-[#666] font-semibold text-sm">Service Area:</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">NSW Wide</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                      <span className="text-gray-600">ABN:</span>
-                      <span className="font-semibold text-gray-900">{COMPANY_INFO.abn}</span>
-                    </div>
-                    <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                      <span className="text-gray-600">Phone:</span>
-                      <span className="font-semibold text-gray-900">{formatPhone(COMPANY_INFO.phone)}</span>
-                    </div>
-                    <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                      <span className="text-gray-600">Email:</span>
-                      <span className="font-semibold text-gray-900">{COMPANY_INFO.email.support}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Service Area:</span>
-                      <span className="font-semibold text-gray-900">NSW Wide</span>
-                    </div>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                 {companyValues.map((value, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-md text-center">
-                    <h4 className="text-lg font-bold text-gray-900 mb-3">{value.title}</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">{value.description}</p>
+                  <div key={index} className="relative group animate-fade-in-up" style={{ animationDelay: `${800 + index * 200}ms` }}>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                    <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 hover:scale-105 transform-gpu text-center overflow-hidden border-2 border-white/40">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                      
+                      <div className={`relative w-12 h-12 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:shadow-2xl transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 transform-gpu`}>
+                        <span className="text-2xl group-hover:animate-bounce">{value.icon}</span>
+                        <div className="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                      </div>
+                      
+                      <h4 className="text-base font-black text-gray-900 mb-3 group-hover:text-[#00FF66] transition-colors duration-500">{value.title}</h4>
+                      <p className="text-sm text-[#666] leading-relaxed group-hover:text-[#333] transition-colors duration-500">{value.description}</p>
+                      
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -150,30 +228,42 @@ const About = () => {
           </div>
         </section>
 
-        <section className="section-padding bg-white">
+        <section ref={teamRef} className="section-padding bg-white relative z-10">
           <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-                  Meet Our Team
+                <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
+                  Meet Our <span className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent">Team</span>
                 </h2>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                <p className="text-base text-[#4B4B4B] max-w-2xl mx-auto font-medium animate-fade-in-up delay-300">
                   Our experienced professionals are the heart of our service
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 {teamMembers.map((member, index) => (
-                  <div key={index} className="bg-gray-50 rounded-xl p-8 text-center">
-                    <div className="w-24 h-24 bg-[#00FF66]/10 rounded-full mx-auto mb-6 flex items-center justify-center">
-                      <span className="text-2xl font-bold text-[#00FF66]">
-                        {member.name.split(' ').map(n => n[0]).join('')}
-                      </span>
+                  <div key={index} className="relative group animate-fade-in-up" style={{ animationDelay: `${teamVisible ? index * 200 : 0}ms` }}>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                    <div className="relative bg-gradient-to-br from-gray-50/80 via-white/90 to-gray-50/80 backdrop-blur-xl rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 hover:scale-105 transform-gpu overflow-hidden border-2 border-white/40">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-t-3xl"></div>
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                      
+                      <div className={`relative w-20 h-20 bg-gradient-to-br ${member.color} rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl group-hover:shadow-[0_0_30px_rgba(0,255,102,0.4)] transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 transform-gpu overflow-hidden`}>
+                        <span className="text-2xl font-black text-black group-hover:animate-bounce">
+                          {member.name.split(' ').map(n => n[0]).join('')}
+                        </span>
+                        <div className="absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66]/20 to-[#00cc52]/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                      </div>
+                      
+                      <h3 className="text-lg font-black text-gray-900 mb-2 group-hover:text-[#00FF66] transition-colors duration-500">{member.name}</h3>
+                      <p className="text-[#00FF66] font-black mb-2 group-hover:text-black transition-colors duration-500 text-sm">{member.role}</p>
+                      <p className="text-sm text-[#666] mb-3 font-semibold group-hover:text-[#333] transition-colors duration-500">{member.experience} experience</p>
+                      <p className="text-sm text-[#4B4B4B] group-hover:text-[#00FF66] transition-colors duration-500 font-medium">{member.specialization}</p>
+                      
+                      <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
-                    <p className="text-[#00FF66] font-semibold mb-2">{member.role}</p>
-                    <p className="text-sm text-gray-600 mb-3">{member.experience} experience</p>
-                    <p className="text-sm text-gray-700">{member.specialization}</p>
                   </div>
                 ))}
               </div>
@@ -181,75 +271,105 @@ const About = () => {
           </div>
         </section>
 
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-gradient-to-br from-gray-50/80 via-white/60 to-gray-50/80 backdrop-blur-xl relative z-10">
           <div className="container mx-auto">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-                  Service Areas & Hours
+                <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
+                  Service Areas & <span className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent">Hours</span>
                 </h2>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className="bg-white rounded-xl p-8 shadow-md">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Service Areas</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    {SERVICE_AREAS.map((area, index) => (
-                      <div key={index} className="flex items-center">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mr-3"></div>
-                        <span className="text-gray-700">{area}</span>
-                      </div>
-                    ))}
+                <div className="relative group animate-fade-in-up delay-300">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,255,102,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                    
+                    <h3 className="text-lg font-black text-gray-900 mb-6 group-hover:text-[#00FF66] transition-colors duration-500">Service Areas</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      {SERVICE_AREAS.map((area, index) => (
+                        <div key={index} className="flex items-center group/area">
+                          <div className="w-3 h-3 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full mr-3 group-hover/area:animate-pulse"></div>
+                          <span className="text-[#4B4B4B] font-medium group-hover/area:text-[#00FF66] transition-colors duration-300 text-sm">{area}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm text-[#666] mt-6 group-hover:text-[#333] transition-colors duration-500 font-medium">
+                      Don't see your area? Contact us to check availability.
+                    </p>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
-                  <p className="text-sm text-gray-600 mt-6">
-                    Don't see your area? Contact us to check availability.
-                  </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-8 shadow-md">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Business Hours</h3>
-                  <div className="space-y-3">
-                    {Object.entries(BUSINESS_HOURS).map(([day, hours]) => (
-                      <div key={day} className="flex justify-between items-center">
-                        <span className="text-gray-700 capitalize">{day}:</span>
-                        <span className="font-medium text-gray-900">{hours}</span>
-                      </div>
-                    ))}
+                <div className="relative group animate-fade-in-up delay-600">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,255,102,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                    
+                    <h3 className="text-lg font-black text-gray-900 mb-6 group-hover:text-[#00FF66] transition-colors duration-500">Business Hours</h3>
+                    <div className="space-y-4">
+                      {Object.entries(BUSINESS_HOURS).map(([day, hours]) => (
+                        <div key={day} className="flex justify-between items-center group/hours">
+                          <span className="text-[#4B4B4B] capitalize font-semibold group-hover/hours:text-[#00FF66] transition-colors duration-300 text-sm">{day}:</span>
+                          <span className="font-black text-gray-900 group-hover/hours:text-[#00FF66] transition-colors duration-300 text-sm">{hours}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm text-[#666] mt-6 group-hover:text-[#333] transition-colors duration-500 font-medium">
+                      Emergency and urgent cleaning services available outside regular hours.
+                    </p>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
-                  <p className="text-sm text-gray-600 mt-6">
-                    Emergency and urgent cleaning services available outside regular hours.
-                  </p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="section-padding bg-[#00FF66]/5">
-          <div className="container mx-auto">
+        <section className="section-padding bg-gradient-to-r from-[#00FF66]/10 via-white/80 to-[#00cc52]/10 backdrop-blur-xl relative z-10 overflow-hidden">
+          <div className="absolute inset-0">
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#00FF66]/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-[#00cc52]/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          </div>
+          
+          <div className="container mx-auto relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-                Ready to Experience the Difference?
+              <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
+                Ready to Experience the <span className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent">Difference?</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+              <p className="text-base text-[#4B4B4B] mb-12 max-w-2xl mx-auto font-medium animate-fade-in-up delay-300">
                 Join hundreds of satisfied customers who trust us with their cleaning needs.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up delay-600">
                 <Button
                   onClick={handleGetQuote}
-                  variant="primary"
-                  size="lg"
+                  className="relative bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transform-gpu group overflow-hidden"
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
-                  Get Your Free Quote
+                  <span className="relative z-10 flex items-center gap-2">
+                    <span className="text-xl group-hover:animate-bounce">💰</span>
+                    Get Your Free Quote
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform group-hover:translate-x-full"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-30 group-hover:opacity-60 transition-opacity duration-700"></div>
                 </Button>
                 
                 <Button
                   onClick={handleContact}
-                  variant="secondary"
-                  size="lg"
+                  className="relative bg-transparent border-3 border-[#00FF66] text-[#00FF66] hover:bg-gradient-to-r hover:from-black hover:to-gray-800 hover:text-white hover:border-black font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:-rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transform-gpu group overflow-hidden"
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
-                  Contact Us Today
+                  <span className="relative z-10 flex items-center gap-2">
+                    <span className="text-xl group-hover:animate-pulse">📞</span>
+                    Contact Us Today
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-full"></div>
                 </Button>
               </div>
             </div>
@@ -261,4 +381,4 @@ const About = () => {
 };
 
 export default About;
- 
+

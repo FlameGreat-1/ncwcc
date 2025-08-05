@@ -1,10 +1,121 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '../common/Button.jsx';
-import { COMPANY_INFO, NAVIGATION_LINKS } from '../../utils/constants.js';
+import { COMPANY_INFO } from '../../utils/constants.js';
 import { scrollToElement } from '../../utils/helpers.js';
 
 const HeroSection = () => {
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [email, setEmail] = useState('');
+  const [currentBadge, setCurrentBadge] = useState(0);
+  const [happyCustomers, setHappyCustomers] = useState(20);
+  const [satisfactionRate, setSatisfactionRate] = useState(10);
+  const [isVisible, setIsVisible] = useState(false);
+  const [worldClassVisible, setWorldClassVisible] = useState(false);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const sectionRef = useRef(null);
+  const statsRef = useRef(null);
+
+  const badges = [
+    { text: "Trusted by 500+ NSW Families", icon: "👨‍👩‍👧‍👦" },
+    { text: "NDIS Approved Provider", icon: "🛡️" },
+    { text: "Fully Insured & Licensed", icon: "🏢" },
+    { text: "Bond-Back Guarantee", icon: "🔑" },
+    { text: "Available 24/7 Support", icon: "📞" },
+    { text: "Eco-Friendly Products", icon: "🌿" }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBadge((prev) => (prev + 1) % badges.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          setWorldClassVisible(false);
+          setTimeout(() => setWorldClassVisible(true), 500);
+        } else {
+          setWorldClassVisible(false);
+          setTimeout(() => setWorldClassVisible(true), 300);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const statsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStatsVisible(true);
+          setHappyCustomers(20);
+          setSatisfactionRate(10);
+          
+          const customerInterval = setInterval(() => {
+            setHappyCustomers(prev => {
+              if (prev >= 500) {
+                clearInterval(customerInterval);
+                return 500;
+              }
+              return prev + 15;
+            });
+          }, 50);
+
+          const satisfactionInterval = setInterval(() => {
+            setSatisfactionRate(prev => {
+              if (prev >= 100) {
+                clearInterval(satisfactionInterval);
+                return 100;
+              }
+              return prev + 3;
+            });
+          }, 80);
+        } else {
+          setStatsVisible(false);
+          setTimeout(() => {
+            setStatsVisible(true);
+            setHappyCustomers(20);
+            setSatisfactionRate(10);
+            
+            const customerInterval = setInterval(() => {
+              setHappyCustomers(prev => {
+                if (prev >= 500) {
+                  clearInterval(customerInterval);
+                  return 500;
+                }
+                return prev + 15;
+              });
+            }, 50);
+
+            const satisfactionInterval = setInterval(() => {
+              setSatisfactionRate(prev => {
+                if (prev >= 100) {
+                  clearInterval(satisfactionInterval);
+                  return 100;
+                }
+                return prev + 3;
+              });
+            }, 80);
+          }, 200);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    if (statsRef.current) {
+      statsObserver.observe(statsRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      statsObserver.disconnect();
+    };
+  }, []);
 
   const handleGetQuote = () => {
     scrollToElement('quote-calculator', 80);
@@ -18,94 +129,187 @@ const HeroSection = () => {
     window.location.href = `tel:${COMPANY_INFO.phone}`;
   };
 
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    if (email) {
+      scrollToElement('contact-section', 80);
+    }
+  };
+
   return (
-    <section className="relative min-h-screen bg-white flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
+    <section ref={sectionRef} className="relative min-h-screen bg-white flex items-center justify-center overflow-hidden pt-32">
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/30 to-white"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/3 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#00FF66]/3 to-[#00cc52]/3 rounded-full blur-3xl animate-spin-slow"></div>
+      </div>
       
-      <div className="relative z-10 container mx-auto px-6 py-20 text-center">
-        <div className="max-w-4xl mx-auto">
-          <div className="inline-flex items-center bg-[#00FF66]/10 border border-[#00FF66]/20 rounded-full px-4 py-2 mb-8">
-            <div className="w-2 h-2 bg-[#00FF66] rounded-full mr-2 animate-pulse"></div>
-            <span className="text-sm font-medium text-gray-700">NDIS Approved Provider</span>
+      <div className="relative z-10 container mx-auto px-6 py-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="relative inline-flex items-center gap-3 bg-white/90 backdrop-blur-lg border-2 border-[#00FF66]/30 rounded-full px-6 py-3 mb-12 shadow-2xl hover:shadow-[0_0_40px_rgba(0,255,102,0.3)] transition-all duration-700 group overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 via-transparent to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            <div className="flex -space-x-2 relative z-10">
+              <div className="w-8 h-8 bg-gradient-to-br from-[#00FF66] to-[#00cc52] rounded-full border-2 border-white shadow-lg animate-pulse"></div>
+              <div className="w-8 h-8 bg-gradient-to-br from-[#00cc52] to-[#00FF66] rounded-full border-2 border-white shadow-lg animate-pulse delay-300"></div>
+              <div className="w-8 h-8 bg-gradient-to-br from-[#00FF66] to-[#00cc52] rounded-full border-2 border-white shadow-lg animate-pulse delay-700"></div>
+            </div>
+            <div className="relative z-10 flex items-center gap-2">
+              <span className="text-lg animate-bounce">{badges[currentBadge].icon}</span>
+              <span className="text-sm font-bold text-black transition-all duration-500 transform">
+                {badges[currentBadge].text}
+              </span>
+            </div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#00FF66] rounded-full animate-ping"></div>
           </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-black mb-6 leading-tight">
-            Reliable & Professional
-            <span className="block text-gradient bg-gradient-to-r from-[#00FF66] to-[#00cc52] bg-clip-text text-transparent">
-              Cleaning Services
+          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-black mb-8 leading-[0.9] tracking-tight">
+            Cleaning Services by
+            <span className="block mt-4 relative perspective-1000">
+              <span 
+                className={`relative z-10 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent transform transition-all duration-1200 ${
+                  worldClassVisible 
+                    ? 'translate-y-0 rotate-0 scale-100 opacity-100' 
+                    : 'translate-y-32 rotate-x-90 scale-75 opacity-0'
+                } hover:scale-110 hover:rotate-1 hover:drop-shadow-2xl`}
+                style={{
+                  transformStyle: 'preserve-3d',
+                  filter: 'drop-shadow(0 10px 20px rgba(0,255,102,0.3))',
+                }}
+              >
+                World-Class
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/30 to-[#00cc52]/30 blur-3xl transform scale-150 animate-pulse"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-[#00FF66]/10 to-[#00cc52]/10 blur-2xl rounded-3xl animate-pulse delay-500"></div>
             </span>
+            <span className="block mt-4 text-black hover:text-[#00FF66] transition-colors duration-500">Professionals</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
-            Supporting Homes, Rentals & NDIS Participants
+          <p className="text-base md:text-lg text-[#4B4B4B] mb-12 max-w-2xl mx-auto leading-relaxed font-medium animate-fade-in-up delay-1000">
+            NDIS-approved cleaning services across NSW. From regular home maintenance to deep cleans and end-of-lease services — we deliver exceptional results with full insurance and documentation.
           </p>
 
-          <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
-            Affordable, flexible cleaning tailored to your needs — including NDIS-compliant services, 
-            before & after photos, and GST-included invoicing.
-          </p>
+          <form onSubmit={handleEmailSubmit} className="max-w-md mx-auto mb-16 animate-fade-in-up delay-1200">
+            <div className="relative group">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email for instant quote"
+                className="w-full px-6 py-4 text-base border-2 border-[#00FF66]/40 rounded-full focus:border-[#00FF66] focus:outline-none transition-all duration-500 bg-white/90 backdrop-blur-lg shadow-xl focus:shadow-2xl focus:scale-105 group-hover:shadow-[0_0_30px_rgba(0,255,102,0.2)]"
+                required
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-2 bottom-2 px-6 bg-gradient-to-r from-[#00FF66] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-bold rounded-full transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:-translate-y-1 transform-gpu"
+              >
+                Get Quote
+              </button>
+            </div>
+          </form>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20 animate-fade-in-up delay-1400">
             <Button
               onClick={handleGetQuote}
-              variant="primary"
-              size="lg"
-              className="w-full sm:w-auto text-lg px-8 py-4"
+              className="relative bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transform-gpu group overflow-hidden"
+              style={{ transformStyle: 'preserve-3d' }}
             >
-              🟣 Get a Free Quote
+              <span className="relative z-10 flex items-center gap-2">
+                <span className="text-xl group-hover:animate-bounce">💰</span>
+                Free Instant Quote
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform group-hover:translate-x-full"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-30 group-hover:opacity-60 transition-opacity duration-700"></div>
             </Button>
             
             <Button
               onClick={handleSendPhotos}
-              variant="secondary"
-              size="lg"
-              className="w-full sm:w-auto text-lg px-8 py-4"
+              className="relative bg-transparent border-3 border-[#00FF66] text-[#00FF66] hover:bg-gradient-to-r hover:from-black hover:to-gray-800 hover:text-white hover:border-black font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:-rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transform-gpu group overflow-hidden"
+              style={{ transformStyle: 'preserve-3d' }}
             >
-              🟢 Send Photos for Estimate
+              <span className="relative z-10 flex items-center gap-2">
+                <span className="text-xl group-hover:animate-spin">📸</span>
+                Send Photos
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-full"></div>
+            </Button>
+
+            <Button
+              onClick={handleCallNow}
+              className="relative bg-gradient-to-r from-black to-gray-800 hover:from-gray-800 hover:to-black text-white hover:text-[#00FF66] font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transform-gpu group overflow-hidden"
+              style={{ transformStyle: 'preserve-3d' }}
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                <span className="text-xl group-hover:animate-pulse">📞</span>
+                Call Now
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-[#00FF66]/10 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl">✅</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 animate-fade-in-up delay-1600">
+            {[
+              { icon: "🏠", title: "Regular Cleaning", desc: "Weekly, fortnightly, or monthly home maintenance", color: "from-[#00FF66] to-[#00cc52]" },
+              { icon: "✨", title: "Deep Cleaning", desc: "Comprehensive top-to-bottom property cleaning", color: "from-[#00cc52] to-[#00FF66]" },
+              { icon: "🔑", title: "End of Lease", desc: "Bond-back guarantee cleaning services", color: "from-[#00FF66] to-[#00e65a]" },
+              { icon: "🛡️", title: "NDIS Support", desc: "Registered provider with compliant invoicing", color: "from-[#00e65a] to-[#00cc52]" }
+            ].map((service, index) => (
+              <div key={index} className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700 animate-pulse"></div>
+                <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl p-6 border-2 border-white/40 shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 hover:scale-105 transform-gpu group overflow-hidden h-full flex flex-col">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                  <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                  
+                  <div className="flex flex-col items-center text-center flex-grow">
+                    <div className={`w-12 h-12 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:shadow-2xl transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 transform-gpu`}>
+                      <span className="text-2xl group-hover:animate-bounce">{service.icon}</span>
+                      <div className="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    </div>
+                    
+                    <h3 className="font-black text-lg text-black mb-2 group-hover:text-[#00FF66] transition-colors duration-500">{service.title}</h3>
+                    <p className="text-sm text-[#666] leading-relaxed group-hover:text-[#333] transition-colors duration-500 flex-grow">{service.desc}</p>
+                  </div>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-2xl"></div>
+                </div>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">NDIS Registered</h3>
-              <p className="text-sm text-gray-600 text-center">Compliant services with proper invoicing</p>
-            </div>
-
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-[#00FF66]/10 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl">📸</span>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Before & After Photos</h3>
-              <p className="text-sm text-gray-600 text-center">Complete job documentation included</p>
-            </div>
-
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-[#00FF66]/10 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl">🛡️</span>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Fully Insured</h3>
-              <p className="text-sm text-gray-600 text-center">Police-checked & insured team</p>
-            </div>
+            ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#00FF66]/5 to-[#00cc52]/5 rounded-2xl p-8 border border-[#00FF66]/20">
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="text-left mb-6 md:mb-0">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Need immediate assistance?</h3>
-                <p className="text-gray-600">Call us now for urgent cleaning services</p>
+          <div ref={statsRef} className="relative bg-gradient-to-r from-[#00FF66]/15 via-white/60 to-[#00cc52]/15 backdrop-blur-xl rounded-3xl p-8 border-2 border-[#00FF66]/30 shadow-2xl hover:shadow-[0_0_60px_rgba(0,255,102,0.2)] transition-all duration-700 group overflow-hidden animate-fade-in-up delay-1800">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 via-transparent to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+            
+            <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8">
+              <div className="text-left">
+                <h3 className="text-3xl font-black text-black mb-3 group-hover:text-[#00FF66] transition-colors duration-500">Ready to Experience the Difference?</h3>
+                <p className="text-[#666] text-lg leading-relaxed max-w-lg group-hover:text-[#333] transition-colors duration-500">
+                  Join hundreds of satisfied customers across NSW. Professional, reliable, and fully insured cleaning services.
+                </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  onClick={handleCallNow}
-                  variant="primary"
-                  size="lg"
-                  className="whitespace-nowrap"
-                >
-                  📞 Call {COMPANY_INFO.phone}
-                </Button>
+              
+              <div className="flex flex-col sm:flex-row gap-6 shrink-0">
+                <div className="text-center group/stat">
+                  <div className="text-4xl font-black text-[#00FF66] group-hover:text-black mb-2 transition-all duration-500 group-hover/stat:scale-110 group-hover/stat:animate-pulse">
+                    {happyCustomers}+
+                  </div>
+                  <div className="text-sm text-[#666] font-semibold group-hover/stat:text-[#00FF66] transition-colors duration-500">Happy Customers</div>
+                </div>
+                
+                <div className="text-center group/stat">
+                  <div className="text-4xl font-black text-[#00FF66] group-hover:text-black mb-2 transition-all duration-500 group-hover/stat:scale-110 group-hover/stat:animate-pulse">
+                    {satisfactionRate}%
+                  </div>
+                  <div className="text-sm text-[#666] font-semibold group-hover/stat:text-[#00FF66] transition-colors duration-500">Satisfaction Rate</div>
+                </div>
+                
+                <div className="text-center group/stat">
+                  <div className={`text-4xl font-black text-[#00FF66] group-hover:text-black mb-2 transition-all duration-1000 group-hover/stat:scale-110 ${statsVisible ? 'animate-bounce-in' : 'opacity-0 translate-y-10'}`}>
+                    24/7
+                  </div>
+                  <div className="text-sm text-[#666] font-semibold group-hover/stat:text-[#00FF66] transition-colors duration-500">Support Available</div>
+                </div>
               </div>
             </div>
           </div>
@@ -113,8 +317,8 @@ const HeroSection = () => {
       </div>
 
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-gray-300 rounded-full mt-2 animate-pulse"></div>
+        <div className="w-6 h-10 border-2 border-[#00FF66]/60 rounded-full flex justify-center bg-white/30 backdrop-blur-lg shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-110 group cursor-pointer">
+          <div className="w-1 h-3 bg-gradient-to-b from-[#00FF66] to-[#00cc52] rounded-full mt-2 animate-pulse group-hover:animate-bounce"></div>
         </div>
       </div>
     </section>
@@ -122,3 +326,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
