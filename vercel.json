@@ -1,16 +1,5 @@
 {
   "framework": "vite",
-  "functions": {
-    "app/api/contact.js": {
-      "maxDuration": 10
-    },
-    "app/api/quote.js": {
-      "maxDuration": 10
-    },
-    "app/api/gallery.js": {
-      "maxDuration": 5
-    }
-  },
   "rewrites": [
     {
       "source": "/sitemap.xml",
