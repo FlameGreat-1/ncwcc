@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import Button from '../common/Button.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import { NAVIGATION_LINKS, COMPANY_INFO } from '../../utils/constants.js';
@@ -10,6 +11,7 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const location = useLocation();
   const headerRef = useRef(null);
+  const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,6 +48,10 @@ const Header = () => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
+  const handleLogout = async () => {
+    await logout();
+  };
+
   const servicesDropdown = [
     { name: 'General Home Cleaning', path: '/services#general', icon: '🏠' },
     { name: 'Deep Cleaning', path: '/services#deep', icon: '✨' },
@@ -68,7 +74,7 @@ const Header = () => {
   };
 
   return (
-    <header ref={headerRef} className="fixed top-2 left-4 right-4 z-[100] transition-all duration-700 ease-out">
+    <header ref={headerRef} className="fixed top-2 left-2 right-2 z-[100] transition-all duration-700 ease-out">
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-32 h-32 bg-[#006da6]/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-0 right-1/4 w-24 h-24 bg-[#180c2e]/15 rounded-full blur-2xl animate-pulse delay-1000"></div>
@@ -83,39 +89,33 @@ const Header = () => {
         
         <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/5 via-transparent to-[#180c2e]/5 rounded-3xl"></div>
         
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="flex items-center justify-between h-20 lg:h-24">
+        <div className="relative w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-18">
             
             <div className="flex-shrink-0">
               <Link 
                 to="/" 
-                className="flex items-center space-x-5 hover:opacity-90 transition-all duration-500 group"
+                className="flex items-center space-x-3 hover:opacity-90 transition-all duration-500 group"
               >
                 <div className="relative">
                   <img 
                     src="/logo.svg" 
                     alt="NSWCC Logo" 
-                    className="w-20 h-20 object-contain group-hover:scale-110 transition-transform duration-500 drop-shadow-lg"
+                    className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-500 drop-shadow-lg"
                   />
-                  {/* <img
-                    src="/ndis.png" 
-                    alt="NDIS Badge" 
-                    className="absolute -top-2 -right-2 w-6 h-6 object-contain animate-pulse drop-shadow-md"
-                  /> */}
                 </div>
                 <div className="hidden sm:block">
-                  <h1 className="app-text-primary font-black text-2xl leading-tight tracking-tight group-hover:text-[#006da6] transition-colors duration-300">
+                  <h1 className="app-text-primary font-black text-xl leading-tight tracking-tight group-hover:text-[#006da6] transition-colors duration-300">
                     NSWCC
                   </h1>
-                  <p className="app-text-secondary text-sm font-semibold">Professional • Reliable • Insured</p>
+                  <p className="app-text-secondary text-xs font-semibold">Professional • Reliable • Insured</p>
                 </div>
               </Link>
             </div>
-
-            <nav className="hidden lg:flex items-center space-x-2 app-bg-glass backdrop-blur-lg rounded-2xl px-4 py-2 app-border-glass border shadow-lg overflow-visible">
+            <nav className="hidden lg:flex items-center space-x-1 app-bg-glass backdrop-blur-lg rounded-2xl px-3 py-1.5 app-border-glass border shadow-lg overflow-visible">
               <Link
                 to="/"
-                className={`px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
                   isActivePath('/') 
                     ? 'text-white bg-gradient-to-r from-[#006da6] to-[#180c2e] shadow-lg shadow-[#006da6]/30' 
                     : 'app-text-primary hover:text-[#006da6] hover:bg-white/60 dark:hover:bg-white/10'
@@ -126,7 +126,7 @@ const Header = () => {
 
               <Link
                 to="/about"
-                className={`px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
                   isActivePath('/about') 
                     ? 'text-white bg-gradient-to-r from-[#006da6] to-[#180c2e] shadow-lg shadow-[#006da6]/30' 
                     : 'app-text-primary hover:text-[#006da6] hover:bg-white/60 dark:hover:bg-white/10'
@@ -139,7 +139,7 @@ const Header = () => {
                 <button
                   onClick={() => toggleDropdown('services')}
                   onMouseEnter={() => setActiveDropdown('services')}
-                  className={`flex items-center px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                  className={`flex items-center px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
                     isActivePath('/services') 
                       ? 'text-white bg-gradient-to-r from-[#006da6] to-[#180c2e] shadow-lg shadow-[#006da6]/30' 
                       : 'app-text-primary hover:text-[#006da6] hover:bg-white/60 dark:hover:bg-white/10'
@@ -172,11 +172,16 @@ const Header = () => {
                   </div>
                 )}
               </div>
+
               <div className="relative">
                 <button
                   onClick={() => toggleDropdown('resources')}
                   onMouseEnter={() => setActiveDropdown('resources')}
-                  className="flex items-center px-5 py-3 rounded-xl text-sm font-bold app-text-primary hover:text-[#006da6] transition-all duration-400 hover:bg-white/60 dark:hover:bg-white/10 hover:scale-105"
+                  className={`flex items-center px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                    isActivePath('/faq') || isActivePath('/gallery') || isActivePath('/ndis') || isActivePath('/blog')
+                      ? 'text-white bg-gradient-to-r from-[#006da6] to-[#180c2e] shadow-lg shadow-[#006da6]/30' 
+                      : 'app-text-primary hover:text-[#006da6] hover:bg-white/60 dark:hover:bg-white/10'
+                  }`}
                 >
                   Resources
                   <svg className={`ml-2 w-4 h-4 transition-transform duration-400 ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,7 +213,7 @@ const Header = () => {
 
               <Link
                 to="/contact"
-                className={`px-5 py-3 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
+                className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-400 hover:scale-105 ${
                   isActivePath('/contact') 
                     ? 'text-white bg-gradient-to-r from-[#006da6] to-[#180c2e] shadow-lg shadow-[#006da6]/30' 
                     : 'app-text-primary hover:text-[#006da6] hover:bg-white/60 dark:hover:bg-white/10'
@@ -218,13 +223,43 @@ const Header = () => {
               </Link>
             </nav>
 
-            <div className="flex items-center space-x-4">
-              {/*<ThemeToggle className="hidden lg:block" />*/}
-              
-              <div className="hidden lg:flex items-center">
+            <div className="flex items-center space-x-3">
+              <div className="hidden lg:flex items-center space-x-2">
+                {isAuthenticated ? (
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      to={user?.user_type === 'admin' ? '/admin/portal' : '/clients/portal'}
+                      className="px-4 py-2 text-sm font-semibold app-text-primary hover:text-[#006da6] transition-colors duration-300"
+                    >
+                      {user?.first_name || 'Portal'}
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-500 transition-colors duration-300"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      to="/accounts/login"
+                      className="px-4 py-2 text-sm font-semibold app-text-primary hover:text-[#006da6] transition-colors duration-300"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/accounts/register"
+                      className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#006da6] to-[#180c2e] hover:from-[#0080c7] hover:to-[#2d1b4e] rounded-xl transition-all duration-300 hover:scale-105"
+                    >
+                      Register
+                    </Link>
+                  </div>
+                )}
+                
                 <button
                   onClick={() => window.location.href = '/quote'}
-                  className="relative px-8 py-4 bg-gradient-to-r from-[#006da6] to-[#180c2e] hover:from-[#0080c7] hover:to-[#2d1b4e] text-white font-black rounded-2xl hover:shadow-2xl hover:shadow-[#006da6]/40 transition-all duration-500 hover:scale-110 hover:-translate-y-1 text-sm overflow-hidden group"
+                  className="relative px-6 py-2.5 bg-gradient-to-r from-[#006da6] to-[#180c2e] hover:from-[#0080c7] hover:to-[#2d1b4e] text-white font-black rounded-2xl hover:shadow-2xl hover:shadow-[#006da6]/40 transition-all duration-500 hover:scale-110 hover:-translate-y-1 text-sm overflow-hidden group"
                 >
                   <span className="relative z-10">Get Quote</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0080c7] to-[#2d1b4e] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -233,9 +268,9 @@ const Header = () => {
 
               <button
                 onClick={toggleMenu}
-                className="lg:hidden p-4 rounded-2xl app-text-secondary hover:app-text-primary hover:bg-white/60 dark:hover:bg-white/10 transition-all duration-400 hover:scale-110"
+                className="lg:hidden p-3 rounded-2xl app-text-secondary hover:app-text-primary hover:bg-white/60 dark:hover:bg-white/10 transition-all duration-400 hover:scale-110"
               >
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {isMenuOpen ? (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   ) : (
@@ -265,9 +300,43 @@ const Header = () => {
                 ))}
                 
                 <div className="pt-6 border-t app-border-glass mt-6 space-y-4">
-                  {/*<div className="flex justify-center">
-                    <ThemeToggle />
-                  </div>*/}
+                  {isAuthenticated ? (
+                    <div className="space-y-3">
+                      <Link
+                        to={user?.user_type === 'admin' ? '/admin/portal' : '/clients/portal'}
+                        className="block w-full px-6 py-3 text-center text-base font-bold app-text-primary hover:text-[#006da6] transition-colors duration-300"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {user?.first_name || 'Portal'}
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMenuOpen(false);
+                        }}
+                        className="block w-full px-6 py-3 text-center text-base font-bold text-red-600 hover:text-red-500 transition-colors duration-300"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <Link
+                        to="/accounts/login"
+                        className="block w-full px-6 py-3 text-center text-base font-bold app-text-primary hover:text-[#006da6] transition-colors duration-300"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        to="/accounts/register"
+                        className="block w-full px-6 py-3 text-center text-base font-bold text-white bg-gradient-to-r from-[#006da6] to-[#180c2e] hover:from-[#0080c7] hover:to-[#2d1b4e] rounded-2xl transition-all duration-300"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Register
+                      </Link>
+                    </div>
+                  )}
                   
                   <button
                     onClick={() => window.location.href = '/quote'}

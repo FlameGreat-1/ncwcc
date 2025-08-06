@@ -32,7 +32,7 @@ export const getUser = () => {
 };
 
 export const removeUser = () => {
-  localStorage.removeUser(USER_KEY);
+  localStorage.removeItem(USER_KEY);
 };
 
 export const clearAuthData = () => {
@@ -191,20 +191,20 @@ export const redirectToLogin = () => {
 };
 
 export const redirectAfterLogin = (userType = null) => {
-  const user = userType || getUserRole();
+    const user = userType || getUserRole();
+    
+    switch (user) {
+      case 'admin':
+        return '/admin/portal';        
+      case 'staff':
+        return '/staff/portal';        
+      case 'client':
+        return '/clients/portal';
+      default:
+        return '/';
+    }
+  };
   
-  switch (user) {
-    case 'admin':
-      return '/admin/dashboard';
-    case 'staff':
-      return '/staff/dashboard';
-    case 'client':
-      return '/dashboard';
-    default:
-      return '/';
-  }
-};
-
 export const shouldRedirectToVerification = () => {
   return isAuthenticated() && !isVerified() && !isGoogleUser();
 };

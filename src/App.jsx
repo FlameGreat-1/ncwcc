@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext.jsx';
 import Header from './components/common/Header.jsx';
 import Footer from './components/common/Footer.jsx';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx';
+import ProtectedRoute, { ClientRoute, AdminRoute } from './components/common/ProtectedRoute.jsx';
 import './styles/theme.css';
 import './styles/globals.css';
 
@@ -21,15 +22,12 @@ const Login = lazy(() => import('./pages/accounts/Login.jsx'));
 const Register = lazy(() => import('./pages/accounts/Register.jsx'));
 const PasswordReset = lazy(() => import('./pages/accounts/PasswordReset.jsx'));
 const EmailVerification = lazy(() => import('./pages/accounts/EmailVerification.jsx'));
+const ClientPortal = lazy(() => import('./pages/clients/Portal.jsx'));
+const AdminPortal = lazy(() => import('./pages/admin/Portal.jsx'));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center app-bg-primary">
-    <div className="relative group">
-      <div className="absolute -inset-4 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#180c2e] rounded-3xl blur opacity-30 animate-pulse"></div>
-      <div className="relative app-bg-card app-border border-2 rounded-3xl p-8 app-shadow-xl">
-        <LoadingSpinner size="lg" text="Loading..." />
-      </div>
-    </div>
+    <LoadingSpinner size="lg" variant="branded" />
   </div>
 );
 
@@ -102,6 +100,8 @@ const AppContent = () => {
             <Route path="/accounts/register" element={<Register />} />
             <Route path="/accounts/password-reset" element={<PasswordReset />} />
             <Route path="/accounts/email-verification" element={<EmailVerification />} />
+            <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/admin/portal" element={<AdminRoute><AdminPortal /></AdminRoute>} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
