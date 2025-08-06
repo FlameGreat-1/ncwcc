@@ -27,123 +27,189 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-black text-white">
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+    <footer className="relative bg-gradient-to-br from-black via-gray-900 to-black overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/3 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#00FF66]/3 to-[#00cc52]/3 rounded-full blur-3xl animate-spin-slow"></div>
+      </div>
+
+      <div className="relative z-10 container mx-auto px-6 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-2xl font-bold text-[#00FF66] mb-2">
-                {COMPANY_INFO.name}
-              </h3>
-              <p className="text-[#CCCCCC] text-sm leading-relaxed">
-                Professional cleaning services across NSW including NDIS support, 
-                end-of-lease cleaning, and general home cleaning. Reliable, insured, 
-                and bond-back guaranteed.
-              </p>
+          <div className="space-y-8 animate-fade-in-up">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+              <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                <div className="relative z-10">
+                  <h3 className="text-3xl font-black text-transparent bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text mb-4 group-hover:scale-110 transition-transform duration-500">
+                    {COMPANY_INFO.name}
+                  </h3>
+                  <p className="text-[#CCCCCC] text-sm leading-relaxed font-medium group-hover:text-white transition-colors duration-500">
+                    Professional cleaning services across NSW including NDIS support, 
+                    end-of-lease cleaning, and general home cleaning. Reliable, insured, 
+                    and bond-back guaranteed.
+                  </p>
+                </div>
+              </div>
             </div>
             
-            <div className="flex items-center gap-2 bg-[#1A1A1A] p-3 rounded-lg">
-              <div className="w-3 h-3 bg-[#00FF66] rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-[#00FF66]">NDIS Approved Provider</span>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-40 transition-all duration-700"></div>
+              <div className="relative flex items-center gap-3 bg-gradient-to-r from-[#00FF66]/10 via-white/5 to-[#00cc52]/10 backdrop-blur-xl border border-[#00FF66]/30 p-4 rounded-2xl hover:border-[#00FF66]/50 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                <div className="relative w-4 h-4 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full animate-pulse shadow-lg group-hover:animate-bounce"></div>
+                <span className="relative text-sm font-black text-[#00FF66] group-hover:text-white transition-colors duration-500">NDIS Approved Provider</span>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+              </div>
             </div>
           </div>
 
-          <div>
-            <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
+          <div className="animate-fade-in-up delay-200">
+            <h4 className="text-xl font-black text-white mb-8 relative group">
+              <span className="relative z-10 group-hover:text-[#00FF66] transition-colors duration-500">Quick Links</span>
+              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover:w-full transition-all duration-700 rounded-full"></div>
+            </h4>
+            <ul className="space-y-4">
+              {quickLinks.map((link, index) => (
+                <li key={link.name} className="group/link">
                   <Link 
                     to={link.path}
-                    className="text-[#CCCCCC] hover:text-[#00FF66] transition-colors duration-200 text-sm"
+                    className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
+                    style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    {link.name}
+                    <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
+                    <span className="relative z-10">{link.name}</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                   </Link>
                 </li>
               ))}
-              <li>
+              <li className="group/link">
                 <Link 
                   to="/gallery"
-                  className="text-[#CCCCCC] hover:text-[#00FF66] transition-colors duration-200 text-sm"
+                  className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
                 >
-                  Before & After Gallery
+                  <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
+                  <span className="relative z-10">Before & After Gallery</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                 </Link>
               </li>
-              <li>
+              <li className="group/link">
                 <Link 
                   to="/faq"
-                  className="text-[#CCCCCC] hover:text-[#00FF66] transition-colors duration-200 text-sm"
+                  className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
                 >
-                  FAQ
+                  <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
+                  <span className="relative z-10">FAQ</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                 </Link>
               </li>
             </ul>
           </div>
 
-          <div>
-            <h4 className="text-lg font-semibold mb-6">Our Services</h4>
-            <ul className="space-y-3">
-              {serviceLinks.map((service) => (
-                <li key={service.name}>
+          <div className="animate-fade-in-up delay-400">
+            <h4 className="text-xl font-black text-white mb-8 relative group">
+              <span className="relative z-10 group-hover:text-[#00FF66] transition-colors duration-500">Our Services</span>
+              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover:w-full transition-all duration-700 rounded-full"></div>
+            </h4>
+            <ul className="space-y-4 mb-8">
+              {serviceLinks.map((service, index) => (
+                <li key={service.name} className="group/service">
                   <Link 
                     to={service.path}
-                    className="text-[#CCCCCC] hover:text-[#00FF66] transition-colors duration-200 text-sm"
+                    className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/service:translate-x-2 group-hover/service:scale-105 transform-gpu"
+                    style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    {service.name}
+                    <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/service:w-4 transition-all duration-500 mr-0 group-hover/service:mr-2 rounded-full"></div>
+                    <span className="relative z-10">{service.name}</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/service:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                   </Link>
                 </li>
               ))}
             </ul>
             
-            <div className="mt-6">
-              <h5 className="text-sm font-medium mb-3">Service Areas</h5>
-              <div className="grid grid-cols-2 gap-1 text-xs text-[#CCCCCC]">
-                {SERVICE_AREAS.slice(0, 6).map((area) => (
-                  <span key={area}>{area}</span>
-                ))}
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+              <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                <div className="relative z-10">
+                  <h5 className="text-sm font-black mb-4 text-white group-hover:text-[#00FF66] transition-colors duration-500">Service Areas</h5>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-[#CCCCCC] mb-3">
+                    {SERVICE_AREAS.slice(0, 6).map((area, index) => (
+                      <div key={area} className="group/area flex items-center">
+                        <div className="w-1 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full mr-2 group-hover/area:animate-pulse"></div>
+                        <span className="group-hover/area:text-[#00FF66] transition-colors duration-300">{area}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <span className="text-xs text-[#00FF66] font-black group-hover:text-white transition-colors duration-500 inline-flex items-center gap-1">
+                    <span className="group-hover:animate-bounce"></span>
+                    + More areas available
+                  </span>
+                </div>
               </div>
-              <span className="text-xs text-[#00FF66] mt-2 inline-block">+ More areas</span>
             </div>
           </div>
 
-          <div>
-            <h4 className="text-lg font-semibold mb-6">Contact Info</h4>
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm font-medium mb-1">Phone</p>
-                <a 
-                  href={`tel:${COMPANY_INFO.phone}`}
-                  className="text-[#00FF66] hover:text-[#00e65a] transition-colors duration-200 font-medium"
-                >
-                  {formatPhone(COMPANY_INFO.phone)}
-                </a>
+          <div className="animate-fade-in-up delay-600">
+            <h4 className="text-xl font-black text-white mb-8 relative group">
+              <span className="relative z-10 group-hover:text-[#00FF66] transition-colors duration-500">Contact Info</span>
+              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover:w-full transition-all duration-700 rounded-full"></div>
+            </h4>
+            <div className="space-y-6">
+              <div className="relative group/contact">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/contact:opacity-30 transition-all duration-700"></div>
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/contact:opacity-100 transition-opacity duration-700 rounded-xl"></div>
+                  <div className="relative z-10">
+                    <p className="text-sm font-black mb-2 text-white group-hover/contact:text-[#00FF66] transition-colors duration-500">Phone</p>
+                    <a 
+                      href={`tel:${COMPANY_INFO.phone}`}
+                      className="text-[#00FF66] hover:text-white transition-all duration-500 font-black text-lg group-hover/contact:scale-110 inline-block transform-gpu"
+                    >
+                      {formatPhone(COMPANY_INFO.phone)}
+                    </a>
+                  </div>
+                </div>
               </div>
               
-              <div>
-                <p className="text-sm font-medium mb-1">Email</p>
-                <a 
-                  href={`mailto:${COMPANY_INFO.email.support}`}
-                  className="text-[#CCCCCC] hover:text-[#00FF66] transition-colors duration-200 text-sm break-all"
-                >
-                  {COMPANY_INFO.email.support}
-                </a>
+              <div className="relative group/email">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/email:opacity-30 transition-all duration-700"></div>
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/email:opacity-100 transition-opacity duration-700 rounded-xl"></div>
+                  <div className="relative z-10">
+                    <p className="text-sm font-black mb-2 text-white group-hover/email:text-[#00FF66] transition-colors duration-500">Email</p>
+                    <a 
+                      href={`mailto:${COMPANY_INFO.email.support}`}
+                      className="text-[#CCCCCC] hover:text-[#00FF66] transition-colors duration-500 text-sm break-all font-medium group-hover/email:scale-105 inline-block transform-gpu"
+                    >
+                      {COMPANY_INFO.email.support}
+                    </a>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <p className="text-sm font-medium mb-2">Business Hours</p>
-                <div className="text-xs text-[#CCCCCC] space-y-1">
-                  <div className="flex justify-between">
-                    <span>Mon - Fri:</span>
-                    <span>{BUSINESS_HOURS.monday}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Saturday:</span>
-                    <span>{BUSINESS_HOURS.saturday}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Sunday:</span>
-                    <span className="text-red-400">{BUSINESS_HOURS.sunday}</span>
+              <div className="relative group/hours">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/hours:opacity-30 transition-all duration-700"></div>
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/hours:opacity-100 transition-opacity duration-700 rounded-xl"></div>
+                  <div className="relative z-10">
+                    <p className="text-sm font-black mb-3 text-white group-hover/hours:text-[#00FF66] transition-colors duration-500">Business Hours</p>
+                    <div className="text-xs text-[#CCCCCC] space-y-2 font-medium">
+                      <div className="flex justify-between items-center group/day hover:text-[#00FF66] transition-colors duration-300">
+                        <span>Mon - Fri:</span>
+                        <span className="font-black">{BUSINESS_HOURS.monday}</span>
+                      </div>
+                      <div className="flex justify-between items-center group/day hover:text-[#00FF66] transition-colors duration-300">
+                        <span>Saturday:</span>
+                        <span className="font-black">{BUSINESS_HOURS.saturday}</span>
+                      </div>
+                      <div className="flex justify-between items-center group/day hover:text-red-400 transition-colors duration-300">
+                        <span>Sunday:</span>
+                        <span className="text-red-400 font-black">{BUSINESS_HOURS.sunday}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -151,76 +217,144 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-[#333333] pt-8">
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
-            
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="flex items-center gap-4">
-                <a
-                  href={SOCIAL_LINKS.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-[#1A1A1A] rounded-full flex items-center justify-center hover:bg-[#00FF66] hover:text-black transition-all duration-200"
-                  aria-label="Facebook"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </a>
+        <div className="relative group mb-12">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+          <div className="relative bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-1 hover:border-[#00FF66]/50 transition-all duration-700">
+            <div className="bg-gradient-to-r from-black/50 via-gray-900/50 to-black/50 rounded-3xl p-8 hover:bg-gradient-to-r hover:from-black/70 hover:via-gray-900/70 hover:to-black/70 transition-all duration-700">
+              <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
                 
-                <a
-                  href={SOCIAL_LINKS.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-[#1A1A1A] rounded-full flex items-center justify-center hover:bg-[#00FF66] hover:text-black transition-all duration-200"
-                  aria-label="Instagram"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.781c-.49 0-.928-.175-1.297-.49-.368-.315-.49-.753-.49-1.243 0-.49.122-.928.49-1.243.369-.315.807-.49 1.297-.49s.928.175 1.297.49c.315.315.49.753.49 1.243 0 .49-.175.928-.49 1.243-.369.315-.807.49-1.297.49z"/>
-                  </svg>
-                </a>
-              </div>
-              
-              <div className="text-xs text-[#CCCCCC]">
-                ABN: {COMPANY_INFO.abn}
-              </div>
-            </div>
+                <div className="flex flex-col sm:flex-row items-center gap-6 animate-fade-in-up delay-800">
+                  <div className="flex items-center gap-4">
+                    <a
+                      href={SOCIAL_LINKS.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative group/social perspective-1000"
+                      aria-label="Facebook"
+                    >
+                      <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl blur opacity-0 group-hover/social:opacity-40 transition-all duration-700"></div>
+                      <div className="relative w-12 h-12 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/20 rounded-2xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500 hover:to-blue-600 hover:text-white hover:border-blue-400 transition-all duration-700 hover:-translate-y-2 hover:scale-110 hover:rotate-12 transform-gpu group-hover/social:shadow-2xl overflow-hidden"
+                           style={{ transformStyle: 'preserve-3d' }}>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-transparent to-blue-600/20 opacity-0 group-hover/social:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                        <svg className="relative z-10 w-6 h-6 text-[#CCCCCC] group-hover/social:text-white transition-all duration-500 group-hover/social:scale-110 group-hover/social:animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full opacity-0 group-hover/social:opacity-100 animate-ping transition-opacity duration-700"></div>
+                      </div>
+                    </a>
+                    
+                    <a
+                      href={SOCIAL_LINKS.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative group/social perspective-1000"
+                      aria-label="Instagram"
+                    >
+                      <div className="absolute -inset-2 bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 rounded-2xl blur opacity-0 group-hover/social:opacity-40 transition-all duration-700"></div>
+                      <div className="relative w-12 h-12 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/20 rounded-2xl flex items-center justify-center hover:bg-gradient-to-br hover:from-pink-500 hover:via-purple-500 hover:to-orange-500 hover:text-white hover:border-pink-400 transition-all duration-700 hover:-translate-y-2 hover:scale-110 hover:rotate-12 transform-gpu group-hover/social:shadow-2xl overflow-hidden"
+                           style={{ transformStyle: 'preserve-3d' }}>
+                        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-orange-500/20 opacity-0 group-hover/social:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                        <svg className="relative z-10 w-6 h-6 text-[#CCCCCC] group-hover/social:text-white transition-all duration-500 group-hover/social:scale-110 group-hover/social:animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-pink-500 rounded-full opacity-0 group-hover/social:opacity-100 animate-ping transition-opacity duration-700"></div>
+                      </div>
+                    </a>
+                  </div>
+                  
+                  <div className="relative group/abn">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/abn:opacity-30 transition-all duration-700"></div>
+                    <div className="relative text-xs text-[#CCCCCC] bg-white/5 backdrop-blur-xl border border-white/10 px-3 py-2 rounded-xl font-medium group-hover/abn:text-[#00FF66] group-hover/abn:bg-white/10 transition-all duration-500 hover:-translate-y-1 hover:scale-105 transform-gpu">
+                      <span className="relative z-10">ABN: {COMPANY_INFO.abn}</span>
+                    </div>
+                  </div>
+                </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Subscribe to updates"
-                  className="px-3 py-2 bg-[#1A1A1A] border border-[#333333] rounded-lg text-sm text-white placeholder-[#CCCCCC] focus:outline-none focus:border-[#00FF66] transition-colors duration-200"
-                  required
-                />
-                <Button type="submit" size="sm" variant="primary">
-                  Subscribe
-                </Button>
-              </form>
+                <div className="flex flex-col sm:flex-row items-center gap-6 animate-fade-in-up delay-1000">
+                  <form onSubmit={handleNewsletterSubmit} className="relative group/form">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-2xl blur opacity-0 group-hover/form:opacity-30 transition-all duration-700"></div>
+                    <div className="relative flex gap-3 bg-white/5 backdrop-blur-xl border border-white/20 p-2 rounded-2xl hover:bg-white/10 hover:border-[#00FF66]/50 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Subscribe to updates"
+                        className="flex-1 px-4 py-2 bg-transparent text-sm text-white placeholder-[#CCCCCC] focus:outline-none focus:placeholder-[#00FF66] transition-colors duration-500 font-medium"
+                        required
+                      />
+                      <Button 
+                        type="submit" 
+                        className="relative bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-black px-4 py-2 rounded-xl text-xs transition-all duration-700 hover:scale-110 hover:-translate-y-1 shadow-lg hover:shadow-2xl transform-gpu group/btn overflow-hidden"
+                      >
+                        <span className="relative z-10 flex items-center gap-1">
+                          <span className="text-sm group-hover/btn:animate-bounce">📧</span>
+                          Subscribe
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-700 transform group-hover/btn:translate-x-full"></div>
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="mt-6 pt-6 border-t border-[#333333] text-center">
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-xs text-[#CCCCCC]">
-              <p>
-                © {currentYear} {COMPANY_INFO.name}. All rights reserved.
-              </p>
-              <div className="flex gap-4">
-                <Link to="/terms" className="hover:text-[#00FF66] transition-colors duration-200">
-                  Terms of Service
-                </Link>
-                <Link to="/privacy" className="hover:text-[#00FF66] transition-colors duration-200">
-                  Privacy Policy
-                </Link>
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-20 transition-all duration-700"></div>
+          <div className="relative bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-1 hover:border-[#00FF66]/30 transition-all duration-700">
+            <div className="bg-gradient-to-r from-black/50 via-gray-900/50 to-black/50 rounded-3xl p-8 hover:bg-gradient-to-r hover:from-black/70 hover:via-gray-900/70 hover:to-black/70 transition-all duration-700">
+              <div className="text-center animate-fade-in-up delay-1200">
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-6 text-xs text-[#CCCCCC] mb-6">
+                  <p className="relative group/copy">
+                    <span className="relative z-10 font-medium group-hover/copy:text-[#00FF66] transition-colors duration-500">
+                      © {currentYear} {COMPANY_INFO.name}. All rights reserved.
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/copy:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
+                  </p>
+                  <div className="flex gap-6">
+                    <Link 
+                      to="/terms" 
+                      className="relative group/legal hover:text-[#00FF66] transition-all duration-500 font-medium hover:scale-105 transform-gpu"
+                    >
+                      <span className="relative z-10">Terms of Service</span>
+                      <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/legal:w-full transition-all duration-500 rounded-full"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/legal:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
+                    </Link>
+                    <Link 
+                      to="/privacy" 
+                      className="relative group/legal hover:text-[#00FF66] transition-all duration-500 font-medium hover:scale-105 transform-gpu"
+                    >
+                      <span className="relative z-10">Privacy Policy</span>
+                      <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/legal:w-full transition-all duration-500 rounded-full"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/legal:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
+                    </Link>
+                  </div>
+                </div>
+                
+                <div className="relative group/disclaimer">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-2xl blur opacity-0 group-hover/disclaimer:opacity-20 transition-all duration-700"></div>
+                  <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:bg-white/10 hover:border-[#00FF66]/30 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/disclaimer:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                    <p className="relative z-10 text-xs text-[#CCCCCC] max-w-4xl mx-auto leading-relaxed font-medium group-hover/disclaimer:text-white transition-colors duration-500">
+                      We are not affiliated with the NDIA but work with all types of participant management. 
+                      All services are provided by qualified, insured professionals with police checks.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <p className="text-xs text-[#CCCCCC] mt-3 max-w-2xl mx-auto">
-              We are not affiliated with the NDIA but work with all types of participant management. 
-              All services are provided by qualified, insured professionals with police checks.
-            </p>
+          </div>
+        </div>
+
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="relative group/scroll">
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-0 group-hover/scroll:opacity-40 transition-all duration-700"></div>
+            <div className="relative w-8 h-12 bg-white/10 backdrop-blur-xl border-2 border-[#00FF66]/60 rounded-full flex justify-center hover:bg-white/20 hover:border-[#00FF66] transition-all duration-700 hover:scale-110 hover:-translate-y-2 transform-gpu group-hover/scroll:shadow-2xl cursor-pointer overflow-hidden"
+                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/10 via-transparent to-[#00cc52]/10 opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-700 rounded-full"></div>
+              <div className="relative w-1 h-4 bg-gradient-to-b from-[#00FF66] to-[#00cc52] rounded-full mt-2 animate-pulse group-hover/scroll:animate-bounce"></div>
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#00FF66] rounded-full opacity-0 group-hover/scroll:opacity-100 animate-ping transition-opacity duration-700"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -229,3 +363,10 @@ const Footer = () => {
 };
 
 export default Footer;
+
+          
+
+      
+
+   
+

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { testimonialsData, getRecentTestimonials, getAverageRating } from '../../data/testimonials.js';
 import LoadingSpinner from '../common/LoadingSpinner.jsx';
 import Button from '../common/Button.jsx';
@@ -8,6 +8,10 @@ const TestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [cardsVisible, setCardsVisible] = useState(false);
+  const sectionRef = useRef(null);
+  const cardsRef = useRef(null);
 
   useEffect(() => {
     const loadTestimonials = () => {
@@ -16,19 +20,48 @@ const TestimonialsSection = () => {
       setTestimonials(recentTestimonials);
       setLoading(false);
     };
-
     loadTestimonials();
   }, []);
 
   useEffect(() => {
-    if (!isAutoPlaying || testimonials.length === 0) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
 
+    const cardsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCardsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    if (cardsRef.current) {
+      cardsObserver.observe(cardsRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      cardsObserver.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoPlaying || testimonials.length === 0) return;
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => 
         prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
       );
     }, 5000);
-
     return () => clearInterval(interval);
   }, [isAutoPlaying, testimonials.length]);
 
@@ -53,32 +86,52 @@ const TestimonialsSection = () => {
 
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
-      <span
-        key={index}
-        className={`text-lg ${index < rating ? 'text-yellow-400' : 'text-gray-300'}`}
-      >
-        ★
-      </span>
+      <div key={index} className="relative group/star">
+        <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur opacity-0 group-hover/star:opacity-60 transition-all duration-500"></div>
+        <span
+          className={`relative text-2xl transition-all duration-500 hover:scale-125 hover:rotate-12 transform-gpu ${
+            index < rating 
+              ? 'text-transparent bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 bg-clip-text drop-shadow-lg' 
+              : 'text-gray-300 hover:text-gray-400'
+          }`}
+          style={{ 
+            filter: index < rating ? 'drop-shadow(0 0 8px rgba(251, 191, 36, 0.5))' : 'none',
+            transformStyle: 'preserve-3d'
+          }}
+        >
+          ★
+        </span>
+      </div>
     ));
   };
 
   const getServiceBadgeColor = (service) => {
     const serviceColors = {
-      'End-of-Lease Cleaning': 'bg-blue-100 text-blue-800',
-      'NDIS Cleaning Support': 'bg-green-100 text-green-800',
-      'Deep Cleaning': 'bg-purple-100 text-purple-800',
-      'General Home Cleaning': 'bg-gray-100 text-gray-800',
-      'Pet Hair Removal': 'bg-orange-100 text-orange-800',
-      'Window & Carpet Cleaning': 'bg-indigo-100 text-indigo-800'
+      'End-of-Lease Cleaning': 'from-blue-500 to-blue-600 text-white',
+      'NDIS Cleaning Support': 'from-[#00FF66] to-[#00cc52] text-black',
+      'Deep Cleaning': 'from-purple-500 to-purple-600 text-white',
+      'General Home Cleaning': 'from-gray-500 to-gray-600 text-white',
+      'Pet Hair Removal': 'from-orange-500 to-orange-600 text-white',
+      'Window & Carpet Cleaning': 'from-indigo-500 to-indigo-600 text-white'
     };
-    return serviceColors[service] || 'bg-gray-100 text-gray-800';
+    return serviceColors[service] || 'from-gray-500 to-gray-600 text-white';
   };
 
   if (loading) {
     return (
-      <section className="section-padding bg-gray-50" id="testimonials">
-        <div className="container mx-auto text-center">
-          <LoadingSpinner size="lg" text="Loading testimonials..." />
+      <section className="relative section-padding bg-gradient-to-br from-gray-50/80 via-white/60 to-gray-50/80 backdrop-blur-xl overflow-hidden" id="testimonials">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/3 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#00FF66]/2 to-[#00cc52]/2 rounded-full blur-3xl animate-spin-slow"></div>
+        </div>
+        <div className="relative z-10 container mx-auto text-center">
+          <div className="relative group">
+            <div className="absolute -inset-4 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-30 animate-pulse"></div>
+            <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-12 shadow-2xl">
+              <LoadingSpinner size="lg" text="Loading testimonials..." />
+            </div>
+          </div>
         </div>
       </section>
     );
@@ -92,136 +145,207 @@ const TestimonialsSection = () => {
   const totalTestimonials = testimonialsData.length;
 
   return (
-    <section className="section-padding bg-gray-50" id="testimonials">
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-            What Our Clients Say
+    <section ref={sectionRef} className="relative section-padding bg-gradient-to-br from-gray-50/80 via-white/60 to-gray-50/80 backdrop-blur-xl overflow-hidden" id="testimonials">
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/3 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#00FF66]/2 to-[#00cc52]/2 rounded-full blur-3xl animate-spin-slow"></div>
+      </div>
+
+      <div className="relative z-10 container mx-auto">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl md:text-5xl font-black text-black mb-8 animate-fade-in-up leading-tight">
+            What Our <span className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent">Clients Say</span>
           </h2>
           
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="text-center">
-              <div className="flex items-center justify-center mb-2">
-                {renderStars(Math.round(averageRating))}
-                <span className="ml-2 text-lg font-bold text-gray-900">{averageRating}</span>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-12 animate-fade-in-up delay-300">
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+              <div className="relative text-center bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu">
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-transparent to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center justify-center gap-1 mb-3">
+                    {renderStars(Math.round(averageRating))}
+                    <span className="ml-3 text-2xl font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500">{averageRating}</span>
+                  </div>
+                  <p className="text-sm font-black text-gray-600 group-hover:text-gray-800 transition-colors duration-500">Average Rating</p>
+                </div>
               </div>
-              <p className="text-sm text-gray-600">Average Rating</p>
             </div>
             
-            <div className="w-px h-12 bg-gray-300"></div>
+            <div className="w-px h-16 bg-gradient-to-b from-transparent via-[#00FF66] to-transparent hidden sm:block"></div>
             
-            <div className="text-center">
-              <div className="text-2xl font-bold text-[#00FF66] mb-1">{totalTestimonials}+</div>
-              <p className="text-sm text-gray-600">Happy Customers</p>
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+              <div className="relative text-center bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                <div className="relative z-10">
+                  <div className="text-3xl font-black text-transparent bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text mb-2 group-hover:scale-110 transition-transform duration-500">{totalTestimonials}+</div>
+                  <p className="text-sm font-black text-gray-600 group-hover:text-gray-800 transition-colors duration-500">Happy Customers</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div className="relative max-w-4xl mx-auto mb-12">
-          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 min-h-[300px] flex items-center">
-            {testimonials.length > 0 && (
-              <div className="w-full text-center">
-                <div className="flex justify-center mb-6">
-                  {renderStars(testimonials[currentIndex].rating)}
-                </div>
-                
-                <blockquote className="text-lg md:text-xl text-gray-700 mb-8 leading-relaxed italic">
-                  "{testimonials[currentIndex].text}"
-                </blockquote>
-                
-                <div className="flex flex-col items-center">
-                  <div className="font-bold text-gray-900 text-lg mb-2">
-                    {testimonials[currentIndex].name}
+        <div className="relative max-w-5xl mx-auto mb-16">
+          <div className="relative group">
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+            <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-8 md:p-12 shadow-2xl hover:shadow-[0_0_60px_rgba(0,255,102,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu min-h-[400px] flex items-center overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+              
+              {testimonials.length > 0 && (
+                <div className="relative z-10 w-full text-center">
+                  <div className="flex justify-center mb-8">
+                    <div className="flex gap-1">
+                      {renderStars(testimonials[currentIndex].rating)}
+                    </div>
                   </div>
                   
-                  <div className="text-sm text-gray-500 mb-3">
-                    {testimonials[currentIndex].location}
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getServiceBadgeColor(testimonials[currentIndex].service)}`}>
-                      {testimonials[currentIndex].service}
+                  <blockquote className="text-xl md:text-2xl text-gray-700 mb-10 leading-relaxed italic font-medium relative group/quote">
+                    <div className="absolute -inset-4 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/quote:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                    <span className="relative z-10 group-hover/quote:text-gray-900 transition-colors duration-500">
+                      "{testimonials[currentIndex].text}"
                     </span>
+                  </blockquote>
+                  
+                  <div className="flex flex-col items-center">
+                    <div className="font-black text-gray-900 text-xl mb-3 group-hover:text-[#00FF66] transition-colors duration-500">
+                      {testimonials[currentIndex].name}
+                    </div>
                     
-                    {testimonials[currentIndex].verified && (
-                      <span className="flex items-center text-xs text-green-600">
-                        <div className="w-3 h-3 bg-green-500 rounded-full mr-1"></div>
-                        Verified
-                      </span>
-                    )}
+                    <div className="text-sm text-gray-500 mb-6 font-medium">
+                      {testimonials[currentIndex].location}
+                    </div>
                     
-                    {testimonials[currentIndex].ndisParticipant && (
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
-                        NDIS Participant
-                      </span>
-                    )}
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                      <div className="relative group/badge">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-2xl blur opacity-0 group-hover/badge:opacity-40 transition-all duration-500"></div>
+                        <span className={`relative px-4 py-2 rounded-2xl text-sm font-black bg-gradient-to-r ${getServiceBadgeColor(testimonials[currentIndex].service)} shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-110 hover:-translate-y-1 transform-gpu`}>
+                          {testimonials[currentIndex].service}
+                        </span>
+                      </div>
+                      
+                      {testimonials[currentIndex].verified && (
+                        <div className="relative group/verified">
+                          <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-green-500 rounded-2xl blur opacity-0 group-hover/verified:opacity-40 transition-all duration-500"></div>
+                          <span className="relative flex items-center text-sm text-green-600 bg-green-50 px-3 py-2 rounded-2xl font-black hover:bg-green-100 transition-all duration-500 hover:scale-110 hover:-translate-y-1 transform-gpu shadow-lg">
+                            <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-500 rounded-full mr-2 animate-pulse shadow-lg"></div>
+                            Verified
+                          </span>
+                        </div>
+                      )}
+                      
+                      {testimonials[currentIndex].ndisParticipant && (
+                        <div className="relative group/ndis">
+                          <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl blur opacity-0 group-hover/ndis:opacity-40 transition-all duration-500"></div>
+                          <span className="relative px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-black rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-110 hover:-translate-y-1 transform-gpu">
+                            NDIS Participant
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+              
+              <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+            </div>
           </div>
 
           {testimonials.length > 1 && (
             <>
               <button
                 onClick={handlePrevious}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-[#00FF66] transition-colors"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 group perspective-1000"
               >
-                ←
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-40 transition-all duration-700"></div>
+                <div className="relative w-14 h-14 bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-2xl flex items-center justify-center text-gray-600 hover:text-white hover:bg-gradient-to-r hover:from-[#00FF66] hover:to-[#00cc52] hover:border-[#00FF66] transition-all duration-700 hover:-translate-y-2 hover:scale-110 hover:rotate-12 transform-gpu shadow-xl hover:shadow-2xl overflow-hidden"
+                     style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/10 via-transparent to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                  <span className="relative z-10 text-2xl font-black group-hover:animate-bounce">←</span>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                </div>
               </button>
               
               <button
                 onClick={handleNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-[#00FF66] transition-colors"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 group perspective-1000"
               >
-                →
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-40 transition-all duration-700"></div>
+                <div className="relative w-14 h-14 bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-2xl flex items-center justify-center text-gray-600 hover:text-white hover:bg-gradient-to-r hover:from-[#00FF66] hover:to-[#00cc52] hover:border-[#00FF66] transition-all duration-700 hover:-translate-y-2 hover:scale-110 hover:-rotate-12 transform-gpu shadow-xl hover:shadow-2xl overflow-hidden"
+                     style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/10 via-transparent to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                  <span className="relative z-10 text-2xl font-black group-hover:animate-bounce">→</span>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                </div>
               </button>
             </>
           )}
         </div>
 
         {testimonials.length > 1 && (
-          <div className="flex justify-center gap-2 mb-12">
+          <div className="flex justify-center gap-3 mb-16">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleDotClick(index)}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-[#00FF66]' : 'bg-gray-300'
-                }`}
-              />
+                className="relative group"
+              >
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-0 group-hover:opacity-60 transition-all duration-500"></div>
+                <div className={`relative w-4 h-4 rounded-full transition-all duration-500 hover:scale-125 transform-gpu ${
+                  index === currentIndex 
+                    ? 'bg-gradient-to-r from-[#00FF66] to-[#00cc52] shadow-lg' 
+                    : 'bg-gray-300 hover:bg-gray-400'
+                }`}></div>
+              </button>
             ))}
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {testimonials.slice(0, 3).map((testimonial, index) => (
             <div 
               key={testimonial.id}
-              className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow"
+              className="relative group animate-fade-in-up h-full"
+              style={{ animationDelay: `${cardsVisible ? 400 + index * 200 : 0}ms` }}
             >
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex">
-                  {renderStars(testimonial.rating)}
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+              <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 hover:scale-105 transform-gpu border-2 border-white/40 overflow-hidden h-full flex flex-col">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-t-3xl"></div>
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex gap-1">
+                      {renderStars(testimonial.rating)}
+                    </div>
+                    {testimonial.verified && (
+                      <span className="text-xs text-green-600 flex items-center font-black">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
+                        Verified
+                      </span>
+                    )}
+                  </div>
+                  
+                  <p className="text-gray-700 mb-6 text-sm leading-relaxed font-medium flex-grow group-hover:text-gray-900 transition-colors duration-500">
+                    "{testimonial.text.length > 120 ? testimonial.text.substring(0, 120) + '...' : testimonial.text}"
+                  </p>
+                  
+                  <div className="border-t border-gray-200 pt-4 mt-auto">
+                    <div className="font-black text-gray-900 text-sm mb-1 group-hover:text-[#00FF66] transition-colors duration-500">{testimonial.name}</div>
+                    <div className="text-xs text-gray-500 mb-3 font-medium">{testimonial.location}</div>
+                    <div className="relative group/service-badge">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/service-badge:opacity-30 transition-all duration-500"></div>
+                      <span className={`relative px-3 py-1 rounded-xl text-xs font-black bg-gradient-to-r ${getServiceBadgeColor(testimonial.service)} shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 transform-gpu`}>
+                        {testimonial.service}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                {testimonial.verified && (
-                  <span className="text-xs text-green-600 flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                    Verified
-                  </span>
-                )}
-              </div>
-              
-              <p className="text-gray-700 mb-4 text-sm leading-relaxed">
-                "{testimonial.text.length > 120 ? testimonial.text.substring(0, 120) + '...' : testimonial.text}"
-              </p>
-              
-              <div className="border-t pt-4">
-                <div className="font-semibold text-gray-900 text-sm">{testimonial.name}</div>
-                <div className="text-xs text-gray-500 mb-2">{testimonial.location}</div>
-                <span className={`px-2 py-1 rounded text-xs font-medium ${getServiceBadgeColor(testimonial.service)}`}>
-                  {testimonial.service}
-                </span>
+                
+                <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
               </div>
             </div>
           ))}
@@ -230,10 +354,15 @@ const TestimonialsSection = () => {
         <div className="text-center">
           <Button
             onClick={handleViewAllTestimonials}
-            variant="primary"
-            size="lg"
+            className="relative bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transform-gpu group overflow-hidden"
+            style={{ transformStyle: 'preserve-3d' }}
           >
-            View All Testimonials
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="text-xl group-hover:animate-bounce">💬</span>
+              View All Testimonials
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform group-hover:translate-x-full"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-30 group-hover:opacity-60 transition-opacity duration-700"></div>
           </Button>
         </div>
       </div>
@@ -242,3 +371,4 @@ const TestimonialsSection = () => {
 };
 
 export default TestimonialsSection;
+

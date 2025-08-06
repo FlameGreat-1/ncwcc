@@ -334,7 +334,7 @@ const Services = () => {
                         style={{ transformStyle: 'preserve-3d' }}
                       >
                         <span className="relative z-10 flex items-center gap-2">
-                          <span className="text-lg group-hover/cta:animate-bounce">🎯</span>
+                          <span className="text-lg group-hover/cta:animate-bounce"></span>
                           Get Custom Quote
                         </span>
                         <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/cta:opacity-100 transition-opacity duration-700 transform group-hover/cta:translate-x-full"></div>
