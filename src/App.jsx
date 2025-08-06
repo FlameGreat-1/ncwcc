@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext.jsx';
+import { AuthProvider } from './contexts/AuthContext.jsx';
 import Header from './components/common/Header.jsx';
 import Footer from './components/common/Footer.jsx';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx';
@@ -15,6 +16,11 @@ const QuoteCalculator = lazy(() => import('./pages/QuoteCalculator.jsx'));
 const Gallery = lazy(() => import('./pages/Gallery.jsx'));
 const NDISInfo = lazy(() => import('./pages/NDISInfo.jsx'));
 const FAQ = lazy(() => import('./pages/FAQ.jsx'));
+
+const Login = lazy(() => import('./pages/accounts/Login.jsx'));
+const Register = lazy(() => import('./pages/accounts/Register.jsx'));
+const PasswordReset = lazy(() => import('./pages/accounts/PasswordReset.jsx'));
+const EmailVerification = lazy(() => import('./pages/accounts/EmailVerification.jsx'));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center app-bg-primary">
@@ -91,6 +97,12 @@ const AppContent = () => {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/ndis" element={<NDISInfo />} />
             <Route path="/faq" element={<FAQ />} />
+            
+            <Route path="/accounts/login" element={<Login />} />
+            <Route path="/accounts/register" element={<Register />} />
+            <Route path="/accounts/password-reset" element={<PasswordReset />} />
+            <Route path="/accounts/email-verification" element={<EmailVerification />} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
@@ -104,11 +116,13 @@ const AppContent = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <Router>
-        <ThemeOrchestrator>
-          <AppContent />
-        </ThemeOrchestrator>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <ThemeOrchestrator>
+            <AppContent />
+          </ThemeOrchestrator>
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 };
