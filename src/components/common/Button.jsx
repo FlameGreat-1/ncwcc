@@ -16,9 +16,9 @@ const Button = ({
   const baseClasses = 'inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
-    primary: 'bg-[#00FF66] text-black hover:bg-[#00e65a] focus:ring-[#00FF66] hover:transform hover:-translate-y-0.5',
-    secondary: 'bg-transparent text-[#00FF66] border-2 border-[#00FF66] hover:bg-[#00FF66] hover:text-black focus:ring-[#00FF66]',
-    outline: 'bg-transparent text-white border-2 border-white hover:bg-white hover:text-black focus:ring-white',
+    primary: 'bg-[#006da6] text-white hover:bg-[#0080c7] focus:ring-[#006da6] hover:transform hover:-translate-y-0.5',
+    secondary: 'bg-transparent text-[#006da6] border-2 border-[#006da6] hover:bg-[#006da6] hover:text-white focus:ring-[#006da6]',
+    outline: 'bg-transparent text-white border-2 border-white hover:bg-white hover:text-[#180c2e] focus:ring-white',
     ghost: 'bg-transparent text-white hover:bg-white/10 focus:ring-white/20',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
   };

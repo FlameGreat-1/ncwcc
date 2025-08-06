@@ -19,7 +19,7 @@ const FAQ = lazy(() => import('./pages/FAQ.jsx'));
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center app-bg-primary">
     <div className="relative group">
-      <div className="absolute -inset-4 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-30 animate-pulse"></div>
+      <div className="absolute -inset-4 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#180c2e] rounded-3xl blur opacity-30 animate-pulse"></div>
       <div className="relative app-bg-card app-border border-2 rounded-3xl p-8 app-shadow-xl">
         <LoadingSpinner size="lg" text="Loading..." />
       </div>
@@ -27,14 +27,12 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Theme Orchestrator Component
 const ThemeOrchestrator = ({ children }) => {
   const { isDark } = useTheme();
 
   useEffect(() => {
     const root = document.documentElement;
     
-    // Apply theme class to html element
     if (isDark) {
       root.classList.add('app-dark');
       root.classList.remove('app-light');
@@ -43,37 +41,31 @@ const ThemeOrchestrator = ({ children }) => {
       root.classList.remove('app-dark');
     }
 
-    // Set CSS custom properties for the entire app
     const themeVars = {
-      // Backgrounds
-      '--app-bg-primary': isDark ? '#000000' : '#FFFFFF',
-      '--app-bg-secondary': isDark ? '#1A1A1A' : '#F8F9FA',
-      '--app-bg-card': isDark ? '#111111' : '#FFFFFF',
+      '--app-bg-primary': isDark ? '#180c2e' : '#FFFFFF',
+      '--app-bg-secondary': isDark ? '#2d1b4e' : '#F8F9FA',
+      '--app-bg-card': isDark ? '#1a0f33' : '#FFFFFF',
       '--app-bg-glass': isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.9)',
       
-      // Text colors
-      '--app-text-primary': isDark ? '#FFFFFF' : '#000000',
-      '--app-text-secondary': isDark ? '#CCCCCC' : '#4B4B4B',
-      '--app-text-muted': isDark ? '#4B4B4B' : '#6B7280',
+      '--app-text-primary': isDark ? '#FFFFFF' : '#180c2e',
+      '--app-text-secondary': isDark ? '#f5f5f5' : '#333333',
+      '--app-text-muted': isDark ? '#CCCCCC' : '#6B7280',
       
-      // Borders and shadows
-      '--app-border': isDark ? '#333333' : '#E5E7EB',
+      '--app-border': isDark ? '#4a3b6b' : '#E5E7EB',
       '--app-border-glass': isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.4)',
       '--app-shadow': isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)',
       '--app-shadow-lg': isDark ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.15)',
       '--app-shadow-xl': isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.2)',
       
-      // Green colors (consistent)
-      '--app-green': '#00FF66',
-      '--app-green-hover': '#00e65a',
-      '--app-green-dark': '#00cc52',
+      '--app-blue': '#006da6',
+      '--app-blue-hover': '#0080c7',
+      '--app-blue-dark': '#005a8a',
+      '--app-indigo': '#180c2e',
       
-      // Glassmorphism
       '--app-backdrop-blur': 'blur(12px)',
-      '--app-glass-bg': isDark ? 'rgba(17, 17, 17, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+      '--app-glass-bg': isDark ? 'rgba(26, 15, 51, 0.8)' : 'rgba(255, 255, 255, 0.8)',
     };
 
-    // Apply all CSS variables
     Object.entries(themeVars).forEach(([property, value]) => {
       root.style.setProperty(property, value);
     });
@@ -124,8 +116,8 @@ const App = () => {
 const NotFound = () => (
   <div className="min-h-screen flex items-center justify-center app-bg-secondary relative overflow-hidden">
     <div className="absolute inset-0">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/3 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#006da6]/3 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#180c2e]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
     </div>
     
     <div className="relative z-10 text-center max-w-2xl mx-auto px-6">

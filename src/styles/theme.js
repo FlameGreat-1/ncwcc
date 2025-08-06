@@ -1,21 +1,20 @@
 export const theme = {
   colors: {
     background: {
-      // Dynamic backgrounds for both themes
       primary: {
-        dark: '#000000',
+        dark: '#180c2e',
         light: '#FFFFFF'
       },
       secondary: {
-        dark: '#1A1A1A', 
+        dark: '#2d1b4e', 
         light: '#F8F9FA'
       },
       card: {
-        dark: '#111111',
+        dark: '#1a0f33',
         light: '#FFFFFF'
       },
       chat: {
-        dark: '#1A1A1A',
+        dark: '#2d1b4e',
         light: '#F1F5F9'
       }
     },
@@ -23,24 +22,24 @@ export const theme = {
     text: {
       primary: {
         dark: '#FFFFFF',
-        light: '#000000'
+        light: '#180c2e'
       },
       secondary: {
-        dark: '#CCCCCC',
-        light: '#4B4B4B'
+        dark: '#f5f5f5',
+        light: '#333333'
       },
       muted: {
-        dark: '#4B4B4B',
+        dark: '#CCCCCC',
         light: '#6B7280'
       },
       inverse: {
-        dark: '#000000',
+        dark: '#180c2e',
         light: '#FFFFFF'
       }
     },
     
     border: {
-      dark: '#333333',
+      dark: '#4a3b6b',
       light: '#E5E7EB'
     },
     
@@ -49,35 +48,39 @@ export const theme = {
       light: 'rgba(0, 0, 0, 0.1)'
     },
     
-    // Green colors remain consistent across themes
     primary: {
-      green: '#00FF66',
-      greenHover: '#00e65a',
-      greenDark: '#00cc52',
-      greenGlow: {
-        dark: 'radial-gradient(circle, #006b3b 0%, #000000 100%)',
-        light: 'radial-gradient(circle, #00FF66 0%, #FFFFFF 100%)'
+      blue: '#006da6',
+      blueHover: '#0080c7',
+      blueDark: '#005a8a',
+      blueLight: '#4da6d9',
+      indigo: '#180c2e',
+      indigoLight: '#2d1b4e',
+      indigoHover: '#3d2b5e',
+      blueGlow: {
+        dark: 'radial-gradient(circle, #005a8a 0%, #180c2e 100%)',
+        light: 'radial-gradient(circle, #006da6 0%, #FFFFFF 100%)'
       }
     },
     
     button: {
-      green: '#00FF66',
-      greenHover: '#00e65a',
-      text: '#000000'
+      blue: '#006da6',
+      blueHover: '#0080c7',
+      indigo: '#180c2e',
+      text: '#FFFFFF'
     },
     
     chat: {
       sent: {
-        dark: '#002b13',
-        light: '#E6F7FF'
+        dark: '#1a0f33',
+        light: '#e6f3ff'
       },
       received: {
-        dark: '#1A1A1A',
+        dark: '#2d1b4e',
         light: '#F5F5F5'
       }
     },
     
-    inputBorder: '#00FF66'
+    inputBorder: '#006da6'
   },
   
   typography: {
@@ -85,16 +88,16 @@ export const theme = {
       base: 'Inter, system-ui, -apple-system, sans-serif'
     },
     fontSize: {
-      xs: '0.75rem',    // 12px
-      sm: '0.875rem',   // 14px
-      base: '1rem',     // 16px
-      lg: '1.125rem',   // 18px
-      xl: '1.25rem',    // 20px
-      '2xl': '1.5rem',  // 24px
-      '3xl': '2rem',    // 32px
-      '4xl': '3rem',    // 48px
-      '5xl': '4rem',    // 64px
-      '6xl': '4.5rem'   // 72px
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+      '2xl': '1.5rem',
+      '3xl': '2rem',
+      '4xl': '3rem',
+      '5xl': '4rem',
+      '6xl': '4.5rem'
     },
     fontWeight: {
       normal: '400',
@@ -113,30 +116,30 @@ export const theme = {
   },
   
   spacing: {
-    xs: '0.25rem',   // 4px
-    sm: '0.5rem',    // 8px
-    md: '1rem',      // 16px
-    lg: '2rem',      // 32px
-    xl: '4rem',      // 64px
-    '2xl': '6rem',   // 96px
-    '3xl': '7.5rem'  // 120px
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '2rem',
+    xl: '4rem',
+    '2xl': '6rem',
+    '3xl': '7.5rem'
   },
   
   layout: {
-    containerMaxWidth: '71.25rem', // 1140px
-    containerPadding: '0 1.5rem',  // 0 24px
-    sectionPadding: '4rem 0',      // 64px 0
-    chatBubblePadding: '0.75rem 1rem' // 12px 16px
+    containerMaxWidth: '71.25rem',
+    containerPadding: '0 1.5rem',
+    sectionPadding: '4rem 0',
+    chatBubblePadding: '0.75rem 1rem'
   },
   
   borderRadius: {
     none: '0',
-    sm: '0.25rem',   // 4px
-    md: '0.5rem',    // 8px
-    lg: '0.75rem',   // 12px
-    xl: '1rem',      // 16px
-    '2xl': '1.5rem', // 24px
-    '3xl': '2rem',   // 32px
+    sm: '0.25rem',
+    md: '0.5rem',
+    lg: '0.75rem',
+    xl: '1rem',
+    '2xl': '1.5rem',
+    '3xl': '2rem',
     full: '9999px',
     circle: '50%'
   },
@@ -156,52 +159,54 @@ export const theme = {
       light: '0 20px 40px rgba(0, 0, 0, 0.2)'
     },
     glow: {
-      green: '0 0 20px rgba(0, 255, 102, 0.3)',
-      greenStrong: '0 0 40px rgba(0, 255, 102, 0.5)'
+      blue: '0 0 20px rgba(0, 109, 166, 0.3)',
+      blueStrong: '0 0 40px rgba(0, 109, 166, 0.5)',
+      indigo: '0 0 20px rgba(24, 12, 46, 0.3)',
+      indigoStrong: '0 0 40px rgba(24, 12, 46, 0.5)'
     }
   },
   
   components: {
     avatar: {
-      sm: '2rem',    // 32px
-      md: '2.5rem',  // 40px
-      lg: '3rem',    // 48px
-      xl: '4rem'     // 64px
+      sm: '2rem',
+      md: '2.5rem',
+      lg: '3rem',
+      xl: '4rem'
     },
     button: {
       padding: {
-        sm: '0.5rem 1rem',     // 8px 16px
-        md: '0.75rem 1.5rem',  // 12px 24px
-        lg: '1rem 2rem'        // 16px 32px
+        sm: '0.5rem 1rem',
+        md: '0.75rem 1.5rem',
+        lg: '1rem 2rem'
       },
       radius: '9999px',
       height: {
-        sm: '2rem',   // 32px
-        md: '2.5rem', // 40px
-        lg: '3rem'    // 48px
+        sm: '2rem',
+        md: '2.5rem',
+        lg: '3rem'
       }
     },
     card: {
       padding: {
-        sm: '1rem',     // 16px
-        md: '1.5rem',   // 24px
-        lg: '2rem'      // 32px
+        sm: '1rem',
+        md: '1.5rem',
+        lg: '2rem'
       },
-      radius: '1rem'    // 16px
+      radius: '1rem'
     },
     input: {
-      height: '2.5rem',      // 40px
-      padding: '0.75rem',    // 12px
-      radius: '0.5rem'       // 8px
+      height: '2.5rem',
+      padding: '0.75rem',
+      radius: '0.5rem'
     }
   },
   
   breakpoints: {
-    sm: '40rem',     // 640px
-    md: '48rem',     // 768px
-    lg: '64rem',     // 1024px
-    xl: '80rem',     // 1280px
-    '2xl': '96rem'   // 1536px
+    sm: '40rem',
+    md: '48rem',
+    lg: '64rem',
+    xl: '80rem',
+    '2xl': '96rem'
   },
   
   transitions: {
@@ -222,7 +227,6 @@ export const theme = {
   }
 };
 
-// Helper functions to get theme-aware values
 export const getThemeValue = (path, isDark = true) => {
   const keys = path.split('.');
   let value = theme;
@@ -238,7 +242,6 @@ export const getThemeValue = (path, isDark = true) => {
   return value;
 };
 
-// Utility to generate CSS custom properties
 export const generateCSSVariables = (isDark = true) => {
   return {
     '--color-bg-primary': getThemeValue('colors.background.primary', isDark),
@@ -249,15 +252,46 @@ export const generateCSSVariables = (isDark = true) => {
     '--color-text-muted': getThemeValue('colors.text.muted', isDark),
     '--color-border': getThemeValue('colors.border', isDark),
     '--color-shadow': getThemeValue('colors.shadow', isDark),
-    '--color-green': theme.colors.primary.green,
-    '--color-green-hover': theme.colors.primary.greenHover,
-    '--color-green-dark': theme.colors.primary.greenDark,
+    '--color-blue': theme.colors.primary.blue,
+    '--color-blue-hover': theme.colors.primary.blueHover,
+    '--color-blue-dark': theme.colors.primary.blueDark,
+    '--color-indigo': theme.colors.primary.indigo,
+    '--color-indigo-light': theme.colors.primary.indigoLight,
     '--font-family-base': theme.typography.fontFamily.base,
     '--border-radius-md': theme.borderRadius.md,
     '--border-radius-lg': theme.borderRadius.lg,
     '--border-radius-xl': theme.borderRadius.xl,
     '--transition-normal': theme.transitions.normal,
     '--shadow-md': getThemeValue('shadows.md', isDark),
-    '--shadow-lg': getThemeValue('shadows.lg', isDark)
+    '--shadow-lg': getThemeValue('shadows.lg', isDark),
+    '--shadow-xl': getThemeValue('shadows.xl', isDark)
   };
+};
+
+export const getBrandColors = () => {
+  return {
+    blue: theme.colors.primary.blue,
+    blueHover: theme.colors.primary.blueHover,
+    blueDark: theme.colors.primary.blueDark,
+    blueLight: theme.colors.primary.blueLight,
+    indigo: theme.colors.primary.indigo,
+    indigoLight: theme.colors.primary.indigoLight,
+    indigoHover: theme.colors.primary.indigoHover
+  };
+};
+
+export const getComponentStyles = (component, variant = 'md') => {
+  const componentConfig = theme.components[component];
+  if (!componentConfig) return {};
+  
+  const styles = {};
+  Object.keys(componentConfig).forEach(key => {
+    if (typeof componentConfig[key] === 'object' && componentConfig[key][variant]) {
+      styles[key] = componentConfig[key][variant];
+    } else if (typeof componentConfig[key] === 'string') {
+      styles[key] = componentConfig[key];
+    }
+  });
+  
+  return styles;
 };

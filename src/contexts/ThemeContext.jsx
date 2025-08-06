@@ -36,25 +36,46 @@ export const ThemeProvider = ({ children }) => {
     const root = document.documentElement;
     
     if (isDark) {
-      root.classList.add('dark');
-      root.classList.remove('light');
+      root.classList.add('dark', 'app-dark');
+      root.classList.remove('light', 'app-light');
     } else {
-      root.classList.add('light');
-      root.classList.remove('dark');
+      root.classList.add('light', 'app-light');
+      root.classList.remove('dark', 'app-dark');
     }
 
-    root.style.setProperty('--bg-primary', isDark ? '#000000' : '#FFFFFF');
-    root.style.setProperty('--bg-secondary', isDark ? '#1A1A1A' : '#F8F9FA');
-    root.style.setProperty('--bg-card', isDark ? '#111111' : '#FFFFFF');
-    root.style.setProperty('--text-primary', isDark ? '#FFFFFF' : '#000000');
-    root.style.setProperty('--text-secondary', isDark ? '#CCCCCC' : '#4B4B4B');
-    root.style.setProperty('--text-muted', isDark ? '#4B4B4B' : '#6B7280');
-    root.style.setProperty('--border-color', isDark ? '#333333' : '#E5E7EB');
+    root.style.setProperty('--bg-primary', isDark ? '#180c2e' : '#FFFFFF');
+    root.style.setProperty('--bg-secondary', isDark ? '#2d1b4e' : '#F8F9FA');
+    root.style.setProperty('--bg-card', isDark ? '#1a0f33' : '#FFFFFF');
+    root.style.setProperty('--text-primary', isDark ? '#FFFFFF' : '#180c2e');
+    root.style.setProperty('--text-secondary', isDark ? '#f5f5f5' : '#333333');
+    root.style.setProperty('--text-muted', isDark ? '#CCCCCC' : '#6B7280');
+    root.style.setProperty('--border-color', isDark ? '#4a3b6b' : '#E5E7EB');
     root.style.setProperty('--shadow-color', isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)');
     
-    root.style.setProperty('--green-primary', '#00FF66');
-    root.style.setProperty('--green-hover', '#00e65a');
-    root.style.setProperty('--green-dark', '#00cc52');
+    root.style.setProperty('--blue-primary', '#006da6');
+    root.style.setProperty('--blue-hover', '#0080c7');
+    root.style.setProperty('--blue-dark', '#005a8a');
+    root.style.setProperty('--indigo-primary', '#180c2e');
+    root.style.setProperty('--indigo-light', '#2d1b4e');
+    
+    root.style.setProperty('--app-bg-primary', isDark ? '#180c2e' : '#FFFFFF');
+    root.style.setProperty('--app-bg-secondary', isDark ? '#2d1b4e' : '#F8F9FA');
+    root.style.setProperty('--app-bg-card', isDark ? '#1a0f33' : '#FFFFFF');
+    root.style.setProperty('--app-bg-glass', isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.9)');
+    root.style.setProperty('--app-text-primary', isDark ? '#FFFFFF' : '#180c2e');
+    root.style.setProperty('--app-text-secondary', isDark ? '#f5f5f5' : '#333333');
+    root.style.setProperty('--app-text-muted', isDark ? '#CCCCCC' : '#6B7280');
+    root.style.setProperty('--app-border', isDark ? '#4a3b6b' : '#E5E7EB');
+    root.style.setProperty('--app-border-glass', isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.4)');
+    root.style.setProperty('--app-shadow', isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)');
+    root.style.setProperty('--app-shadow-lg', isDark ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.15)');
+    root.style.setProperty('--app-shadow-xl', isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.2)');
+    root.style.setProperty('--app-blue', '#006da6');
+    root.style.setProperty('--app-blue-hover', '#0080c7');
+    root.style.setProperty('--app-blue-dark', '#005a8a');
+    root.style.setProperty('--app-indigo', '#180c2e');
+    root.style.setProperty('--app-backdrop-blur', 'blur(12px)');
+    root.style.setProperty('--app-glass-bg', isDark ? 'rgba(26, 15, 51, 0.8)' : 'rgba(255, 255, 255, 0.8)');
   }, [isDark]);
 
   useEffect(() => {
@@ -77,37 +98,52 @@ export const ThemeProvider = ({ children }) => {
     setTheme,
     colors: {
       background: {
-        primary: isDark ? '#000000' : '#FFFFFF',
-        secondary: isDark ? '#1A1A1A' : '#F8F9FA',
-        card: isDark ? '#111111' : '#FFFFFF',
-        chat: isDark ? '#1A1A1A' : '#F1F5F9'
+        primary: isDark ? '#180c2e' : '#FFFFFF',
+        secondary: isDark ? '#2d1b4e' : '#F8F9FA',
+        card: isDark ? '#1a0f33' : '#FFFFFF',
+        chat: isDark ? '#2d1b4e' : '#F1F5F9'
       },
       text: {
-        primary: isDark ? '#FFFFFF' : '#000000',
-        secondary: isDark ? '#CCCCCC' : '#4B4B4B',
-        muted: isDark ? '#4B4B4B' : '#6B7280',
-        inverse: isDark ? '#000000' : '#FFFFFF'
+        primary: isDark ? '#FFFFFF' : '#180c2e',
+        secondary: isDark ? '#f5f5f5' : '#333333',
+        muted: isDark ? '#CCCCCC' : '#6B7280',
+        inverse: isDark ? '#180c2e' : '#FFFFFF'
       },
-      border: isDark ? '#333333' : '#E5E7EB',
+      border: isDark ? '#4a3b6b' : '#E5E7EB',
       shadow: isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)',
-      green: {
-        primary: '#00FF66',
-        hover: '#00e65a',
-        dark: '#00cc52'
+      blue: {
+        primary: '#006da6',
+        hover: '#0080c7',
+        dark: '#005a8a',
+        light: '#4da6d9'
+      },
+      indigo: {
+        primary: '#180c2e',
+        light: '#2d1b4e',
+        hover: '#3d2b5e'
       }
     },
     classes: {
       background: {
-        primary: isDark ? 'bg-black' : 'bg-white',
-        secondary: isDark ? 'bg-gray-900' : 'bg-gray-50',
-        card: isDark ? 'bg-gray-800' : 'bg-white'
+        primary: isDark ? 'bg-[#180c2e]' : 'bg-white',
+        secondary: isDark ? 'bg-[#2d1b4e]' : 'bg-gray-50',
+        card: isDark ? 'bg-[#1a0f33]' : 'bg-white'
       },
       text: {
-        primary: isDark ? 'text-white' : 'text-black',
-        secondary: isDark ? 'text-gray-300' : 'text-gray-600',
-        muted: isDark ? 'text-gray-500' : 'text-gray-400'
+        primary: isDark ? 'text-white' : 'text-[#180c2e]',
+        secondary: isDark ? 'text-[#f5f5f5]' : 'text-[#333333]',
+        muted: isDark ? 'text-[#CCCCCC]' : 'text-gray-400'
       },
-      border: isDark ? 'border-gray-700' : 'border-gray-200'
+      border: isDark ? 'border-[#4a3b6b]' : 'border-gray-200'
+    },
+    brand: {
+      blue: '#006da6',
+      blueHover: '#0080c7',
+      blueDark: '#005a8a',
+      blueLight: '#4da6d9',
+      indigo: '#180c2e',
+      indigoLight: '#2d1b4e',
+      indigoHover: '#3d2b5e'
     }
   };
 
