@@ -219,7 +219,7 @@ const Header = () => {
             </nav>
 
             <div className="flex items-center space-x-4">
-              <ThemeToggle className="hidden lg:block" />
+              {/*<ThemeToggle className="hidden lg:block" />*/}
               
               <div className="hidden lg:flex items-center">
                 <button
@@ -265,9 +265,9 @@ const Header = () => {
                 ))}
                 
                 <div className="pt-6 border-t app-border-glass mt-6 space-y-4">
-                  <div className="flex justify-center">
+                  {/*<div className="flex justify-center">
                     <ThemeToggle />
-                  </div>
+                  </div>*/}
                   
                   <button
                     onClick={() => window.location.href = '/quote'}
