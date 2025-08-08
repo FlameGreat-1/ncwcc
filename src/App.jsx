@@ -25,6 +25,11 @@ const EmailVerification = lazy(() => import('./pages/accounts/EmailVerification.
 const ClientPortal = lazy(() => import('./pages/clients/Portal.jsx'));
 const AdminPortal = lazy(() => import('./pages/admin/Portal.jsx'));
 
+const MyQuotes = lazy(() => import('./pages/quotes/MyQuotes.jsx'));
+const QuoteDetail = lazy(() => import('./pages/quotes/QuoteDetail.jsx'));
+const CreateQuote = lazy(() => import('./pages/quotes/CreateQuote.jsx'));
+const EditQuote = lazy(() => import('./pages/quotes/EditQuote.jsx'));
+
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center app-bg-primary">
     <LoadingSpinner size="lg" variant="branded" />
@@ -100,8 +105,23 @@ const AppContent = () => {
             <Route path="/accounts/register" element={<Register />} />
             <Route path="/accounts/password-reset" element={<PasswordReset />} />
             <Route path="/accounts/email-verification" element={<EmailVerification />} />
+            
+            <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
+            <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
+            <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
+            <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
+            
             <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/quotes" element={<ClientRoute><MyQuotes /></ClientRoute>} />
+            <Route path="/clients/quotes/create" element={<ClientRoute><CreateQuote /></ClientRoute>} />
+            <Route path="/clients/quotes/:id" element={<ClientRoute><QuoteDetail /></ClientRoute>} />
+            <Route path="/clients/quotes/:id/edit" element={<ClientRoute><EditQuote /></ClientRoute>} />
+            
             <Route path="/admin/portal" element={<AdminRoute><AdminPortal /></AdminRoute>} />
+            <Route path="/admin/quotes" element={<AdminRoute><MyQuotes /></AdminRoute>} />
+            <Route path="/admin/quotes/create" element={<AdminRoute><CreateQuote /></AdminRoute>} />
+            <Route path="/admin/quotes/:id" element={<AdminRoute><QuoteDetail /></AdminRoute>} />
+            <Route path="/admin/quotes/:id/edit" element={<AdminRoute><EditQuote /></AdminRoute>} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

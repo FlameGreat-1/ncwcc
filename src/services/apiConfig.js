@@ -28,6 +28,21 @@ export const API_ENDPOINTS = {
   ADDRESSES: `${API_BASE_URL}/${API_VERSION}/accounts/addresses/`,
   DASHBOARD: `${API_BASE_URL}/${API_VERSION}/accounts/dashboard/`,
   HEALTH: `${API_BASE_URL}/${API_VERSION}/accounts/health/`,
+  
+  // CLIENT-FOCUSED QUOTES ENDPOINTS
+  QUOTES: {
+    BASE: `${API_BASE_URL}/${API_VERSION}/quotes/`,
+    MY_QUOTES: `${API_BASE_URL}/${API_VERSION}/quotes/my-quotes/`,
+    CALCULATOR: `${API_BASE_URL}/${API_VERSION}/quotes/calculator/`,
+    ITEMS: `${API_BASE_URL}/${API_VERSION}/quotes/items/`,
+    ATTACHMENTS: `${API_BASE_URL}/${API_VERSION}/quotes/attachments/`,
+  },
+  
+  // SERVICES FOR QUOTE CREATION
+  SERVICES: {
+    BASE: `${API_BASE_URL}/${API_VERSION}/services/`,
+    ADDONS: `${API_BASE_URL}/${API_VERSION}/services/addons/`,
+  },
 };
 
 const apiClient = axios.create({
@@ -39,6 +54,7 @@ const apiClient = axios.create({
   },
 });
 
+// Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -52,6 +68,7 @@ apiClient.interceptors.request.use(
   }
 );
 
+// Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => {
     return response;
