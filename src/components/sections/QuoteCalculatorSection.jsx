@@ -49,9 +49,9 @@ const QuoteCalculatorSection = () => {
 
         {!showFullForm ? (
           <div className="max-w-2xl mx-auto">
-            <div className="bg-gradient-to-br from-[#00FF66]/10 to-[#00cc52]/5 rounded-2xl p-8 md:p-12 text-center border border-[#00FF66]/20">
+            <div className="bg-gradient-to-br from-[#006da6]/10 to-[#0080c7]/5 rounded-2xl p-8 md:p-12 text-center border border-[#006da6]/20">
               <div className="mb-8">
-                <div className="w-20 h-20 bg-[#00FF66]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-[#006da6]/20 rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-3xl">🧮</span>
                 </div>
                 
@@ -66,15 +66,15 @@ const QuoteCalculatorSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-sm">
                   <div className="flex items-center justify-center p-3 bg-white rounded-lg">
-                    <span className="text-[#00FF66] mr-2">✓</span>
+                    <span className="text-[#006da6] mr-2">✓</span>
                     <span className="text-gray-700">Instant pricing</span>
                   </div>
                   <div className="flex items-center justify-center p-3 bg-white rounded-lg">
-                    <span className="text-[#00FF66] mr-2">✓</span>
+                    <span className="text-[#006da6] mr-2">✓</span>
                     <span className="text-gray-700">No hidden fees</span>
                   </div>
                   <div className="flex items-center justify-center p-3 bg-white rounded-lg">
-                    <span className="text-[#00FF66] mr-2">✓</span>
+                    <span className="text-[#006da6] mr-2">✓</span>
                     <span className="text-gray-700">NDIS compliant</span>
                   </div>
                 </div>
@@ -163,7 +163,7 @@ const QuoteCalculatorSection = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#00FF66]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#006da6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">⚡</span>
               </div>
               <h4 className="font-bold text-gray-900 mb-2">Instant Results</h4>
@@ -173,7 +173,7 @@ const QuoteCalculatorSection = () => {
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#00FF66]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#006da6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🎯</span>
               </div>
               <h4 className="font-bold text-gray-900 mb-2">Accurate Pricing</h4>
@@ -183,7 +183,7 @@ const QuoteCalculatorSection = () => {
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#00FF66]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#006da6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">💰</span>
               </div>
               <h4 className="font-bold text-gray-900 mb-2">Transparent Costs</h4>
@@ -199,3 +199,4 @@ const QuoteCalculatorSection = () => {
 };
 
 export default QuoteCalculatorSection;
+

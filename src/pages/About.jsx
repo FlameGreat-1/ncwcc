@@ -58,21 +58,21 @@ const About = () => {
       role: 'Operations Manager',
       experience: '8+ years',
       specialization: 'NDIS Services & Quality Control',
-      color: 'from-[#00FF66] to-[#00cc52]'
+      color: 'from-[#006da6] to-[#0080c7]'
     },
     {
       name: 'Michael Chen',
       role: 'Lead Cleaner',
       experience: '6+ years',
       specialization: 'End-of-Lease & Deep Cleaning',
-      color: 'from-[#00cc52] to-[#00FF66]'
+      color: 'from-[#0080c7] to-[#006da6]'
     },
     {
       name: 'Emma Williams',
       role: 'Customer Relations',
       experience: '5+ years',
       specialization: 'Client Support & Scheduling',
-      color: 'from-[#00FF66] to-[#00e65a]'
+      color: 'from-[#006da6] to-[#005a8a]'
     }
   ];
 
@@ -81,25 +81,25 @@ const About = () => {
       title: 'Reliability',
       description: 'We show up on time, every time, and deliver consistent quality service.',
       icon: '⏰',
-      color: 'from-[#00FF66] to-[#00cc52]'
+      color: 'from-[#006da6] to-[#0080c7]'
     },
     {
       title: 'Respect',
       description: 'We treat every home and client with the utmost respect and care.',
       icon: '🤝',
-      color: 'from-[#00cc52] to-[#00FF66]'
+      color: 'from-[#0080c7] to-[#006da6]'
     },
     {
       title: 'Quality',
       description: 'We use professional-grade equipment and eco-friendly products.',
       icon: '⭐',
-      color: 'from-[#00FF66] to-[#00e65a]'
+      color: 'from-[#006da6] to-[#005a8a]'
     },
     {
       title: 'Transparency',
       description: 'Clear pricing, detailed invoices, and honest communication always.',
       icon: '💎',
-      color: 'from-[#00e65a] to-[#00cc52]'
+      color: 'from-[#005a8a] to-[#0080c7]'
     }
   ];
 
@@ -113,9 +113,9 @@ const About = () => {
 
       <main className="pt-24 relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/3 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#00FF66]/2 to-[#00cc52]/2 rounded-full blur-3xl animate-spin-slow"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#006da6]/3 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#0080c7]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#006da6]/2 to-[#0080c7]/2 rounded-full blur-3xl animate-spin-slow"></div>
         </div>
 
         <section className="section-padding bg-white relative z-10">
@@ -168,36 +168,36 @@ const About = () => {
                 </div>
 
                 <div className="relative group animate-fade-in-up delay-600">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
-                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,255,102,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#0080c7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
                     
-                    <h4 className="text-lg font-black text-gray-900 mb-8 group-hover:text-[#00FF66] transition-colors duration-500">Company Details</h4>
+                    <h4 className="text-lg font-black text-gray-900 mb-8 group-hover:text-[#006da6] transition-colors duration-500">Company Details</h4>
                     <div className="space-y-6">
-                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#006da6]/20 transition-colors duration-500">
                         <span className="text-[#666] font-semibold text-sm">Business Name:</span>
-                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{COMPANY_INFO.name}</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#006da6] transition-colors duration-500 text-sm">{COMPANY_INFO.name}</span>
                       </div>
-                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#006da6]/20 transition-colors duration-500">
                         <span className="text-[#666] font-semibold text-sm">ABN:</span>
-                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{COMPANY_INFO.abn}</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#006da6] transition-colors duration-500 text-sm">{COMPANY_INFO.abn}</span>
                       </div>
-                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#006da6]/20 transition-colors duration-500">
                         <span className="text-[#666] font-semibold text-sm">Phone:</span>
-                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{formatPhone(COMPANY_INFO.phone)}</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#006da6] transition-colors duration-500 text-sm">{formatPhone(COMPANY_INFO.phone)}</span>
                       </div>
-                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#00FF66]/20 transition-colors duration-500">
+                      <div className="flex justify-between items-center border-b border-gray-100 pb-4 group-hover:border-[#006da6]/20 transition-colors duration-500">
                         <span className="text-[#666] font-semibold text-sm">Email:</span>
-                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">{COMPANY_INFO.email.support}</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#006da6] transition-colors duration-500 text-sm">{COMPANY_INFO.email.support}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-[#666] font-semibold text-sm">Service Area:</span>
-                        <span className="font-black text-gray-900 group-hover:text-[#00FF66] transition-colors duration-500 text-sm">NSW Wide</span>
+                        <span className="font-black text-gray-900 group-hover:text-[#006da6] transition-colors duration-500 text-sm">NSW Wide</span>
                       </div>
                     </div>
                     
-                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#0080c7] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
                 </div>
               </div>
@@ -205,21 +205,21 @@ const About = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                 {companyValues.map((value, index) => (
                   <div key={index} className="relative group animate-fade-in-up" style={{ animationDelay: `${800 + index * 200}ms` }}>
-                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
                     <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 hover:scale-105 transform-gpu text-center overflow-hidden border-2 border-white/40">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
-                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#0080c7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#006da6] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#006da6] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
                       
                       <div className={`relative w-12 h-12 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:shadow-2xl transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 transform-gpu`}>
                         <span className="text-2xl group-hover:animate-bounce">{value.icon}</span>
                         <div className="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                       </div>
                       
-                      <h4 className="text-base font-black text-gray-900 mb-3 group-hover:text-[#00FF66] transition-colors duration-500">{value.title}</h4>
+                      <h4 className="text-base font-black text-gray-900 mb-3 group-hover:text-[#006da6] transition-colors duration-500">{value.title}</h4>
                       <p className="text-sm text-[#666] leading-relaxed group-hover:text-[#333] transition-colors duration-500">{value.description}</p>
                       
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#006da6] to-[#0080c7] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                     </div>
                   </div>
                 ))}
@@ -227,13 +227,12 @@ const About = () => {
             </div>
           </div>
         </section>
-
         <section ref={teamRef} className="section-padding bg-white relative z-10">
           <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
-                  Meet Our <span className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent">Team</span>
+                  Meet Our <span className="bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] bg-clip-text text-transparent">Team</span>
                 </h2>
                 <p className="text-base text-[#4B4B4B] max-w-2xl mx-auto font-medium animate-fade-in-up delay-300">
                   Our experienced professionals are the heart of our service
@@ -243,26 +242,26 @@ const About = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 {teamMembers.map((member, index) => (
                   <div key={index} className="relative group animate-fade-in-up" style={{ animationDelay: `${teamVisible ? index * 200 : 0}ms` }}>
-                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
                     <div className="relative bg-gradient-to-br from-gray-50/80 via-white/90 to-gray-50/80 backdrop-blur-xl rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 hover:scale-105 transform-gpu overflow-hidden border-2 border-white/40">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-                      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-t-3xl"></div>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#0080c7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-t-3xl"></div>
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#006da6] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
                       
-                      <div className={`relative w-20 h-20 bg-gradient-to-br ${member.color} rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl group-hover:shadow-[0_0_30px_rgba(0,255,102,0.4)] transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 transform-gpu overflow-hidden`}>
-                        <span className="text-2xl font-black text-black group-hover:animate-bounce">
+                      <div className={`relative w-20 h-20 bg-gradient-to-br ${member.color} rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl group-hover:shadow-[0_0_30px_rgba(0,109,166,0.4)] transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 transform-gpu overflow-hidden`}>
+                        <span className="text-2xl font-black text-white group-hover:animate-bounce">
                           {member.name.split(' ').map(n => n[0]).join('')}
                         </span>
                         <div className="absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                        <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66]/20 to-[#00cc52]/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/20 to-[#0080c7]/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                       </div>
                       
-                      <h3 className="text-lg font-black text-gray-900 mb-2 group-hover:text-[#00FF66] transition-colors duration-500">{member.name}</h3>
-                      <p className="text-[#00FF66] font-black mb-2 group-hover:text-black transition-colors duration-500 text-sm">{member.role}</p>
+                      <h3 className="text-lg font-black text-gray-900 mb-2 group-hover:text-[#006da6] transition-colors duration-500">{member.name}</h3>
+                      <p className="text-[#006da6] font-black mb-2 group-hover:text-black transition-colors duration-500 text-sm">{member.role}</p>
                       <p className="text-sm text-[#666] mb-3 font-semibold group-hover:text-[#333] transition-colors duration-500">{member.experience} experience</p>
-                      <p className="text-sm text-[#4B4B4B] group-hover:text-[#00FF66] transition-colors duration-500 font-medium">{member.specialization}</p>
+                      <p className="text-sm text-[#4B4B4B] group-hover:text-[#006da6] transition-colors duration-500 font-medium">{member.specialization}</p>
                       
-                      <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                      <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#0080c7] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                     </div>
                   </div>
                 ))}
@@ -276,23 +275,23 @@ const About = () => {
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
-                  Service Areas & <span className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent">Hours</span>
+                  Service Areas & <span className="bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] bg-clip-text text-transparent">Hours</span>
                 </h2>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="relative group animate-fade-in-up delay-300">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
-                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,255,102,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#0080c7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
                     
-                    <h3 className="text-lg font-black text-gray-900 mb-6 group-hover:text-[#00FF66] transition-colors duration-500">Service Areas</h3>
+                    <h3 className="text-lg font-black text-gray-900 mb-6 group-hover:text-[#006da6] transition-colors duration-500">Service Areas</h3>
                     <div className="grid grid-cols-2 gap-4">
                       {SERVICE_AREAS.map((area, index) => (
                         <div key={index} className="flex items-center group/area">
-                          <div className="w-3 h-3 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full mr-3 group-hover/area:animate-pulse"></div>
-                          <span className="text-[#4B4B4B] font-medium group-hover/area:text-[#00FF66] transition-colors duration-300 text-sm">{area}</span>
+                          <div className="w-3 h-3 bg-gradient-to-r from-[#006da6] to-[#0080c7] rounded-full mr-3 group-hover/area:animate-pulse"></div>
+                          <span className="text-[#4B4B4B] font-medium group-hover/area:text-[#006da6] transition-colors duration-300 text-sm">{area}</span>
                         </div>
                       ))}
                     </div>
@@ -300,30 +299,30 @@ const About = () => {
                       Don't see your area? Contact us to check availability.
                     </p>
                     
-                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#0080c7] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
                 </div>
 
                 <div className="relative group animate-fade-in-up delay-600">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
-                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,255,102,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#0080c7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
                     
-                    <h3 className="text-lg font-black text-gray-900 mb-6 group-hover:text-[#00FF66] transition-colors duration-500">Business Hours</h3>
+                    <h3 className="text-lg font-black text-gray-900 mb-6 group-hover:text-[#006da6] transition-colors duration-500">Business Hours</h3>
                     <div className="space-y-4">
                       {Object.entries(BUSINESS_HOURS).map(([day, hours]) => (
-                        <div key={day} className="flex justify-between items-center group/hours">
-                          <span className="text-[#4B4B4B] capitalize font-semibold group-hover/hours:text-[#00FF66] transition-colors duration-300 text-sm">{day}:</span>
-                          <span className="font-black text-gray-900 group-hover/hours:text-[#00FF66] transition-colors duration-300 text-sm">{hours}</span>
+                        <div key={day} className="flex justify-between items-center border-b border-gray-100 pb-3 group-hover:border-[#006da6]/20 transition-colors duration-500 group/hour">
+                          <span className="text-[#4B4B4B] font-semibold capitalize group-hover/hour:text-[#006da6] transition-colors duration-300 text-sm">{day}:</span>
+                          <span className="text-gray-900 font-black group-hover/hour:text-[#006da6] transition-colors duration-300 text-sm">{hours}</span>
                         </div>
                       ))}
                     </div>
                     <p className="text-sm text-[#666] mt-6 group-hover:text-[#333] transition-colors duration-500 font-medium">
-                      Emergency and urgent cleaning services available outside regular hours.
+                      Emergency services available 24/7 for urgent situations.
                     </p>
                     
-                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#0080c7] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
                 </div>
               </div>
@@ -331,46 +330,43 @@ const About = () => {
           </div>
         </section>
 
-        <section className="section-padding bg-gradient-to-r from-[#00FF66]/10 via-white/80 to-[#00cc52]/10 backdrop-blur-xl relative z-10 overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#00FF66]/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-[#00cc52]/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          </div>
-          
-          <div className="container mx-auto relative z-10">
+        <section className="section-padding bg-white relative z-10">
+          <div className="container mx-auto">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
-                Ready to Experience the <span className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text text-transparent">Difference?</span>
-              </h2>
-              <p className="text-base text-[#4B4B4B] mb-12 max-w-2xl mx-auto font-medium animate-fade-in-up delay-300">
-                Join hundreds of satisfied customers who trust us with their cleaning needs.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up delay-600">
-                <Button
-                  onClick={handleGetQuote}
-                  className="relative bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transform-gpu group overflow-hidden"
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    <span className="text-xl group-hover:animate-bounce">💰</span>
-                    Get Your Free Quote
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform group-hover:translate-x-full"></div>
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-30 group-hover:opacity-60 transition-opacity duration-700"></div>
-                </Button>
-                
-                <Button
-                  onClick={handleContact}
-                  className="relative bg-transparent border-3 border-[#00FF66] text-[#00FF66] hover:bg-gradient-to-r hover:from-black hover:to-gray-800 hover:text-white hover:border-black font-black px-8 py-4 rounded-full text-base transition-all duration-700 hover:scale-110 hover:-translate-y-3 hover:-rotate-1 shadow-2xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transform-gpu group overflow-hidden"
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    <span className="text-xl group-hover:animate-pulse">📞</span>
-                    Contact Us Today
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-full"></div>
-                </Button>
+              <div className="relative group animate-fade-in-up">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                <div className="relative bg-gradient-to-br from-gray-50/80 via-white/90 to-gray-50/80 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border-2 border-white/40 hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#0080c7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                  
+                  <h2 className="text-3xl md:text-4xl font-black text-black mb-8 group-hover:text-[#006da6] transition-colors duration-500">
+                    Ready to Experience the Difference?
+                  </h2>
+                  <p className="text-base text-[#4B4B4B] mb-12 max-w-2xl mx-auto font-medium group-hover:text-[#333] transition-colors duration-500">
+                    Join hundreds of satisfied customers who trust us with their cleaning needs. 
+                    Get your free quote today and discover why we're NSW's preferred cleaning service.
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <Button
+                      onClick={handleGetQuote}
+                      className="btn-primary group/btn relative overflow-hidden"
+                    >
+                      <span className="relative z-10">Get Free Quote</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#180c2e] to-[#2d1b4e] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-300 origin-left"></div>
+                    </Button>
+                    
+                    <Button
+                      onClick={handleContact}
+                      className="btn-secondary group/btn relative overflow-hidden"
+                    >
+                      <span className="relative z-10">Contact Us</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#180c2e] to-[#2d1b4e] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-300 origin-left"></div>
+                    </Button>
+                  </div>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#0080c7] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                </div>
               </div>
             </div>
           </div>

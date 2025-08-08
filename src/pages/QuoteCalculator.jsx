@@ -37,15 +37,15 @@ const QuoteCalculator = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div className="bg-gray-50 rounded-lg p-6 text-center">
-                  <div className="text-2xl font-bold text-[#00FF66] mb-2">Instant</div>
+                  <div className="text-2xl font-bold text-[#006da6] mb-2">Instant</div>
                   <p className="text-sm text-gray-600">Get your quote immediately</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-6 text-center">
-                  <div className="text-2xl font-bold text-[#00FF66] mb-2">Accurate</div>
+                  <div className="text-2xl font-bold text-[#006da6] mb-2">Accurate</div>
                   <p className="text-sm text-gray-600">Based on real service data</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-6 text-center">
-                  <div className="text-2xl font-bold text-[#00FF66] mb-2">No Obligation</div>
+                  <div className="text-2xl font-bold text-[#006da6] mb-2">No Obligation</div>
                   <p className="text-sm text-gray-600">Free quote with no commitment</p>
                 </div>
               </div>
@@ -66,7 +66,7 @@ const QuoteCalculator = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-[#00FF66] text-black rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#006da6] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                     1
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Select Service</h3>
@@ -74,7 +74,7 @@ const QuoteCalculator = () => {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-[#00FF66] text-black rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#006da6] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                     2
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Add Details</h3>
@@ -82,7 +82,7 @@ const QuoteCalculator = () => {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-[#00FF66] text-black rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#006da6] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                     3
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Set Preferences</h3>
@@ -90,7 +90,7 @@ const QuoteCalculator = () => {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-[#00FF66] text-black rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#006da6] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                     4
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Get Quote</h3>
@@ -108,19 +108,19 @@ const QuoteCalculator = () => {
                     <h4 className="font-bold text-gray-900 mb-4">What's Included:</h4>
                     <ul className="space-y-3">
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">All cleaning supplies and equipment</span>
                       </li>
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">Professional cleaning team</span>
                       </li>
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">Before and after photos</span>
                       </li>
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">Quality guarantee</span>
                       </li>
                     </ul>
@@ -130,19 +130,19 @@ const QuoteCalculator = () => {
                     <h4 className="font-bold text-gray-900 mb-4">Additional Benefits:</h4>
                     <ul className="space-y-3">
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">Fully insured service</span>
                       </li>
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">Police-checked cleaners</span>
                       </li>
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">NDIS compliant invoicing</span>
                       </li>
                       <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#00FF66] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-[#006da6] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         <span className="text-gray-700">Flexible scheduling</span>
                       </li>
                     </ul>
@@ -197,4 +197,3 @@ const QuoteCalculator = () => {
 };
 
 export default QuoteCalculator;
-

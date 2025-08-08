@@ -64,7 +64,7 @@ const QuoteForm = ({
 
   const getInputClasses = (field, hasError = false) => {
     const baseClasses = 'w-full px-4 py-3 border rounded-lg transition-all duration-200 bg-white';
-    const focusClasses = 'focus:outline-none focus:ring-2 focus:ring-[#00FF66] focus:border-transparent';
+    const focusClasses = 'focus:outline-none focus:ring-2 focus:ring-[#006da6] focus:border-transparent';
     const errorClasses = hasError ? 'border-red-500' : 'border-gray-300';
     const hoverClasses = 'hover:border-gray-400';
     
@@ -73,7 +73,7 @@ const QuoteForm = ({
 
   const getLabelClasses = (field, hasError = false) => {
     const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200';
-    const focusedClasses = focusedField === field ? 'text-[#00FF66]' : 'text-gray-700';
+    const focusedClasses = focusedField === field ? 'text-[#006da6]' : 'text-gray-700';
     const errorClasses = hasError ? 'text-red-600' : '';
     
     return `${baseClasses} ${focusedClasses} ${errorClasses}`;
@@ -96,18 +96,18 @@ const QuoteForm = ({
 
   if (submitStatus === 'success') {
     return (
-      <div className={`bg-green-50 border border-green-200 rounded-xl p-8 text-center ${className}`}>
-        <div className="text-green-600 text-6xl mb-6">✓</div>
-        <h3 className="text-2xl font-bold text-green-800 mb-4">
+      <div className={`bg-blue-50 border border-blue-200 rounded-xl p-8 text-center ${className}`}>
+        <div className="text-blue-600 text-6xl mb-6">✓</div>
+        <h3 className="text-2xl font-bold text-blue-800 mb-4">
           Quote Submitted Successfully!
         </h3>
         <div className="bg-white rounded-lg p-6 mb-6">
-          <div className="text-3xl font-bold text-[#00FF66] mb-2">
+          <div className="text-3xl font-bold text-[#006da6] mb-2">
             {formatCurrency(pricing.total)}
           </div>
           <p className="text-gray-600">Estimated Total (including GST)</p>
         </div>
-        <p className="text-green-700 mb-6">
+        <p className="text-blue-700 mb-6">
           We'll contact you within 2 hours to confirm your booking and arrange the service.
         </p>
         <Button onClick={resetQuote} variant="primary">
@@ -120,9 +120,9 @@ const QuoteForm = ({
   return (
     <div className={`bg-white rounded-xl shadow-lg overflow-hidden ${className}`}>
       {!embedded && (
-        <div className="bg-gradient-to-r from-[#00FF66] to-[#00e65a] p-6">
-          <h2 className="text-2xl font-bold text-black mb-2">Get Your Instant Quote</h2>
-          <p className="text-black/80">Professional cleaning services tailored to your needs</p>
+        <div className="bg-gradient-to-r from-[#006da6] to-[#0080c7] p-6">
+          <h2 className="text-2xl font-bold text-white mb-2">Get Your Instant Quote</h2>
+          <p className="text-white/90">Professional cleaning services tailored to your needs</p>
         </div>
       )}
 
@@ -132,21 +132,21 @@ const QuoteForm = ({
             <div key={step.id} className="flex items-center">
               <div className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-medium transition-all duration-200 ${
                 currentStep >= step.id 
-                  ? 'bg-[#00FF66] text-black' 
+                  ? 'bg-[#006da6] text-white' 
                   : 'bg-gray-200 text-gray-600'
               }`}>
                 {currentStep > step.id ? '✓' : step.id}
               </div>
               <div className="ml-3 hidden sm:block">
                 <p className={`text-sm font-medium ${
-                  currentStep >= step.id ? 'text-[#00FF66]' : 'text-gray-500'
+                  currentStep >= step.id ? 'text-[#006da6]' : 'text-gray-500'
                 }`}>
                   {step.title}
                 </p>
               </div>
               {index < steps.length - 1 && (
                 <div className={`w-8 h-0.5 mx-4 ${
-                  currentStep > step.id ? 'bg-[#00FF66]' : 'bg-gray-200'
+                  currentStep > step.id ? 'bg-[#006da6]' : 'bg-gray-200'
                 }`} />
               )}
             </div>
@@ -167,7 +167,7 @@ const QuoteForm = ({
                       onClick={() => updateCleaningType(service.id)}
                       className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${
                         quoteData.cleaningType === service.id
-                          ? 'border-[#00FF66] bg-[#00FF66]/5'
+                          ? 'border-[#006da6] bg-[#006da6]/5'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
@@ -180,18 +180,18 @@ const QuoteForm = ({
                             Starting from {formatCurrency(service.basePrice)}
                           </p>
                           {service.popular && (
-                            <span className="inline-block bg-[#00FF66] text-black text-xs font-medium px-2 py-1 rounded-full">
+                            <span className="inline-block bg-[#006da6] text-white text-xs font-medium px-2 py-1 rounded-full">
                               Most Popular
                             </span>
                           )}
                         </div>
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                           quoteData.cleaningType === service.id
-                            ? 'border-[#00FF66] bg-[#00FF66]'
+                            ? 'border-[#006da6] bg-[#006da6]'
                             : 'border-gray-300'
                         }`}>
                           {quoteData.cleaningType === service.id && (
-                            <div className="w-2 h-2 bg-black rounded-full" />
+                            <div className="w-2 h-2 bg-white rounded-full" />
                           )}
                         </div>
                       </div>
@@ -205,7 +205,7 @@ const QuoteForm = ({
             </div>
           )}
 
-{currentStep === 2 && (
+          {currentStep === 2 && (
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -231,7 +231,7 @@ const QuoteForm = ({
                         <button
                           type="button"
                           onClick={() => updateRoomCount(key.toLowerCase(), (quoteData.rooms[key.toLowerCase()] || 0) + 1)}
-                          className="w-8 h-8 rounded-full bg-[#00FF66] hover:bg-[#00e65a] text-black flex items-center justify-center transition-colors"
+                          className="w-8 h-8 rounded-full bg-[#006da6] hover:bg-[#0080c7] text-white flex items-center justify-center transition-colors"
                         >
                           +
                         </button>
@@ -261,11 +261,11 @@ const QuoteForm = ({
                         type="checkbox"
                         checked={quoteData.extras.some(e => e.id === key)}
                         onChange={() => toggleExtra(key)}
-                        className="mr-3 text-[#00FF66] focus:ring-[#00FF66] rounded"
+                        className="mr-3 text-[#006da6] focus:ring-[#006da6] rounded"
                       />
                       <div className="flex-1">
                         <span className="font-medium text-gray-900">{extra.name}</span>
-                        <span className="text-[#00FF66] font-semibold ml-2">
+                        <span className="text-[#006da6] font-semibold ml-2">
                           +{formatCurrency(extra.price)}
                         </span>
                       </div>
@@ -334,7 +334,7 @@ const QuoteForm = ({
                         value={key.toLowerCase()}
                         checked={quoteData.urgency === key.toLowerCase()}
                         onChange={(e) => updateUrgency(e.target.value)}
-                        className="mr-3 text-[#00FF66] focus:ring-[#00FF66]"
+                        className="mr-3 text-[#006da6] focus:ring-[#006da6]"
                       />
                       <div className="flex-1 flex justify-between items-center">
                         <span className="font-medium text-gray-900">{urgency.name}</span>
@@ -418,7 +418,7 @@ const QuoteForm = ({
                         type="checkbox"
                         checked={quoteData.customerInfo.isNDISParticipant}
                         onChange={(e) => updateCustomerInfo('isNDISParticipant', e.target.checked)}
-                        className="mr-2 text-[#00FF66] focus:ring-[#00FF66] rounded"
+                        className="mr-2 text-[#006da6] focus:ring-[#006da6] rounded"
                       />
                       <span className="text-sm text-gray-700">I am an NDIS participant</span>
                     </label>
@@ -476,7 +476,7 @@ const QuoteForm = ({
                 )}
                 <div className="border-t pt-2 flex justify-between font-semibold text-lg">
                   <span>Total (inc. GST)</span>
-                  <span className="text-[#00FF66]">{formatCurrency(pricing.total)}</span>
+                  <span className="text-[#006da6]">{formatCurrency(pricing.total)}</span>
                 </div>
               </div>
             </div>

@@ -1,38 +1,17 @@
-import { useRef, useState, useEffect } from 'react';
-import useImageUpload from '../../hooks/useImageUpload.js';
-import LoadingSpinner from '../common/LoadingSpinner.jsx';
-import Button from '../common/Button.jsx';
-import { formatFileSize } from '../../utils/helpers.js';
+import { useState, useRef, useEffect } from 'react';
+import SEO from '../components/common/SEO.jsx';
+import ContactSection from '../components/sections/ContactSection.jsx';
+import { COMPANY_INFO, BUSINESS_HOURS, SERVICE_AREAS } from '../utils/constants.js';
+import { formatPhone } from '../utils/helpers.js';
+import Button from '../components/common/Button.jsx';
 
-const ImageUpload = ({
-  maxFiles = 5,
-  onFilesChange,
-  onUploadComplete,
-  className = '',
-  label = 'Upload Images',
-  description = 'Upload photos for a more accurate estimate',
-  showPreviews = true,
-  autoUpload = false,
-  uploadUrl = '/api/upload'
-}) => {
-  const fileInputRef = useRef(null);
-  const [isDragOver, setIsDragOver] = useState(false);
+const Contact = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const componentRef = useRef(null);
-  
-  const {
-    files,
-    previews,
-    uploading,
-    errors,
-    uploadProgress,
-    addFiles,
-    removeFile,
-    clearFiles,
-    uploadFiles,
-    hasFiles,
-    canAddMore
-  } = useImageUpload(maxFiles);
+  const [contactMethodsVisible, setContactMethodsVisible] = useState(false);
+  const [businessInfoVisible, setBusinessInfoVisible] = useState(false);
+  const sectionRef = useRef(null);
+  const contactMethodsRef = useRef(null);
+  const businessInfoRef = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,302 +23,433 @@ const ImageUpload = ({
       { threshold: 0.3 }
     );
 
-    if (componentRef.current) {
-      observer.observe(componentRef.current);
+    const contactMethodsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setContactMethodsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const businessInfoObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setBusinessInfoVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    if (contactMethodsRef.current) {
+      contactMethodsObserver.observe(contactMethodsRef.current);
+    }
+    if (businessInfoRef.current) {
+      businessInfoObserver.observe(businessInfoRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      contactMethodsObserver.disconnect();
+      businessInfoObserver.disconnect();
+    };
   }, []);
 
-  const handleFileSelect = async (event) => {
-    const selectedFiles = event.target.files;
-    if (selectedFiles.length > 0) {
-      const success = await addFiles(selectedFiles);
-      if (success) {
-        onFilesChange?.(files);
-        if (autoUpload) {
-          handleUpload();
-        }
-      }
+  const handleCallNow = () => {
+    window.location.href = `tel:${COMPANY_INFO.phone}`;
+  };
+
+  const handleEmailSupport = () => {
+    window.location.href = `mailto:${COMPANY_INFO.email.support}`;
+  };
+
+  const handleEmailBookings = () => {
+    window.location.href = `mailto:${COMPANY_INFO.email.bookings}`;
+  };
+
+  const handleGetQuote = () => {
+    window.location.href = '/quote';
+  };
+
+  const contactMethods = [
+    {
+      title: 'Phone',
+      value: formatPhone(COMPANY_INFO.phone),
+      description: 'Call us for immediate assistance',
+      action: handleCallNow,
+      buttonText: 'Call Now',
+      icon: '📞',
+      gradient: 'from-[#006da6] to-[#0080c7]'
+    },
+    {
+      title: 'Email Support',
+      value: COMPANY_INFO.email.support,
+      description: 'General inquiries and support',
+      action: handleEmailSupport,
+      buttonText: 'Send Email',
+      icon: '📧',
+      gradient: 'from-[#006da6] to-[#005a8a]'
+    },
+    {
+      title: 'Email Bookings',
+      value: COMPANY_INFO.email.bookings,
+      description: 'Service bookings and scheduling',
+      action: handleEmailBookings,
+      buttonText: 'Send Email',
+      icon: '📅',
+      gradient: 'from-[#180c2e] to-[#2d1b4e]'
     }
-    event.target.value = '';
-  };
+  ];
 
-  const handleDrop = async (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragOver(false);
-    
-    const droppedFiles = event.dataTransfer.files;
-    if (droppedFiles.length > 0) {
-      const success = await addFiles(droppedFiles);
-      if (success) {
-        onFilesChange?.(files);
-        if (autoUpload) {
-          handleUpload();
-        }
-      }
+  const responseTimeInfo = [
+    {
+      method: 'Phone Calls',
+      time: 'Immediate',
+      availability: 'Business Hours',
+      icon: '⚡'
+    },
+    {
+      method: 'Email Inquiries',
+      time: 'Within 2 hours',
+      availability: 'Business Days',
+      icon: '📨'
+    },
+    {
+      method: 'Quote Requests',
+      time: 'Within 1 hour',
+      availability: '7 Days a Week',
+      icon: '💰'
+    },
+    {
+      method: 'Emergency Services',
+      time: 'Within 30 minutes',
+      availability: '24/7 Available',
+      icon: '🚨'
     }
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragOver(false);
-  };
-
-  const handleUpload = async () => {
-    if (!hasFiles) return;
-    
-    const result = await uploadFiles(uploadUrl);
-    if (result.success) {
-      onUploadComplete?.(result.data);
-    }
-  };
-
-  const handleRemoveFile = (index) => {
-    removeFile(index);
-    onFilesChange?.(files.filter((_, i) => i !== index));
-  };
-
-  const openFileDialog = () => {
-    fileInputRef.current?.click();
-  };
+  ];
 
   return (
-    <div ref={componentRef} className={`space-y-6 animate-fade-in-up ${className}`}>
-      {label && (
-        <div className="animate-fade-in-up delay-300">
-          <label className="block text-base font-black text-gray-900 mb-2">
-            {label}
-          </label>
-          {description && (
-            <p className="text-sm text-[#4B4B4B] font-medium">{description}</p>
-          )}
+    <>
+      <SEO
+        title="Contact Us - Get Your Free Cleaning Quote"
+        description="Contact NSW Cleaning Company for professional cleaning services. Call us, email us, or request a free quote online. Fast response times and excellent customer service."
+        keywords="contact NSW cleaning company, cleaning quote, professional cleaners contact, cleaning services inquiry, book cleaning service"
+      />
+
+      <main className="relative pt-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#006da6]/3 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#0080c7]/2 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#006da6]/2 to-[#0080c7]/2 rounded-full blur-3xl animate-spin-slow"></div>
         </div>
-      )}
 
-      <div className="relative group animate-fade-in-up delay-600">
-        <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
-        <div
-          className={`relative border-2 border-dashed rounded-3xl p-8 text-center transition-all duration-700 transform-gpu overflow-hidden ${
-            canAddMore 
-              ? `${isDragOver 
-                  ? 'border-[#00FF66] bg-gradient-to-br from-[#00FF66]/10 via-white/90 to-[#00cc52]/10 scale-105 -translate-y-2' 
-                  : 'border-white/40 bg-white/80 hover:border-[#00FF66]/50 hover:bg-gradient-to-br hover:from-[#00FF66]/5 hover:via-white/90 hover:to-[#00cc52]/5 hover:scale-105 hover:-translate-y-2'
-                } backdrop-blur-xl cursor-pointer shadow-lg hover:shadow-2xl`
-              : 'border-gray-200/50 bg-gray-100/50 backdrop-blur-lg cursor-not-allowed opacity-50'
-          }`}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onClick={canAddMore ? openFileDialog : undefined}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-t-3xl"></div>
-          
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept="image/*,.pdf"
-            onChange={handleFileSelect}
-            className="hidden"
-            disabled={!canAddMore}
-          />
-
-          <div className="relative z-10 space-y-4">
-            <div className={`text-6xl transition-transform duration-700 ${isDragOver ? 'animate-bounce scale-110' : 'group-hover:scale-110 group-hover:animate-pulse'}`}>
-              📸
+        <section ref={sectionRef} className="relative z-10 section-padding bg-white">
+          <div className="container mx-auto">
+            <div className="max-w-4xl mx-auto text-center mb-20">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-black mb-8 animate-fade-in-up leading-tight">
+                Get in <span className="bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] bg-clip-text text-transparent">Touch</span>
+              </h1>
+              <p className="text-xl text-gray-600 leading-relaxed font-medium animate-fade-in-up delay-300">
+                Ready to book your cleaning service? We're here to help with any questions or special requests.
+              </p>
             </div>
-            <div>
-              <p className="text-base font-black text-gray-900 mb-2 group-hover:text-[#00FF66] transition-colors duration-500">
-                {canAddMore ? 'Click to upload or drag and drop' : `Maximum ${maxFiles} files reached`}
-              </p>
-              <p className="text-sm text-[#666] font-semibold">
-                PNG, JPG, PDF up to 5MB each
-              </p>
+
+            <div ref={contactMethodsRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+              {contactMethods.map((method, index) => (
+                <div 
+                  key={index} 
+                  className="relative group animate-fade-in-up"
+                  style={{ animationDelay: `${contactMethodsVisible ? 400 + index * 200 : 0}ms` }}
+                >
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-8 text-center shadow-2xl hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-4 hover:scale-105 transform-gpu overflow-hidden h-full flex flex-col">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-t-3xl"></div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#006da6] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+                    
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className="relative group/icon mb-6">
+                        <div className="absolute -inset-4 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full blur opacity-0 group-hover/icon:opacity-40 transition-all duration-500"></div>
+                        <div className="relative text-6xl group-hover/icon:animate-bounce group-hover/icon:scale-110 transition-transform duration-500">{method.icon}</div>
+                      </div>
+                      
+                      <h3 className="text-xl font-black text-gray-900 mb-3 group-hover:text-[#006da6] transition-colors duration-500">{method.title}</h3>
+                      <p className="text-[#006da6] font-black mb-3 text-lg group-hover:scale-105 transition-transform duration-500">{method.value}</p>
+                      <p className="text-sm text-gray-600 mb-8 font-medium flex-grow group-hover:text-gray-800 transition-colors duration-500">{method.description}</p>
+                      
+                      <Button
+                        onClick={method.action}
+                        className={`relative bg-gradient-to-r ${method.gradient} hover:from-[#180c2e] hover:to-[#2d1b4e] text-white hover:text-white font-black px-6 py-3 rounded-full text-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 shadow-lg hover:shadow-2xl transform-gpu group/btn overflow-hidden mt-auto`}
+                      >
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          <span className="text-lg group-hover/btn:animate-pulse">{method.icon}</span>
+                          {method.buttonText}
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-700 transform group-hover/btn:translate-x-full"></div>
+                      </Button>
+                    </div>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          
-          <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
-        </div>
-      </div>
+        </section>
 
-      {errors.length > 0 && (
-        <div className="space-y-2 animate-fade-in-up delay-800">
-          {errors.map((error, index) => (
-            <div key={index} className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-2xl blur opacity-20"></div>
-              <div className="relative bg-gradient-to-r from-red-50/80 via-white/90 to-red-50/80 backdrop-blur-lg border-2 border-red-200/50 rounded-2xl p-3">
-                <p className="text-sm text-red-700 font-semibold flex items-center gap-2">
-                  <span className="text-lg">⚠️</span>
-                  {error}
+        <ContactSection />
+
+        <section ref={businessInfoRef} className="relative z-10 section-padding bg-gradient-to-br from-gray-50/80 via-white/60 to-gray-50/80 backdrop-blur-xl">
+          <div className="container mx-auto">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-20">
+                <h2 className="text-3xl md:text-4xl font-black text-black mb-8 animate-fade-in-up">
+                  Business <span className="bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] bg-clip-text text-transparent">Information</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto font-medium animate-fade-in-up delay-300">
+                  Everything you need to know about our availability and service areas
                 </p>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
 
-      {showPreviews && previews.length > 0 && (
-        <div className="space-y-4 animate-fade-in-up delay-1000">
-          <h4 className="text-base font-black text-gray-900">
-            Selected Files ({previews.length}/{maxFiles})
-          </h4>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {previews.map((preview, index) => (
-              <div key={preview.id} className="relative group animate-fade-in-up" style={{ animationDelay: `${1200 + index * 100}ms` }}>
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
-                <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu border-2 border-white/40">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-t-2xl"></div>
-                  
-                  <div className="aspect-square bg-gradient-to-br from-gray-50/80 via-white/90 to-gray-50/80">
-                    {preview.type.startsWith('image/') ? (
-                      <img
-                        src={preview.preview}
-                        alt={preview.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="text-3xl mb-2 group-hover:animate-bounce">📄</div>
-                          <p className="text-xs text-[#666] truncate px-2 font-semibold">
-                            {preview.name}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+                <div className="relative group animate-fade-in-up" style={{ animationDelay: `${businessInfoVisible ? 400 : 0}ms` }}>
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-8 shadow-2xl hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                    
+                    <div className="relative z-10">
+                      <h3 className="text-xl font-black text-gray-900 mb-8 group-hover:text-[#006da6] transition-colors duration-500">Business Hours</h3>
+                      <div className="space-y-6">
+                        {Object.entries(BUSINESS_HOURS).map(([day, hours]) => (
+                          <div key={day} className="relative group/day flex justify-between items-center border-b border-[#006da6]/20 pb-4">
+                            <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/day:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                            <span className="relative text-gray-700 capitalize font-black group-hover/day:text-[#006da6] transition-colors duration-500">{day}</span>
+                            <span className={`relative font-black transition-colors duration-500 ${hours === 'Closed' ? 'text-red-600' : 'text-gray-900 group-hover/day:text-[#006da6]'}`}>{hours}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="relative group/emergency mt-8">
+                        <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-2xl blur opacity-0 group-hover/emergency:opacity-20 transition-all duration-500"></div>
+                        <div className="relative p-6 bg-gradient-to-r from-[#006da6]/10 via-white/80 to-[#005a8a]/10 backdrop-blur-lg border-2 border-[#006da6]/30 rounded-2xl hover:border-[#006da6]/50 transition-all duration-500 hover:scale-105 transform-gpu shadow-lg hover:shadow-xl">
+                          <p className="relative text-sm text-[#005a8a] font-black group-hover/emergency:text-[#180c2e] transition-colors duration-500">
+                            Emergency and urgent cleaning services available outside regular hours
                           </p>
                         </div>
                       </div>
-                    )}
+                    </div>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
-                  
-                  <button
-                    onClick={() => handleRemoveFile(index)}
-                    className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-black hover:to-gray-800 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-black hover:scale-110 hover:-translate-y-1 hover:rotate-90 transition-all duration-700 shadow-lg hover:shadow-2xl transform-gpu group/remove overflow-hidden"
-                  >
-                    <span className="relative z-10">×</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/remove:opacity-100 transition-opacity duration-700 rounded-full"></div>
-                  </button>
-                  
-                  <div className="p-3 relative z-10">
-                    <p className="text-xs text-[#4B4B4B] truncate font-semibold mb-1">
-                      {preview.name}
-                    </p>
-                    <p className="text-xs text-[#666] font-medium">
-                      {formatFileSize(preview.size)}
-                    </p>
+                </div>
+                <div className="relative group animate-fade-in-up" style={{ animationDelay: `${businessInfoVisible ? 600 : 0}ms` }}>
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                  <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-8 shadow-2xl hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                    
+                    <div className="relative z-10">
+                      <h3 className="text-xl font-black text-gray-900 mb-8 group-hover:text-[#006da6] transition-colors duration-500">Service Areas</h3>
+                      <div className="grid grid-cols-2 gap-4 mb-8">
+                        {SERVICE_AREAS.map((area, index) => (
+                          <div key={index} className="relative group/area flex items-center">
+                            <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/area:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                            <div className="relative w-3 h-3 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full mr-4 group-hover/area:animate-pulse shadow-lg"></div>
+                            <span className="relative text-gray-700 font-medium group-hover/area:text-[#006da6] transition-colors duration-500">{area}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="relative group/note">
+                        <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] to-[#0080c7] rounded-2xl blur opacity-0 group-hover/note:opacity-20 transition-all duration-500"></div>
+                        <div className="relative p-6 bg-gradient-to-r from-[#006da6]/10 via-white/80 to-[#0080c7]/10 backdrop-blur-lg border-2 border-[#006da6]/30 rounded-2xl hover:border-[#006da6]/50 transition-all duration-500 hover:scale-105 transform-gpu shadow-lg hover:shadow-xl">
+                          <p className="text-sm text-[#006da6] font-black mb-2 group-hover/note:text-[#005a8a] transition-colors duration-500">
+                            Don't see your area listed?
+                          </p>
+                          <p className="text-sm text-[#0080c7] font-medium group-hover/note:text-[#006da6] transition-colors duration-500">
+                            Contact us to check availability in your location. We're always expanding our service areas.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                   </div>
-                  
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-2xl"></div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
 
-{hasFiles && (
-        <div className="flex gap-3 animate-fade-in-up delay-1400">
-          {!autoUpload && (
-            <Button
-              onClick={handleUpload}
-              disabled={uploading}
-              className="relative bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-black px-3 py-2 rounded-full text-xs transition-all duration-700 hover:scale-110 hover:-translate-y-1 shadow-lg hover:shadow-2xl transform-gpu group/btn overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0"
-            >
-              <span className="relative z-10 flex items-center gap-1">
-                {uploading ? (
-                  <>
-                    <LoadingSpinner size="xs" />
-                    Uploading...
-                  </>
-                ) : (
-                  <>
-                    <span className="text-sm group-hover/btn:animate-bounce">📤</span>
-                    Upload Files
-                  </>
-                )}
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-700 transform group-hover/btn:translate-x-full"></div>
-            </Button>
-          )}
-          
-          <Button
-            onClick={clearFiles}
-            disabled={uploading}
-            className="relative bg-transparent border-2 border-red-400 text-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 hover:text-white hover:border-red-600 font-black px-3 py-2 rounded-full text-xs transition-all duration-700 hover:scale-110 hover:-translate-y-1 shadow-lg hover:shadow-2xl transform-gpu group/btn overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0"
-          >
-            <span className="relative z-10 flex items-center gap-1">
-              <span className="text-sm group-hover/btn:animate-pulse">🗑️</span>
-              Clear All
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-red-400/10 to-red-600/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-700 rounded-full"></div>
-          </Button>
-        </div>
-      )}
-
-      {uploading && uploadProgress.overall && (
-        <div className="space-y-4 animate-fade-in-up delay-1600">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-20"></div>
-            <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-6 shadow-xl border-2 border-white/40 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 rounded-3xl"></div>
-              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-t-3xl"></div>
-              
-              <div className="relative z-10 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <LoadingSpinner size="sm" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-30 animate-pulse"></div>
-                  </div>
-                  <div>
-                    <span className="text-base font-black text-gray-900">
-                      Uploading Files...
-                    </span>
-                    <p className="text-sm text-[#666] font-semibold">
-                      {uploadProgress.overall}% Complete
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="relative">
-                  <div className="w-full bg-gradient-to-r from-gray-200/80 via-gray-100/90 to-gray-200/80 backdrop-blur-lg rounded-full h-3 overflow-hidden shadow-inner">
-                    <div
-                      className="bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] h-3 rounded-full transition-all duration-500 ease-out relative overflow-hidden"
-                      style={{ width: `${uploadProgress.overall}%` }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30 animate-pulse"></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+              <div className="relative group animate-fade-in-up" style={{ animationDelay: `${businessInfoVisible ? 800 : 0}ms` }}>
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-8 shadow-2xl hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                  
+                  <div className="relative z-10">
+                    <h3 className="text-xl font-black text-gray-900 mb-8 text-center group-hover:text-[#006da6] transition-colors duration-500">
+                      Response Times
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                      {responseTimeInfo.map((info, index) => (
+                        <div key={index} className="relative group/response text-center">
+                          <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-2xl blur opacity-0 group-hover/response:opacity-30 transition-all duration-500"></div>
+                          <div className="relative p-6 bg-gradient-to-r from-gray-50/90 via-white/90 to-gray-50/90 backdrop-blur-lg border border-white/40 rounded-2xl hover:bg-white/90 transition-all duration-500 hover:scale-105 hover:-translate-y-2 transform-gpu shadow-lg hover:shadow-xl overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover/response:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#006da6] to-transparent transform scale-x-0 group-hover/response:scale-x-100 transition-transform duration-700"></div>
+                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#006da6] rounded-full opacity-0 group-hover/response:opacity-100 animate-ping transition-opacity duration-700"></div>
+                            
+                            <div className="relative z-10">
+                              <div className="relative group/response-icon mb-4">
+                                <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full blur opacity-0 group-hover/response-icon:opacity-40 transition-all duration-500"></div>
+                                <div className="relative text-3xl group-hover/response-icon:animate-bounce group-hover/response-icon:scale-110 transition-transform duration-500">{info.icon}</div>
+                              </div>
+                              <h4 className="font-black text-gray-900 text-sm mb-2 group-hover/response:text-[#006da6] transition-colors duration-500">{info.method}</h4>
+                              <p className="text-[#006da6] font-black text-lg mb-1 group-hover/response:scale-105 transition-transform duration-500">{info.time}</p>
+                              <p className="text-xs text-gray-600 font-medium group-hover/response:text-gray-800 transition-colors duration-500">{info.availability}</p>
+                            </div>
+                            
+                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] transform scale-x-0 group-hover/response:scale-x-100 transition-transform duration-700"></div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-20 animate-pulse"></div>
-                </div>
-                
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#666] font-semibold">
-                    {files.length} file{files.length !== 1 ? 's' : ''} uploading
-                  </span>
-                  <span className="text-[#00FF66] font-black">
-                    {uploadProgress.overall}%
-                  </span>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
                 </div>
               </div>
-              
-              <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-b-3xl"></div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        </section>
+        <section className="relative z-10 section-padding bg-white">
+          <div className="container mx-auto">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+                <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-12 shadow-2xl hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="relative group/cta-icon mb-8">
+                      <div className="absolute -inset-4 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full blur opacity-0 group-hover/cta-icon:opacity-40 transition-all duration-500"></div>
+                      <div className="relative text-6xl group-hover/cta-icon:animate-bounce group-hover/cta-icon:scale-110 transition-transform duration-500">🎯</div>
+                    </div>
+                    
+                    <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6 group-hover:text-[#006da6] transition-colors duration-500">
+                      Ready to Get Started?
+                    </h2>
+                    <p className="text-lg text-gray-600 mb-10 font-medium group-hover:text-gray-800 transition-colors duration-500">
+                      Don't wait - contact us today for your free cleaning quote and experience the difference professional cleaning makes.
+                    </p>
+                    
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                      <Button
+                        onClick={handleGetQuote}
+                        className="relative bg-gradient-to-r from-[#006da6] to-[#0080c7] hover:from-[#180c2e] hover:to-[#2d1b4e] text-white font-black px-8 py-4 rounded-full text-lg transition-all duration-700 hover:scale-110 hover:-translate-y-2 shadow-lg hover:shadow-2xl transform-gpu group/quote-btn overflow-hidden"
+                      >
+                        <span className="relative z-10 flex items-center gap-3">
+                          <span className="text-2xl group-hover/quote-btn:animate-pulse">💰</span>
+                          Get Free Quote
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/quote-btn:opacity-100 transition-opacity duration-700 transform group-hover/quote-btn:translate-x-full"></div>
+                      </Button>
+                      
+                      <Button
+                        onClick={handleCallNow}
+                        className="relative bg-transparent border-2 border-[#006da6] text-[#006da6] hover:bg-gradient-to-r hover:from-[#006da6] hover:to-[#005a8a] hover:text-white hover:border-transparent font-black px-8 py-4 rounded-full text-lg transition-all duration-700 hover:scale-110 hover:-translate-y-2 shadow-lg hover:shadow-2xl transform-gpu group/call-btn overflow-hidden"
+                      >
+                        <span className="relative z-10 flex items-center gap-3">
+                          <span className="text-2xl group-hover/call-btn:animate-pulse">📞</span>
+                          Call {formatPhone(COMPANY_INFO.phone)}
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-[#005a8a]/10 opacity-0 group-hover/call-btn:opacity-100 transition-opacity duration-700 rounded-full"></div>
+                      </Button>
+                    </div>
+                    
+                    <div className="mt-10 pt-8 border-t border-[#006da6]/20">
+                      <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600">
+                        <div className="relative group/feature flex items-center gap-2">
+                          <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                          <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">✅</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">Free Quotes</span>
+                        </div>
+                        <div className="relative group/feature flex items-center gap-2">
+                          <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                          <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">⚡</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">Fast Response</span>
+                        </div>
+                        <div className="relative group/feature flex items-center gap-2">
+                          <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                          <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">🛡️</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">Fully Insured</span>
+                        </div>
+                        <div className="relative group/feature flex items-center gap-2">
+                          <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                          <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">⭐</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">5-Star Service</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 rounded-b-3xl"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative z-10 py-16 bg-gradient-to-br from-[#006da6]/5 via-white/60 to-[#0080c7]/5 backdrop-blur-xl">
+          <div className="container mx-auto">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="relative group">
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-2xl blur opacity-0 group-hover:opacity-20 transition-all duration-500"></div>
+                <div className="relative bg-white/80 backdrop-blur-lg border border-white/40 rounded-2xl p-8 hover:bg-white/90 transition-all duration-500 hover:scale-105 transform-gpu shadow-lg hover:shadow-xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                  
+                  <div className="relative z-10">
+                    <h3 className="text-xl font-black text-gray-900 mb-4 group-hover:text-[#006da6] transition-colors duration-500">
+                      Need Help Choosing the Right Service?
+                    </h3>
+                    <p className="text-gray-600 mb-6 font-medium group-hover:text-gray-800 transition-colors duration-500">
+                      Our cleaning experts are here to help you find the perfect cleaning solution for your needs and budget.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <a 
+                        href="/services" 
+                        className="relative inline-flex items-center justify-center gap-2 bg-transparent border-2 border-[#006da6] text-[#006da6] hover:bg-gradient-to-r hover:from-[#006da6] hover:to-[#005a8a] hover:text-white hover:border-transparent font-black px-6 py-3 rounded-full text-sm transition-all duration-700 hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-xl transform-gpu group/services-btn overflow-hidden"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          <span className="text-lg group-hover/services-btn:animate-pulse">🧹</span>
+                          View All Services
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-[#005a8a]/10 opacity-0 group-hover/services-btn:opacity-100 transition-opacity duration-700 rounded-full"></div>
+                      </a>
+                      <a 
+                        href="/about" 
+                        className="relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#180c2e] to-[#2d1b4e] hover:from-[#006da6] hover:to-[#0080c7] text-white font-black px-6 py-3 rounded-full text-sm transition-all duration-700 hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-xl transform-gpu group/about-btn overflow-hidden"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          <span className="text-lg group-hover/about-btn:animate-pulse">ℹ️</span>
+                          Learn About Us
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/about-btn:opacity-100 transition-opacity duration-700 transform group-hover/about-btn:translate-x-full"></div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </>
   );
 };
 
-export default ImageUpload;
+export default Contact;
+
+
 
