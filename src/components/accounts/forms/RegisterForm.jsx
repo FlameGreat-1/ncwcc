@@ -123,7 +123,7 @@ const RegisterForm = ({
     e.preventDefault();
     
     if (!validateStep2()) return;
-
+  
     const response = await registerUser({
       first_name: formData.first_name.trim(),
       last_name: formData.last_name.trim(),
@@ -134,13 +134,24 @@ const RegisterForm = ({
       user_type: userType,
       client_type: clientType
     });
-
+  
     if (response.success) {
       onSuccess?.(response);
     } else {
       if (response.errors) {
-        setErrors(response.errors);
+        const fieldErrors = {};
+        
+        Object.keys(response.errors).forEach(field => {
+          if (Array.isArray(response.errors[field])) {
+            fieldErrors[field] = response.errors[field][0];
+          } else {
+            fieldErrors[field] = response.errors[field];
+          }
+        });
+        
+        setErrors(fieldErrors);
       }
+      
       onError?.(response.error || 'Registration failed');
     }
   };
