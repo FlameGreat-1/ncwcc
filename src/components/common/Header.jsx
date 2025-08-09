@@ -221,7 +221,7 @@ const Header = () => {
 
             <div className="flex items-center space-x-3">
               <div className="hidden lg:flex items-center space-x-2">
-                {!isAuthenticated && (
+                {!isAuthenticated ? (
                   <div className="flex items-center space-x-2">
                     <Link
                       to="/accounts/login"
@@ -236,7 +236,7 @@ const Header = () => {
                       Register
                     </Link>
                   </div>
-                )}
+                ) : null}
                 
                 <button
                   onClick={() => window.location.href = '/quote'}
@@ -281,7 +281,7 @@ const Header = () => {
                 ))}
                 
                 <div className="pt-6 border-t app-border-glass mt-6 space-y-4">
-                  {!isAuthenticated && (
+                  {!isAuthenticated ? (
                     <div className="space-y-3">
                       <Link
                         to="/accounts/login"
@@ -298,7 +298,7 @@ const Header = () => {
                         Register
                       </Link>
                     </div>
-                  )}
+                  ) : null}
                   
                   <button
                     onClick={() => window.location.href = '/quote'}
