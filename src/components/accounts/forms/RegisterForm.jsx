@@ -130,6 +130,7 @@ const RegisterForm = ({
       email: formData.email.trim(),
       phone_number: formData.phone_number.trim(),
       password: formData.password,
+      password_confirm: formData.confirm_password,
       user_type: userType,
       client_type: clientType
     });
