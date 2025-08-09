@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
@@ -83,51 +83,64 @@ const ThemeOrchestrator = ({ children }) => {
   return children;
 };
 
-const AppContent = () => {
+const LayoutWrapper = ({ children }) => {
+  const location = useLocation();
+  const isPortalRoute = location.pathname.startsWith('/clients/');
+  const isAuthRoute = location.pathname.startsWith('/accounts/');
+
+  if (isPortalRoute) {
+    return (
+      <div className="min-h-screen app-bg-primary app-text-primary app-transition">
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen app-bg-primary app-text-primary flex flex-col app-transition">
       <Header />
-      
       <main className="flex-1">
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/quote" element={<QuoteCalculator />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/ndis" element={<NDISInfo />} />
-            <Route path="/faq" element={<FAQ />} />
-            
-            {/* Authentication Routes */}
-            <Route path="/accounts/login" element={<Login />} />
-            <Route path="/accounts/register" element={<Register />} />
-            <Route path="/accounts/password-reset" element={<PasswordReset />} />
-            <Route path="/accounts/email-verification" element={<EmailVerification />} />
-            
-            {/* Client Portal Routes */}
-            <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/quotes" element={<ClientRoute><MyQuotes /></ClientRoute>} />
-            <Route path="/clients/quotes/create" element={<ClientRoute><CreateQuote /></ClientRoute>} />
-            <Route path="/clients/quotes/:id" element={<ClientRoute><QuoteDetail /></ClientRoute>} />
-            <Route path="/clients/quotes/:id/edit" element={<ClientRoute><EditQuote /></ClientRoute>} />
-            
-            {/* Legacy Protected Routes (redirect to client routes) */}
-            <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
-            <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
-            <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
-            <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
-            
-            {/* 404 Route */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        {children}
       </main>
-      
       <Footer />
     </div>
+  );
+};
+
+const AppContent = () => {
+  return (
+    <LayoutWrapper>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/quote" element={<QuoteCalculator />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/ndis" element={<NDISInfo />} />
+          <Route path="/faq" element={<FAQ />} />
+          
+          <Route path="/accounts/login" element={<Login />} />
+          <Route path="/accounts/register" element={<Register />} />
+          <Route path="/accounts/password-reset" element={<PasswordReset />} />
+          <Route path="/accounts/email-verification" element={<EmailVerification />} />
+          
+          <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/quotes" element={<ClientRoute><MyQuotes /></ClientRoute>} />
+          <Route path="/clients/quotes/create" element={<ClientRoute><CreateQuote /></ClientRoute>} />
+          <Route path="/clients/quotes/:id" element={<ClientRoute><QuoteDetail /></ClientRoute>} />
+          <Route path="/clients/quotes/:id/edit" element={<ClientRoute><EditQuote /></ClientRoute>} />
+          
+          <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
+          <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
+          <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
+          <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
+          
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </LayoutWrapper>
   );
 };
 
