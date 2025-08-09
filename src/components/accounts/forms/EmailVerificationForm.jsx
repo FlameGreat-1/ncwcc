@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useEmailVerification } from '../../../hooks/useAuth';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { validateEmail } from '../../../utils/auth';
@@ -17,29 +17,42 @@ const EmailVerificationForm = ({
   const [isVerified, setIsVerified] = useState(false);
   const [autoVerifying, setAutoVerifying] = useState(!!token);
   const [focusedFields, setFocusedFields] = useState({});
+  
+  const verificationAttempted = useRef(false);
 
   const { verifyEmail, resendVerification, loading, error, setError } = useEmailVerification();
   const { isDark } = useTheme();
 
   useEffect(() => {
-    if (token) {
+    if (token && 
+        token.length > 10 && 
+        !isVerified && 
+        !autoVerifying && 
+        !verificationAttempted.current) {
       handleTokenVerification();
     }
   }, [token]);
 
   const handleTokenVerification = async () => {
+    if (autoVerifying || verificationAttempted.current) return;
+    
+    verificationAttempted.current = true;
     setAutoVerifying(true);
     
-    const response = await verifyEmail(token);
-    
-    if (response.success) {
-      setIsVerified(true);
-      onSuccess?.(response);
-    } else {
-      onError?.(response.error || 'Email verification failed');
+    try {
+      const response = await verifyEmail(token);
+      
+      if (response.success) {
+        setIsVerified(true);
+        onSuccess?.(response);
+      } else {
+        onError?.(response.error || 'Email verification failed');
+      }
+    } catch (err) {
+      onError?.('Email verification failed');
+    } finally {
+      setAutoVerifying(false);
     }
-    
-    setAutoVerifying(false);
   };
 
   const handleInputChange = (e) => {
