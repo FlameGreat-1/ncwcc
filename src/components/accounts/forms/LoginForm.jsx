@@ -19,6 +19,7 @@ const LoginForm = ({
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [focusedFields, setFocusedFields] = useState({});
 
   const { loginUser, loading, error, setError } = useLogin();
   const { isDark } = useTheme();
@@ -32,6 +33,16 @@ const LoginForm = ({
     }
     if (error) {
       setError(null);
+    }
+  };
+
+  const handleFocus = (fieldName) => {
+    setFocusedFields(prev => ({ ...prev, [fieldName]: true }));
+  };
+
+  const handleBlur = (fieldName) => {
+    if (!formData[fieldName]) {
+      setFocusedFields(prev => ({ ...prev, [fieldName]: false }));
     }
   };
 
@@ -84,54 +95,77 @@ const LoginForm = ({
     onError?.(error);
   };
 
-  const inputClasses = `
-    w-full px-4 py-3 rounded-xl border-2 transition-all duration-300
-    bg-transparent font-medium placeholder-gray-400
-    focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:scale-[1.02]
-    ${isDark 
-      ? 'border-gray-600 text-white focus:border-blue-400' 
-      : 'border-gray-300 text-gray-900 focus:border-blue-500'
-    }
-  `;
+  const getInputClasses = (fieldName, hasError = false) => {
+    const baseClasses = `
+      w-full px-4 pt-6 pb-2 rounded-xl border-2 transition-all duration-300
+      font-medium text-base backdrop-blur-xl
+      focus:outline-none focus:ring-4 focus:scale-[1.02] transform-gpu
+      ${isDark 
+        ? 'bg-white/5 border-white/20 text-white focus:border-[#006da6] focus:ring-[#006da6]/20 focus:bg-white/10' 
+        : 'bg-white/90 border-gray-200 text-[#180c2e] focus:border-[#006da6] focus:ring-[#006da6]/20 focus:bg-white'
+      }
+    `;
+    
+    const errorClasses = hasError ? `
+      border-red-500 focus:border-red-500 focus:ring-red-500/20
+      ${isDark ? 'bg-red-500/5' : 'bg-red-50'}
+    ` : '';
 
-  const errorInputClasses = `
-    border-red-500 focus:border-red-500 focus:ring-red-500/20
-  `;
+    return `${baseClasses} ${errorClasses}`.trim();
+  };
+
+  const getLabelClasses = (fieldName, hasError = false) => {
+    const isActive = focusedFields[fieldName] || formData[fieldName];
+    const baseClasses = `
+      absolute left-4 transition-all duration-300 pointer-events-none font-semibold
+      ${isActive 
+        ? 'top-2 text-xs' 
+        : 'top-1/2 transform -translate-y-1/2 text-base'
+      }
+      ${hasError 
+        ? 'text-red-500' 
+        : isActive 
+          ? 'text-[#006da6]'
+          : (isDark ? 'text-[#CCCCCC]' : 'text-[#6B7280]')
+      }
+    `;
+    
+    return baseClasses.trim();
+  };
 
   return (
     <form onSubmit={handleSubmit} className={`space-y-6 ${className}`}>
-      <div className="space-y-4">
-        <div>
-          <label 
-            htmlFor="email" 
-            className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}
-          >
-            Email Address
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={formData.email}
-            onChange={handleInputChange}
-            placeholder="Enter your email address"
-            className={`${inputClasses} ${errors.email ? errorInputClasses : ''}`}
-            disabled={loading}
-          />
+      <div className="space-y-5">
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6]/20 via-[#0080c7]/20 to-[#005a8a]/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+          <div className="relative">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={formData.email}
+              onChange={handleInputChange}
+              onFocus={() => handleFocus('email')}
+              onBlur={() => handleBlur('email')}
+              className={getInputClasses('email', errors.email)}
+              disabled={loading}
+            />
+            <label 
+              htmlFor="email" 
+              className={getLabelClasses('email', errors.email)}
+            >
+              Email Address
+            </label>
+          </div>
           {errors.email && (
-            <p className="mt-2 text-sm text-red-500 font-medium">{errors.email}</p>
+            <p className="mt-2 text-sm text-red-500 font-semibold animate-fade-in-up">{errors.email}</p>
           )}
         </div>
 
-        <div>
-          <label 
-            htmlFor="password" 
-            className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}
-          >
-            Password
-          </label>
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6]/20 via-[#0080c7]/20 to-[#005a8a]/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
           <div className="relative">
             <input
               id="password"
@@ -141,15 +175,24 @@ const LoginForm = ({
               required
               value={formData.password}
               onChange={handleInputChange}
-              placeholder="Enter your password"
-              className={`${inputClasses} pr-12 ${errors.password ? errorInputClasses : ''}`}
+              onFocus={() => handleFocus('password')}
+              onBlur={() => handleBlur('password')}
+              className={`${getInputClasses('password', errors.password)} pr-12`}
               disabled={loading}
             />
+            <label 
+              htmlFor="password" 
+              className={getLabelClasses('password', errors.password)}
+            >
+              Password
+            </label>
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-lg transition-colors ${
-                isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+              className={`absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-lg transition-all duration-300 z-10 hover:scale-110 ${
+                isDark 
+                  ? 'text-[#CCCCCC] hover:text-[#006da6] hover:bg-white/10' 
+                  : 'text-[#6B7280] hover:text-[#006da6] hover:bg-[#006da6]/10'
               }`}
               disabled={loading}
             >
@@ -166,41 +209,56 @@ const LoginForm = ({
             </button>
           </div>
           {errors.password && (
-            <p className="mt-2 text-sm text-red-500 font-medium">{errors.password}</p>
+            <p className="mt-2 text-sm text-red-500 font-semibold animate-fade-in-up">{errors.password}</p>
           )}
         </div>
       </div>
 
       {(error || errors.non_field_errors) && (
-        <div className="p-4 rounded-xl bg-red-50 border border-red-200">
-          <p className="text-sm text-red-600 font-medium">
+        <div className={`relative group p-4 rounded-xl border-2 animate-fade-in-up ${
+          isDark 
+            ? 'bg-red-500/10 border-red-500/30 backdrop-blur-xl' 
+            : 'bg-red-50 border-red-200'
+        }`}>
+          <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 to-red-600/20 rounded-xl blur opacity-50"></div>
+          <p className="relative text-sm text-red-500 font-semibold">
             {error || errors.non_field_errors}
           </p>
         </div>
       )}
 
       <div className="space-y-4">
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full btn-modern-primary btn-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-        >
-          {loading ? (
-            <div className="flex items-center justify-center gap-3">
-              <LoadingSpinner size="sm" color="white" />
-              <span>Signing In...</span>
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-xl blur opacity-0 group-hover:opacity-30 transition-all duration-300"></div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="relative w-full bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] hover:from-[#180c2e] hover:via-[#2d1b4e] hover:to-[#180c2e] text-white font-black py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-[#006da6]/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 backdrop-blur-xl overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/20 via-[#0080c7]/20 to-[#005a8a]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative z-10">
+              {loading ? (
+                <div className="flex items-center justify-center gap-3">
+                  <LoadingSpinner size="sm" color="white" />
+                  <span>Signing In...</span>
+                </div>
+              ) : (
+                'Sign In'
+              )}
             </div>
-          ) : (
-            'Sign In'
-          )}
-        </button>
+          </button>
+        </div>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className={`w-full border-t ${isDark ? 'border-gray-600' : 'border-gray-300'}`} />
+            <div className={`w-full border-t-2 ${isDark ? 'border-white/20' : 'border-gray-200'}`} />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className={`px-4 font-medium ${isDark ? 'bg-[#1a0f33] text-gray-400' : 'bg-white text-gray-500'}`}>
+            <span className={`px-6 font-semibold backdrop-blur-xl rounded-full ${
+              isDark 
+                ? 'bg-[#180c2e]/80 text-[#CCCCCC] border border-white/10' 
+                : 'bg-white/90 text-[#6B7280] border border-gray-200'
+            }`}>
               Or continue with
             </span>
           </div>
@@ -219,16 +277,21 @@ const LoginForm = ({
 
       {onForgotPassword && (
         <div className="text-center">
-          <button
-            type="button"
-            onClick={onForgotPassword}
-            className={`text-sm font-semibold transition-colors hover:underline ${
-              isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
-            }`}
-            disabled={loading}
-          >
-            Forgot your password?
-          </button>
+          <div className="relative group inline-block">
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/20 to-[#005a8a]/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              className={`relative text-sm font-black transition-all duration-300 hover:scale-105 p-3 rounded-lg backdrop-blur-xl ${
+                isDark 
+                  ? 'text-[#006da6] hover:text-[#0080c7] hover:bg-white/10 border border-white/20' 
+                  : 'text-[#006da6] hover:text-[#0080c7] hover:bg-[#006da6]/10 border border-gray-200'
+              }`}
+              disabled={loading}
+            >
+              Forgot your password?
+            </button>
+          </div>
         </div>
       )}
     </form>
