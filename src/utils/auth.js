@@ -69,15 +69,6 @@ export const getClientType = () => {
   return user?.client_type || 'general';
 };
 
-export const isAdmin = () => {
-  return getUserRole() === 'admin';
-};
-
-export const isStaff = () => {
-  const role = getUserRole();
-  return role === 'staff' || role === 'admin';
-};
-
 export const isClient = () => {
   return getUserRole() === 'client';
 };
@@ -102,12 +93,10 @@ export const hasPermission = (permission) => {
   if (!user) return false;
   
   const permissions = {
-    'can_manage_users': isAdmin(),
-    'can_access_admin': isStaff(),
-    'can_manage_clients': isStaff(),
-    'can_view_reports': isStaff(),
     'can_modify_profile': isAuthenticated(),
     'can_access_ndis': isNDISClient(),
+    'can_create_quotes': isAuthenticated(),
+    'can_view_quotes': isAuthenticated(),
   };
   
   return permissions[permission] || false;
@@ -191,40 +180,20 @@ export const redirectToLogin = () => {
 };
 
 export const redirectAfterLogin = (userType = null) => {
-    const user = userType || getUserRole();
-    
-    switch (user) {
-      case 'admin':
-        return '/admin/portal';        
-      case 'staff':
-        return '/staff/portal';        
-      case 'client':
-        return '/clients/portal';
-      default:
-        return '/';
-    }
-  };
+  // All users are clients, so always redirect to client portal
+  return '/clients/portal';
+};
   
 export const shouldRedirectToVerification = () => {
   return isAuthenticated() && !isVerified() && !isGoogleUser();
 };
 
-export const canAccessRoute = (requiredRole = null, requireVerification = true) => {
+export const canAccessRoute = (requireVerification = true) => {
   if (!isAuthenticated()) return false;
   
   if (requireVerification && !isVerified() && !isGoogleUser()) {
     return false;
   }
   
-  if (!requiredRole) return true;
-  
-  const userRole = getUserRole();
-  
-  const roleHierarchy = {
-    'client': 1,
-    'staff': 2,
-    'admin': 3,
-  };
-  
-  return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
+  return true;
 };

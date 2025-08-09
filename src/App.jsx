@@ -5,7 +5,7 @@ import { AuthProvider } from './contexts/AuthContext.jsx';
 import Header from './components/common/Header.jsx';
 import Footer from './components/common/Footer.jsx';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx';
-import ProtectedRoute, { ClientRoute, AdminRoute } from './components/common/ProtectedRoute.jsx';
+import ProtectedRoute, { ClientRoute } from './components/common/ProtectedRoute.jsx';
 import './styles/theme.css';
 import './styles/globals.css';
 
@@ -23,7 +23,6 @@ const Register = lazy(() => import('./pages/accounts/Register.jsx'));
 const PasswordReset = lazy(() => import('./pages/accounts/PasswordReset.jsx'));
 const EmailVerification = lazy(() => import('./pages/accounts/EmailVerification.jsx'));
 const ClientPortal = lazy(() => import('./pages/clients/Portal.jsx'));
-const AdminPortal = lazy(() => import('./pages/admin/Portal.jsx'));
 
 const MyQuotes = lazy(() => import('./pages/quotes/MyQuotes.jsx'));
 const QuoteDetail = lazy(() => import('./pages/quotes/QuoteDetail.jsx'));
@@ -92,6 +91,7 @@ const AppContent = () => {
       <main className="flex-1">
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
@@ -101,28 +101,26 @@ const AppContent = () => {
             <Route path="/ndis" element={<NDISInfo />} />
             <Route path="/faq" element={<FAQ />} />
             
+            {/* Authentication Routes */}
             <Route path="/accounts/login" element={<Login />} />
             <Route path="/accounts/register" element={<Register />} />
             <Route path="/accounts/password-reset" element={<PasswordReset />} />
             <Route path="/accounts/email-verification" element={<EmailVerification />} />
             
-            <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
-            <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
-            <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
-            <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
-            
+            {/* Client Portal Routes */}
             <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
             <Route path="/clients/quotes" element={<ClientRoute><MyQuotes /></ClientRoute>} />
             <Route path="/clients/quotes/create" element={<ClientRoute><CreateQuote /></ClientRoute>} />
             <Route path="/clients/quotes/:id" element={<ClientRoute><QuoteDetail /></ClientRoute>} />
             <Route path="/clients/quotes/:id/edit" element={<ClientRoute><EditQuote /></ClientRoute>} />
             
-            <Route path="/admin/portal" element={<AdminRoute><AdminPortal /></AdminRoute>} />
-            <Route path="/admin/quotes" element={<AdminRoute><MyQuotes /></AdminRoute>} />
-            <Route path="/admin/quotes/create" element={<AdminRoute><CreateQuote /></AdminRoute>} />
-            <Route path="/admin/quotes/:id" element={<AdminRoute><QuoteDetail /></AdminRoute>} />
-            <Route path="/admin/quotes/:id/edit" element={<AdminRoute><EditQuote /></AdminRoute>} />
+            {/* Legacy Protected Routes (redirect to client routes) */}
+            <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
+            <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
+            <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
+            <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
             
+            {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
