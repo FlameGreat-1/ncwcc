@@ -39,10 +39,22 @@ const Login = () => {
   }, [location.search]);
 
   const handleLoginSuccess = (response) => {
+    console.log("🔍 Login - handleLoginSuccess called");
+    console.log("🔍 Login - Full response:", response);
+    console.log("🔍 Login - response.success:", response.success);
+    console.log("🔍 Login - response.user:", response.user);
+    console.log("🔍 Login - response.user.user_type:", response.user?.user_type);
+    console.log("🔍 Login - response.redirectTo:", response.redirectTo);
+    
     const redirectPath = response.redirectTo || redirectAfterLogin(response.user.user_type);
+    console.log("🔍 Login - redirectAfterLogin result:", redirectAfterLogin(response.user.user_type));
+    console.log("🔍 Login - Final redirectPath:", redirectPath);
+    
+    console.log("🔍 Login - About to call navigate with:", redirectPath);
     navigate(redirectPath, { replace: true });
+    console.log("🔍 Login - Navigate called successfully");
   };
-
+  
   const handleLoginError = (errorMessage) => {
     setError(errorMessage);
     setSuccess('');

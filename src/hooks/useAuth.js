@@ -67,28 +67,44 @@ export const useLogin = () => {
   const { login } = useAuth();
 
   const loginUser = useCallback(async (credentials) => {
+    console.log("🔍 useLogin - Starting login with credentials:", credentials);
     setLoading(true);
     setError(null);
 
     try {
+      console.log("🔍 useLogin - Calling authService.login...");
       const response = await authService.login(credentials);
+      console.log("🔍 useLogin - authService response:", response);
       
       if (response.success) {
+        console.log("🔍 useLogin - Login successful, calling login()");
+        console.log("🔍 useLogin - User data:", response.data.user);
+        console.log("🔍 useLogin - Token:", response.data.token);
+        
         login(response.data.user, response.data.token);
-        return {
+        
+        const redirectPath = redirectAfterLogin(response.data.user.user_type);
+        console.log("🔍 useLogin - redirectAfterLogin result:", redirectPath);
+        
+        const result = {
           success: true,
           user: response.data.user,
-          redirectTo: redirectAfterLogin(response.data.user.user_type),
+          redirectTo: redirectPath,
         };
+        console.log("🔍 useLogin - Returning result:", result);
+        return result;
       } else {
+        console.log("🔍 useLogin - Login failed:", response.message);
         setError(response.message || 'Login failed');
         return { success: false, error: response.message };
       }
     } catch (err) {
+      console.error("🔍 useLogin - Error caught:", err);
       const errorMessage = 'Login failed. Please try again.';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
+      console.log("🔍 useLogin - Finally block");
       setLoading(false);
     }
   }, [login]);
