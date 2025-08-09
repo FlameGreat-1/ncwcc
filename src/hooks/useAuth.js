@@ -76,19 +76,19 @@ export const useLogin = () => {
       const response = await authService.login(credentials);
       console.log("🔍 useLogin - authService response:", response);
       
-      if (response.success) {
+      if (response.token && response.user) {
         console.log("🔍 useLogin - Login successful, calling login()");
-        console.log("🔍 useLogin - User data:", response.data.user);
-        console.log("🔍 useLogin - Token:", response.data.token);
+        console.log("🔍 useLogin - User data:", response.user);
+        console.log("🔍 useLogin - Token:", response.token);
         
-        login(response.data.user, response.data.token);
+        login(response.user, response.token);
         
-        const redirectPath = redirectAfterLogin(response.data.user.user_type);
+        const redirectPath = redirectAfterLogin(response.user.user_type);
         console.log("🔍 useLogin - redirectAfterLogin result:", redirectPath);
         
         const result = {
           success: true,
-          user: response.data.user,
+          user: response.user,
           redirectTo: redirectPath,
         };
         console.log("🔍 useLogin - Returning result:", result);
