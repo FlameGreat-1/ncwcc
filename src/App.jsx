@@ -86,9 +86,9 @@ const ThemeOrchestrator = ({ children }) => {
 const LayoutWrapper = ({ children }) => {
   const location = useLocation();
   const isPortalRoute = location.pathname.startsWith('/clients/');
-  const isAuthRoute = location.pathname.startsWith('/accounts/');
+  const isQuoteRoute = location.pathname.startsWith('/quotes/');
 
-  if (isPortalRoute) {
+  if (isPortalRoute || isQuoteRoute) {
     return (
       <div className="min-h-screen app-bg-primary app-text-primary app-transition">
         {children}
