@@ -40,7 +40,13 @@ const EmailVerificationForm = ({
     setAutoVerifying(true);
     
     try {
-      const response = await verifyEmail(token);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Verification timeout')), 30000)
+      );
+      
+      const verificationPromise = verifyEmail(token);
+      
+      const response = await Promise.race([verificationPromise, timeoutPromise]);
       
       if (response.success) {
         setIsVerified(true);
@@ -49,12 +55,12 @@ const EmailVerificationForm = ({
         onError?.(response.error || 'Email verification failed');
       }
     } catch (err) {
-      onError?.('Email verification failed');
+      onError?.(err.message === 'Verification timeout' ? 'Verification timed out. Please try again.' : 'Email verification failed');
     } finally {
       setAutoVerifying(false);
     }
   };
-
+  
   const handleInputChange = (e) => {
     setEmail(e.target.value);
     
