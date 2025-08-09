@@ -29,9 +29,9 @@ const Footer = () => {
   return (
     <footer className="relative bg-gradient-to-br from-black via-gray-900 to-black overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF66]/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#00cc52]/3 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#00FF66]/3 to-[#00cc52]/3 rounded-full blur-3xl animate-spin-slow"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#006da6]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#005a8a]/3 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-[#006da6]/3 to-[#005a8a]/3 rounded-full blur-3xl animate-spin-slow"></div>
       </div>
 
       <div className="relative z-10 container mx-auto px-6 py-20">
@@ -39,11 +39,11 @@ const Footer = () => {
           
           <div className="space-y-8 animate-fade-in-up">
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
               <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
                 <div className="relative z-10">
-                  <h3 className="text-3xl font-black text-transparent bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] bg-clip-text mb-4 group-hover:scale-110 transition-transform duration-500">
+                  <h3 className="text-3xl font-black text-transparent bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] bg-clip-text mb-4 group-hover:scale-110 transition-transform duration-500">
                     {COMPANY_INFO.name}
                   </h3>
                   <p className="text-[#CCCCCC] text-sm leading-relaxed font-medium group-hover:text-white transition-colors duration-500">
@@ -56,94 +56,93 @@ const Footer = () => {
             </div>
             
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-40 transition-all duration-700"></div>
-              <div className="relative flex items-center gap-3 bg-gradient-to-r from-[#00FF66]/10 via-white/5 to-[#00cc52]/10 backdrop-blur-xl border border-[#00FF66]/30 p-4 rounded-2xl hover:border-[#00FF66]/50 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-[#00cc52]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
-                <div className="relative w-4 h-4 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full animate-pulse shadow-lg group-hover:animate-bounce"></div>
-                <span className="relative text-sm font-black text-[#00FF66] group-hover:text-white transition-colors duration-500">NDIS Approved Provider</span>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#00FF66] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-2xl blur opacity-0 group-hover:opacity-40 transition-all duration-700"></div>
+              <div className="relative flex items-center gap-3 bg-gradient-to-r from-[#006da6]/10 via-white/5 to-[#005a8a]/10 backdrop-blur-xl border border-[#006da6]/30 p-4 rounded-2xl hover:border-[#006da6]/50 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-[#005a8a]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                <div className="relative w-4 h-4 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full animate-pulse shadow-lg group-hover:animate-bounce"></div>
+                <span className="relative text-sm font-black text-[#006da6] group-hover:text-white transition-colors duration-500">NDIS Approved Provider</span>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#006da6] rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-700"></div>
               </div>
             </div>
           </div>
 
           <div className="animate-fade-in-up delay-200">
             <h4 className="text-xl font-black text-white mb-8 relative group">
-              <span className="relative z-10 group-hover:text-[#00FF66] transition-colors duration-500">Quick Links</span>
-              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover:w-full transition-all duration-700 rounded-full"></div>
+              <span className="relative z-10 group-hover:text-[#006da6] transition-colors duration-500">Quick Links</span>
+              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] group-hover:w-full transition-all duration-700 rounded-full"></div>
             </h4>
             <ul className="space-y-4">
               {quickLinks.map((link, index) => (
                 <li key={link.name} className="group/link">
                   <Link 
                     to={link.path}
-                    className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
+                    className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#006da6] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
+                    <div className="w-0 h-0.5 bg-gradient-to-r from-[#006da6] to-[#005a8a] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
                     <span className="relative z-10">{link.name}</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                   </Link>
                 </li>
               ))}
               <li className="group/link">
                 <Link 
                   to="/gallery"
-                  className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
+                  className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#006da6] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
                 >
-                  <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
+                  <div className="w-0 h-0.5 bg-gradient-to-r from-[#006da6] to-[#005a8a] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
                   <span className="relative z-10">Before & After Gallery</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                 </Link>
               </li>
               <li className="group/link">
                 <Link 
                   to="/faq"
-                  className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
+                  className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#006da6] transition-all duration-500 text-sm font-medium group-hover/link:translate-x-2 group-hover/link:scale-105 transform-gpu"
                 >
-                  <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
+                  <div className="w-0 h-0.5 bg-gradient-to-r from-[#006da6] to-[#005a8a] group-hover/link:w-4 transition-all duration-500 mr-0 group-hover/link:mr-2 rounded-full"></div>
                   <span className="relative z-10">FAQ</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                 </Link>
               </li>
             </ul>
           </div>
-
           <div className="animate-fade-in-up delay-400">
             <h4 className="text-xl font-black text-white mb-8 relative group">
-              <span className="relative z-10 group-hover:text-[#00FF66] transition-colors duration-500">Our Services</span>
-              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover:w-full transition-all duration-700 rounded-full"></div>
+              <span className="relative z-10 group-hover:text-[#006da6] transition-colors duration-500">Our Services</span>
+              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] group-hover:w-full transition-all duration-700 rounded-full"></div>
             </h4>
             <ul className="space-y-4 mb-8">
               {serviceLinks.map((service, index) => (
                 <li key={service.name} className="group/service">
                   <Link 
                     to={service.path}
-                    className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#00FF66] transition-all duration-500 text-sm font-medium group-hover/service:translate-x-2 group-hover/service:scale-105 transform-gpu"
+                    className="relative inline-flex items-center text-[#CCCCCC] hover:text-[#006da6] transition-all duration-500 text-sm font-medium group-hover/service:translate-x-2 group-hover/service:scale-105 transform-gpu"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <div className="w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/service:w-4 transition-all duration-500 mr-0 group-hover/service:mr-2 rounded-full"></div>
+                    <div className="w-0 h-0.5 bg-gradient-to-r from-[#006da6] to-[#005a8a] group-hover/service:w-4 transition-all duration-500 mr-0 group-hover/service:mr-2 rounded-full"></div>
                     <span className="relative z-10">{service.name}</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/service:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/service:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
                   </Link>
                 </li>
               ))}
             </ul>
             
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
               <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
                 <div className="relative z-10">
-                  <h5 className="text-sm font-black mb-4 text-white group-hover:text-[#00FF66] transition-colors duration-500">Service Areas</h5>
+                  <h5 className="text-sm font-black mb-4 text-white group-hover:text-[#006da6] transition-colors duration-500">Service Areas</h5>
                   <div className="grid grid-cols-2 gap-2 text-xs text-[#CCCCCC] mb-3">
                     {SERVICE_AREAS.slice(0, 6).map((area, index) => (
                       <div key={area} className="group/area flex items-center">
-                        <div className="w-1 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full mr-2 group-hover/area:animate-pulse"></div>
-                        <span className="group-hover/area:text-[#00FF66] transition-colors duration-300">{area}</span>
+                        <div className="w-1 h-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full mr-2 group-hover/area:animate-pulse"></div>
+                        <span className="group-hover/area:text-[#006da6] transition-colors duration-300">{area}</span>
                       </div>
                     ))}
                   </div>
-                  <span className="text-xs text-[#00FF66] font-black group-hover:text-white transition-colors duration-500 inline-flex items-center gap-1">
+                  <span className="text-xs text-[#006da6] font-black group-hover:text-white transition-colors duration-500 inline-flex items-center gap-1">
                     <span className="group-hover:animate-bounce"></span>
                     + More areas available
                   </span>
@@ -154,19 +153,19 @@ const Footer = () => {
 
           <div className="animate-fade-in-up delay-600">
             <h4 className="text-xl font-black text-white mb-8 relative group">
-              <span className="relative z-10 group-hover:text-[#00FF66] transition-colors duration-500">Contact Info</span>
-              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover:w-full transition-all duration-700 rounded-full"></div>
+              <span className="relative z-10 group-hover:text-[#006da6] transition-colors duration-500">Contact Info</span>
+              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] group-hover:w-full transition-all duration-700 rounded-full"></div>
             </h4>
             <div className="space-y-6">
               <div className="relative group/contact">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/contact:opacity-30 transition-all duration-700"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-xl blur opacity-0 group-hover/contact:opacity-30 transition-all duration-700"></div>
                 <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/contact:opacity-100 transition-opacity duration-700 rounded-xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover/contact:opacity-100 transition-opacity duration-700 rounded-xl"></div>
                   <div className="relative z-10">
-                    <p className="text-sm font-black mb-2 text-white group-hover/contact:text-[#00FF66] transition-colors duration-500">Phone</p>
+                    <p className="text-sm font-black mb-2 text-white group-hover/contact:text-[#006da6] transition-colors duration-500">Phone</p>
                     <a 
                       href={`tel:${COMPANY_INFO.phone}`}
-                      className="text-[#00FF66] hover:text-white transition-all duration-500 font-black text-lg group-hover/contact:scale-110 inline-block transform-gpu"
+                      className="text-[#006da6] hover:text-white transition-all duration-500 font-black text-lg group-hover/contact:scale-110 inline-block transform-gpu"
                     >
                       {formatPhone(COMPANY_INFO.phone)}
                     </a>
@@ -175,14 +174,14 @@ const Footer = () => {
               </div>
               
               <div className="relative group/email">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/email:opacity-30 transition-all duration-700"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-xl blur opacity-0 group-hover/email:opacity-30 transition-all duration-700"></div>
                 <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/email:opacity-100 transition-opacity duration-700 rounded-xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover/email:opacity-100 transition-opacity duration-700 rounded-xl"></div>
                   <div className="relative z-10">
-                    <p className="text-sm font-black mb-2 text-white group-hover/email:text-[#00FF66] transition-colors duration-500">Email</p>
+                    <p className="text-sm font-black mb-2 text-white group-hover/email:text-[#006da6] transition-colors duration-500">Email</p>
                     <a 
                       href={`mailto:${COMPANY_INFO.email.support}`}
-                      className="text-[#CCCCCC] hover:text-[#00FF66] transition-colors duration-500 text-sm break-all font-medium group-hover/email:scale-105 inline-block transform-gpu"
+                      className="text-[#CCCCCC] hover:text-[#006da6] transition-colors duration-500 text-sm break-all font-medium group-hover/email:scale-105 inline-block transform-gpu"
                     >
                       {COMPANY_INFO.email.support}
                     </a>
@@ -191,17 +190,17 @@ const Footer = () => {
               </div>
 
               <div className="relative group/hours">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/hours:opacity-30 transition-all duration-700"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-xl blur opacity-0 group-hover/hours:opacity-30 transition-all duration-700"></div>
                 <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/hours:opacity-100 transition-opacity duration-700 rounded-xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover/hours:opacity-100 transition-opacity duration-700 rounded-xl"></div>
                   <div className="relative z-10">
-                    <p className="text-sm font-black mb-3 text-white group-hover/hours:text-[#00FF66] transition-colors duration-500">Business Hours</p>
+                    <p className="text-sm font-black mb-3 text-white group-hover/hours:text-[#006da6] transition-colors duration-500">Business Hours</p>
                     <div className="text-xs text-[#CCCCCC] space-y-2 font-medium">
-                      <div className="flex justify-between items-center group/day hover:text-[#00FF66] transition-colors duration-300">
+                      <div className="flex justify-between items-center group/day hover:text-[#006da6] transition-colors duration-300">
                         <span>Mon - Fri:</span>
                         <span className="font-black">{BUSINESS_HOURS.monday}</span>
                       </div>
-                      <div className="flex justify-between items-center group/day hover:text-[#00FF66] transition-colors duration-300">
+                      <div className="flex justify-between items-center group/day hover:text-[#006da6] transition-colors duration-300">
                         <span>Saturday:</span>
                         <span className="font-black">{BUSINESS_HOURS.saturday}</span>
                       </div>
@@ -218,8 +217,8 @@ const Footer = () => {
         </div>
 
         <div className="relative group mb-12">
-          <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
-          <div className="relative bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-1 hover:border-[#00FF66]/50 transition-all duration-700">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
+          <div className="relative bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-1 hover:border-[#006da6]/50 transition-all duration-700">
             <div className="bg-gradient-to-r from-black/50 via-gray-900/50 to-black/50 rounded-3xl p-8 hover:bg-gradient-to-r hover:from-black/70 hover:via-gray-900/70 hover:to-black/70 transition-all duration-700">
               <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
                 
@@ -262,36 +261,33 @@ const Footer = () => {
                     </a>
                   </div>
                   
-                  <div className="relative group/abn">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-xl blur opacity-0 group-hover/abn:opacity-30 transition-all duration-700"></div>
-                    <div className="relative text-xs text-[#CCCCCC] bg-white/5 backdrop-blur-xl border border-white/10 px-3 py-2 rounded-xl font-medium group-hover/abn:text-[#00FF66] group-hover/abn:bg-white/10 transition-all duration-500 hover:-translate-y-1 hover:scale-105 transform-gpu">
-                      <span className="relative z-10">ABN: {COMPANY_INFO.abn}</span>
-                    </div>
+                  <div className="text-center sm:text-left">
+                    <p className="text-white font-black text-lg mb-2 group-hover:text-[#006da6] transition-colors duration-500">Follow Us</p>
+                    <p className="text-[#CCCCCC] text-sm font-medium">Stay updated with our latest work</p>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-6 animate-fade-in-up delay-1000">
-                  <form onSubmit={handleNewsletterSubmit} className="relative group/form">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-2xl blur opacity-0 group-hover/form:opacity-30 transition-all duration-700"></div>
-                    <div className="relative flex gap-3 bg-white/5 backdrop-blur-xl border border-white/20 p-2 rounded-2xl hover:bg-white/10 hover:border-[#00FF66]/50 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
+                <div className="relative group/newsletter">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-2xl blur opacity-0 group-hover/newsletter:opacity-30 transition-all duration-700"></div>
+                  <form onSubmit={handleNewsletterSubmit} className="relative flex flex-col sm:flex-row gap-4 items-center">
+                    <div className="relative">
                       <input
                         type="email"
                         name="email"
-                        placeholder="Subscribe to updates"
-                        className="flex-1 px-4 py-2 bg-transparent text-sm text-white placeholder-[#CCCCCC] focus:outline-none focus:placeholder-[#00FF66] transition-colors duration-500 font-medium"
+                        placeholder="Enter your email"
                         required
+                        className="w-full sm:w-64 px-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl text-white placeholder-[#CCCCCC] focus:outline-none focus:border-[#006da6] focus:bg-white/20 transition-all duration-500 font-medium"
                       />
-                      <Button 
-                        type="submit" 
-                        className="relative bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] hover:from-black hover:to-gray-800 text-black hover:text-white font-black px-4 py-2 rounded-xl text-xs transition-all duration-700 hover:scale-110 hover:-translate-y-1 shadow-lg hover:shadow-2xl transform-gpu group/btn overflow-hidden"
-                      >
-                        <span className="relative z-10 flex items-center gap-1">
-                          <span className="text-sm group-hover/btn:animate-bounce">📧</span>
-                          Subscribe
-                        </span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-700 transform group-hover/btn:translate-x-full"></div>
-                      </Button>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/10 to-[#005a8a]/10 opacity-0 focus-within:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none"></div>
                     </div>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="md"
+                      className="whitespace-nowrap bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] hover:from-[#180c2e] hover:to-[#2d1b4e] transform hover:scale-105 hover:-translate-y-1 transition-all duration-500"
+                    >
+                      Subscribe
+                    </Button>
                   </form>
                 </div>
               </div>
@@ -299,74 +295,57 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] via-[#00e65a] to-[#00cc52] rounded-3xl blur opacity-0 group-hover:opacity-20 transition-all duration-700"></div>
-          <div className="relative bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-1 hover:border-[#00FF66]/30 transition-all duration-700">
-            <div className="bg-gradient-to-r from-black/50 via-gray-900/50 to-black/50 rounded-3xl p-8 hover:bg-gradient-to-r hover:from-black/70 hover:via-gray-900/70 hover:to-black/70 transition-all duration-700">
-              <div className="text-center animate-fade-in-up delay-1200">
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-6 text-xs text-[#CCCCCC] mb-6">
-                  <p className="relative group/copy">
-                    <span className="relative z-10 font-medium group-hover/copy:text-[#00FF66] transition-colors duration-500">
-                      © {currentYear} {COMPANY_INFO.name}. All rights reserved.
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/copy:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
-                  </p>
-                  <div className="flex gap-6">
-                    <Link 
-                      to="/terms" 
-                      className="relative group/legal hover:text-[#00FF66] transition-all duration-500 font-medium hover:scale-105 transform-gpu"
-                    >
-                      <span className="relative z-10">Terms of Service</span>
-                      <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/legal:w-full transition-all duration-500 rounded-full"></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/legal:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
-                    </Link>
-                    <Link 
-                      to="/privacy" 
-                      className="relative group/legal hover:text-[#00FF66] transition-all duration-500 font-medium hover:scale-105 transform-gpu"
-                    >
-                      <span className="relative z-10">Privacy Policy</span>
-                      <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00FF66] to-[#00cc52] group-hover/legal:w-full transition-all duration-500 rounded-full"></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#00FF66]/10 to-transparent opacity-0 group-hover/legal:opacity-100 transition-opacity duration-500 rounded-lg -m-2 p-2"></div>
-                    </Link>
-                  </div>
-                </div>
-                
-                <div className="relative group/disclaimer">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-2xl blur opacity-0 group-hover/disclaimer:opacity-20 transition-all duration-700"></div>
-                  <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:bg-white/10 hover:border-[#00FF66]/30 transition-all duration-700 hover:-translate-y-1 hover:scale-105 transform-gpu">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/5 via-transparent to-[#00cc52]/5 opacity-0 group-hover/disclaimer:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
-                    <p className="relative z-10 text-xs text-[#CCCCCC] max-w-4xl mx-auto leading-relaxed font-medium group-hover/disclaimer:text-white transition-colors duration-500">
-                      We are not affiliated with the NDIA but work with all types of participant management. 
-                      All services are provided by qualified, insured professionals with police checks.
-                    </p>
-                  </div>
-                </div>
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#006da6]/20 via-transparent to-[#005a8a]/20 blur-xl"></div>
+          <div className="relative border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4 text-sm text-[#CCCCCC] font-medium">
+              <p className="group hover:text-[#006da6] transition-colors duration-500">
+                © {currentYear} {COMPANY_INFO.name}. All rights reserved.
+              </p>
+              <div className="flex items-center gap-4">
+                <Link to="/privacy" className="hover:text-[#006da6] transition-colors duration-500 group">
+                  <span className="relative">
+                    Privacy Policy
+                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#006da6] group-hover:w-full transition-all duration-500"></div>
+                  </span>
+                </Link>
+                <span className="text-white/20">•</span>
+                <Link to="/terms" className="hover:text-[#006da6] transition-colors duration-500 group">
+                  <span className="relative">
+                    Terms of Service
+                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#006da6] group-hover:w-full transition-all duration-500"></div>
+                  </span>
+                </Link>
               </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-sm text-[#CCCCCC] font-medium">
+              <span className="group hover:text-[#006da6] transition-colors duration-500">Made with</span>
+              <div className="relative group">
+                <div className="w-4 h-4 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full animate-pulse group-hover:animate-bounce transition-all duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+              </div>
+              <span className="group hover:text-[#006da6] transition-colors duration-500">in Australia</span>
             </div>
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="relative group/scroll">
-            <div className="absolute -inset-2 bg-gradient-to-r from-[#00FF66] to-[#00cc52] rounded-full blur opacity-0 group-hover/scroll:opacity-40 transition-all duration-700"></div>
-            <div className="relative w-8 h-12 bg-white/10 backdrop-blur-xl border-2 border-[#00FF66]/60 rounded-full flex justify-center hover:bg-white/20 hover:border-[#00FF66] transition-all duration-700 hover:scale-110 hover:-translate-y-2 transform-gpu group-hover/scroll:shadow-2xl cursor-pointer overflow-hidden"
-                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <div className="absolute inset-0 bg-gradient-to-br from-[#00FF66]/10 via-transparent to-[#00cc52]/10 opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-700 rounded-full"></div>
-              <div className="relative w-1 h-4 bg-gradient-to-b from-[#00FF66] to-[#00cc52] rounded-full mt-2 animate-pulse group-hover/scroll:animate-bounce"></div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#00FF66] rounded-full opacity-0 group-hover/scroll:opacity-100 animate-ping transition-opacity duration-700"></div>
-            </div>
-          </div>
-        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#006da6]/50 to-transparent"></div>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
     </footer>
   );
 };
 
 export default Footer;
 
-          
+            
+           
 
       
 
    
+
+
 
