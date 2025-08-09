@@ -123,19 +123,8 @@ const RegisterForm = ({
     e.preventDefault();
     
     if (!validateStep2()) return;
-  
-    // 🔍 DEBUG: Add these lines temporarily
-    console.log('🔍 Form Data:', formData);
-    console.log('🔍 confirm_password value:', formData.confirm_password);
-    console.log('🔍 password value:', formData.password);
-    
-    // Add alert to see in browser
-    alert(`Debug Info:
-      Password: "${formData.password}"
-      Confirm: "${formData.confirm_password}"
-      Are they equal: ${formData.password === formData.confirm_password}`);
-  
-    const requestData = {
+
+    const response = await registerUser({
       first_name: formData.first_name.trim(),
       last_name: formData.last_name.trim(),
       email: formData.email.trim(),
@@ -144,14 +133,8 @@ const RegisterForm = ({
       password_confirm: formData.confirm_password,
       user_type: userType,
       client_type: clientType
-    };
-  
-    // 🔍 DEBUG: Log the request data being sent
-    console.log('🔍 Request Data being sent:', requestData);
-    alert(`Request Data: ${JSON.stringify(requestData, null, 2)}`);
-  
-    const response = await registerUser(requestData);
-  
+    });
+
     if (response.success) {
       onSuccess?.(response);
     } else {
@@ -161,9 +144,6 @@ const RegisterForm = ({
       onError?.(response.error || 'Registration failed');
     }
   };
-  
-
-  
 
   const handleGoogleSuccess = (response) => {
     onSuccess?.(response);
