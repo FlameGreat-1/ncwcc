@@ -48,6 +48,10 @@ const Header = () => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
+  const handleLogout = async () => {
+    await logout();
+  };
+
   const servicesDropdown = [
     { name: 'General Home Cleaning', path: '/services#general', icon: '🏠' },
     { name: 'Deep Cleaning', path: '/services#deep', icon: '✨' },
@@ -221,7 +225,34 @@ const Header = () => {
 
             <div className="flex items-center space-x-3">
               <div className="hidden lg:flex items-center space-x-2">
-                {!isAuthenticated ? (
+                {isAuthenticated && user?.is_verified ? (
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      to="/clients/portal"
+                      className="px-4 py-2 text-sm font-semibold app-text-primary hover:text-[#006da6] transition-colors duration-300"
+                    >
+                      {user?.first_name || 'Portal'}
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-500 transition-colors duration-300"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : isAuthenticated && !user?.is_verified ? (
+                  <div className="flex items-center space-x-2">
+                    <span className="px-4 py-2 text-sm font-semibold text-orange-600">
+                      Please verify your email
+                    </span>
+                    <button
+                      onClick={handleLogout}
+                      className="px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-500 transition-colors duration-300"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
                   <div className="flex items-center space-x-2">
                     <Link
                       to="/accounts/login"
@@ -236,7 +267,7 @@ const Header = () => {
                       Register
                     </Link>
                   </div>
-                ) : null}
+                )}
                 
                 <button
                   onClick={() => window.location.href = '/quote'}
@@ -281,7 +312,41 @@ const Header = () => {
                 ))}
                 
                 <div className="pt-6 border-t app-border-glass mt-6 space-y-4">
-                  {!isAuthenticated ? (
+                  {isAuthenticated && user?.is_verified ? (
+                    <div className="space-y-3">
+                      <Link
+                        to="/clients/portal"
+                        className="block w-full px-6 py-3 text-center text-base font-bold app-text-primary hover:text-[#006da6] transition-colors duration-300"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {user?.first_name || 'Portal'}
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMenuOpen(false);
+                        }}
+                        className="block w-full px-6 py-3 text-center text-base font-bold text-red-600 hover:text-red-500 transition-colors duration-300"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : isAuthenticated && !user?.is_verified ? (
+                    <div className="space-y-3">
+                      <span className="block w-full px-6 py-3 text-center text-base font-bold text-orange-600">
+                        Please verify your email
+                      </span>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMenuOpen(false);
+                        }}
+                        className="block w-full px-6 py-3 text-center text-base font-bold text-red-600 hover:text-red-500 transition-colors duration-300"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
                     <div className="space-y-3">
                       <Link
                         to="/accounts/login"
@@ -298,7 +363,7 @@ const Header = () => {
                         Register
                       </Link>
                     </div>
-                  ) : null}
+                  )}
                   
                   <button
                     onClick={() => window.location.href = '/quote'}
