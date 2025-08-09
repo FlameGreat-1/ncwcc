@@ -4,28 +4,30 @@ import { API_ENDPOINTS } from './apiConfig';
 class AuthService {
   async register(userData) {
     const response = await apiService.post(API_ENDPOINTS.AUTH.REGISTER, userData);
+    const data = response.data;
     
-    if (response.success && response.data.token) {
-      this.setAuthData(response.data.token, response.data);
+    if (data.success && data.data.token) {
+      this.setAuthData(data.data.token, data.data);
     }
     
-    return response;
+    return data;
   }
 
   async login(credentials) {
     const response = await apiService.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
+    const data = response.data;
     
-    if (response.success && response.data.token) {
-      this.setAuthData(response.data.token, response.data);
+    if (data.success && data.data.token) {
+      this.setAuthData(data.data.token, data.data);
     }
     
-    return response;
+    return data;
   }
 
   async logout() {
     const response = await apiService.post(API_ENDPOINTS.AUTH.LOGOUT);
     this.clearAuthData();
-    return response;
+    return response.data;
   }
 
   async googleAuth(accessToken, userType = 'client', clientType = 'general') {
@@ -35,11 +37,13 @@ class AuthService {
       client_type: clientType,
     });
     
-    if (response.success && response.data.token) {
-      this.setAuthData(response.data.token, response.data);
+    const data = response.data;
+    
+    if (data.success && data.data.token) {
+      this.setAuthData(data.data.token, data.data);
     }
     
-    return response;
+    return data;
   }
 
   async googleRegister(accessToken, userType = 'client', clientType = 'general', phoneNumber = '') {
@@ -50,11 +54,13 @@ class AuthService {
       phone_number: phoneNumber,
     });
     
-    if (response.success && response.data.token) {
-      this.setAuthData(response.data.token, response.data);
+    const data = response.data;
+    
+    if (data.success && data.data.token) {
+      this.setAuthData(data.data.token, data.data);
     }
     
-    return response;
+    return data;
   }
 
   async socialLogin(provider, accessToken) {
@@ -63,60 +69,70 @@ class AuthService {
       access_token: accessToken,
     });
     
-    if (response.success && response.data.token) {
-      this.setAuthData(response.data.token, response.data);
+    const data = response.data;
+    
+    if (data.success && data.data.token) {
+      this.setAuthData(data.data.token, data.data);
     }
     
-    return response;
+    return data;
   }
 
   async changePassword(currentPassword, newPassword) {
-    return await apiService.post(API_ENDPOINTS.AUTH.PASSWORD_CHANGE, {
+    const response = await apiService.post(API_ENDPOINTS.AUTH.PASSWORD_CHANGE, {
       current_password: currentPassword,
       new_password: newPassword,
     });
+    return response.data;
   }
 
   async requestPasswordReset(email) {
-    return await apiService.post(API_ENDPOINTS.AUTH.PASSWORD_RESET, {
+    const response = await apiService.post(API_ENDPOINTS.AUTH.PASSWORD_RESET, {
       email,
     });
+    return response.data;
   }
 
   async confirmPasswordReset(token, newPassword) {
-    return await apiService.post(API_ENDPOINTS.AUTH.PASSWORD_RESET_CONFIRM, {
+    const response = await apiService.post(API_ENDPOINTS.AUTH.PASSWORD_RESET_CONFIRM, {
       token,
       new_password: newPassword,
     });
+    return response.data;
   }
 
   async verifyEmail(token) {
-    return await apiService.post(API_ENDPOINTS.AUTH.EMAIL_VERIFY, {
+    const response = await apiService.post(API_ENDPOINTS.AUTH.EMAIL_VERIFY, {
       token,
     });
+    return response.data;
   }
 
   async resendVerification(email) {
-    return await apiService.post(API_ENDPOINTS.AUTH.EMAIL_RESEND, {
+    const response = await apiService.post(API_ENDPOINTS.AUTH.EMAIL_RESEND, {
       email,
     });
+    return response.data;
   }
 
   async linkSocialAccount(provider, accessToken) {
-    return await apiService.post(API_ENDPOINTS.PROFILE.LINK, {
+    const response = await apiService.post(API_ENDPOINTS.PROFILE.LINK, {
       provider,
       access_token: accessToken,
     });
+    return response.data;
   }
 
   async unlinkSocialAccount(provider) {
-    return await apiService.post(API_ENDPOINTS.PROFILE.UNLINK, {
+    const response = await apiService.post(API_ENDPOINTS.PROFILE.UNLINK, {
       provider,
     });
+    return response.data;
   }
 
   async checkHealth() {
-    return await apiService.get(API_ENDPOINTS.HEALTH);
+    const response = await apiService.get(API_ENDPOINTS.HEALTH);
+    return response.data;
   }
 
   setAuthData(token, userData) {
@@ -173,3 +189,4 @@ class AuthService {
 }
 
 export default new AuthService();
+
