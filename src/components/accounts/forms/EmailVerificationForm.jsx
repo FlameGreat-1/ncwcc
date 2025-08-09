@@ -23,18 +23,42 @@ const EmailVerificationForm = ({
   const { verifyEmail, resendVerification, loading, error, setError } = useEmailVerification();
   const { isDark } = useTheme();
 
+  console.log("🔍 EmailVerificationForm - Component rendered");
+  console.log("🔍 EmailVerificationForm - token:", token);
+  console.log("🔍 EmailVerificationForm - token length:", token?.length);
+
   useEffect(() => {
+    console.log("🔍 EmailVerificationForm - useEffect triggered");
+    console.log("🔍 - token:", token);
+    console.log("🔍 - token exists:", !!token);
+    console.log("🔍 - token length > 10:", token && token.length > 10);
+    console.log("🔍 - !isVerified:", !isVerified);
+    console.log("🔍 - !autoVerifying:", !autoVerifying);
+    console.log("🔍 - !verificationAttempted.current:", !verificationAttempted.current);
+    
     if (token && 
         token.length > 10 && 
         !isVerified && 
         !autoVerifying && 
         !verificationAttempted.current) {
+      console.log("🔍 EmailVerificationForm - All conditions met, calling handleTokenVerification");
       handleTokenVerification();
+    } else {
+      console.log("🔍 EmailVerificationForm - Conditions not met, skipping verification");
     }
   }, [token]);
 
   const handleTokenVerification = async () => {
-    if (autoVerifying || verificationAttempted.current) return;
+    console.log("🔍 EmailVerificationForm - handleTokenVerification called");
+    console.log("🔍 - autoVerifying:", autoVerifying);
+    console.log("🔍 - verificationAttempted.current:", verificationAttempted.current);
+    
+    if (autoVerifying || verificationAttempted.current) {
+      console.log("🔍 EmailVerificationForm - Exiting early");
+      return;
+    }
+    
+    console.log("🔍 EmailVerificationForm - Proceeding with verification...");
     
     verificationAttempted.current = true;
     setAutoVerifying(true);
@@ -60,7 +84,7 @@ const EmailVerificationForm = ({
       setAutoVerifying(false);
     }
   };
-  
+
   const handleInputChange = (e) => {
     setEmail(e.target.value);
     
