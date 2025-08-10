@@ -6,6 +6,7 @@ import Header from './components/common/Header.jsx';
 import Footer from './components/common/Footer.jsx';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx';
 import ProtectedRoute, { ClientRoute } from './components/common/ProtectedRoute.jsx';
+import RouteGuard from './components/common/RouteGuard.jsx';
 import './styles/theme.css';
 import './styles/globals.css';
 
@@ -155,9 +156,11 @@ const App = () => {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <ThemeOrchestrator>
-            <AppContent />
-          </ThemeOrchestrator>
+          <RouteGuard>
+            <ThemeOrchestrator>
+              <AppContent />
+            </ThemeOrchestrator>
+          </RouteGuard>
         </Router>
       </AuthProvider>
     </ThemeProvider>

@@ -13,6 +13,10 @@ const Header = () => {
   const headerRef = useRef(null);
   const { isAuthenticated, user, logout } = useAuth();
 
+  const landingPages = ['/', '/about', '/services', '/contact', '/quote', '/gallery', '/ndis', '/faq'];
+  const isLandingPage = landingPages.includes(location.pathname);
+  const showAuthButtons = isAuthenticated && !isLandingPage;
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -49,6 +53,14 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
+    if (window.quotesRefreshInterval) {
+      clearInterval(window.quotesRefreshInterval);
+      window.quotesRefreshInterval = null;
+    }
+    if (window.invoicesRefreshInterval) {
+      clearInterval(window.invoicesRefreshInterval);
+      window.invoicesRefreshInterval = null;
+    }
     await logout();
   };
 
@@ -225,7 +237,7 @@ const Header = () => {
 
             <div className="flex items-center space-x-3">
               <div className="hidden lg:flex items-center space-x-2">
-                {isAuthenticated && user?.is_verified ? (
+                {showAuthButtons && user?.is_verified ? (
                   <div className="flex items-center space-x-2">
                     <Link
                       to="/clients/portal"
@@ -240,7 +252,7 @@ const Header = () => {
                       Logout
                     </button>
                   </div>
-                ) : isAuthenticated && !user?.is_verified ? (
+                ) : showAuthButtons && !user?.is_verified ? (
                   <div className="flex items-center space-x-2">
                     <span className="px-4 py-2 text-sm font-semibold text-orange-600">
                       Please verify your email
@@ -252,7 +264,7 @@ const Header = () => {
                       Logout
                     </button>
                   </div>
-                ) : (
+                ) : !showAuthButtons ? (
                   <div className="flex items-center space-x-2">
                     <Link
                       to="/accounts/login"
@@ -267,7 +279,7 @@ const Header = () => {
                       Register
                     </Link>
                   </div>
-                )}
+                ) : null}
                 
                 <button
                   onClick={() => window.location.href = '/quote'}
@@ -312,7 +324,7 @@ const Header = () => {
                 ))}
                 
                 <div className="pt-6 border-t app-border-glass mt-6 space-y-4">
-                  {isAuthenticated && user?.is_verified ? (
+                  {showAuthButtons && user?.is_verified ? (
                     <div className="space-y-3">
                       <Link
                         to="/clients/portal"
@@ -331,7 +343,7 @@ const Header = () => {
                         Logout
                       </button>
                     </div>
-                  ) : isAuthenticated && !user?.is_verified ? (
+                  ) : showAuthButtons && !user?.is_verified ? (
                     <div className="space-y-3">
                       <span className="block w-full px-6 py-3 text-center text-base font-bold text-orange-600">
                         Please verify your email
@@ -346,7 +358,7 @@ const Header = () => {
                         Logout
                       </button>
                     </div>
-                  ) : (
+                  ) : !showAuthButtons ? (
                     <div className="space-y-3">
                       <Link
                         to="/accounts/login"
@@ -363,7 +375,7 @@ const Header = () => {
                         Register
                       </Link>
                     </div>
-                  )}
+                  ) : null}
                   
                   <button
                     onClick={() => window.location.href = '/quote'}

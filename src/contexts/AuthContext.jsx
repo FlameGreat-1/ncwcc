@@ -111,21 +111,41 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
-  const logout = useCallback(async () => {
-    setLoading(true);
+  const logout = useCallback(async (skipApiCall = false) => {
+    if (!skipApiCall) {
+      setLoading(true);
+    }
     
     try {
-      await authService.logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
+      if (window.quotesRefreshInterval) {
+        clearInterval(window.quotesRefreshInterval);
+        window.quotesRefreshInterval = null;
+      }
+      if (window.invoicesRefreshInterval) {
+        clearInterval(window.invoicesRefreshInterval);
+        window.invoicesRefreshInterval = null;
+      }
+      
       clearAuthData();
       googleAuthService.signOut();
       dispatch({ type: 'LOGOUT' });
+      
+      if (!skipApiCall) {
+        authService.logout().catch(error => {
+          console.error('Background logout error:', error);
+        });
+      }
+
+      window.location.href = '/';
+      
+    } catch (error) {
+      console.error('Logout error:', error);
+      clearAuthData();
+      dispatch({ type: 'LOGOUT' });
       window.location.href = '/';
     }
-  }, [setLoading]);
-
+  }, []);
+  
   const updateUser = useCallback((userData) => {
     const updatedUser = { ...state.user, ...userData };
     setUser(updatedUser);
