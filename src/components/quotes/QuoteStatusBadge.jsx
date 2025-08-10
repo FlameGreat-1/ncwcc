@@ -6,44 +6,36 @@ const QuoteStatusBadge = ({
   const getStatusConfig = (status) => {
     const configs = {
       draft: {
-        bg: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
-        label: 'Draft',
-        pulse: false
+        bg: 'app-bg-secondary app-text-primary',
+        label: 'Draft'
       },
       submitted: {
-        bg: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-        label: 'Submitted',
-        pulse: true
+        bg: 'bg-blue-100 text-blue-800',
+        label: 'Submitted'
       },
       under_review: {
-        bg: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-        label: 'Under Review',
-        pulse: true
+        bg: 'bg-yellow-100 text-yellow-800',
+        label: 'Under Review'
       },
       approved: {
-        bg: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-        label: 'Approved',
-        pulse: false
+        bg: 'bg-green-100 text-green-800',
+        label: 'Approved'
       },
       rejected: {
-        bg: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-        label: 'Rejected',
-        pulse: false
+        bg: 'bg-red-100 text-red-800',
+        label: 'Rejected'
       },
       expired: {
-        bg: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
-        label: 'Expired',
-        pulse: false
+        bg: 'bg-orange-100 text-orange-800',
+        label: 'Expired'
       },
       converted: {
-        bg: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-        label: 'Converted',
-        pulse: false
+        bg: 'bg-purple-100 text-purple-800',
+        label: 'Converted'
       },
       cancelled: {
-        bg: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
-        label: 'Cancelled',
-        pulse: false
+        bg: 'app-bg-secondary app-text-muted',
+        label: 'Cancelled'
       }
     };
     return configs[status] || configs.draft;
@@ -66,10 +58,9 @@ const QuoteStatusBadge = ({
   return (
     <span 
       className={`
-        inline-flex items-center rounded-full font-semibold transition-all duration-300
+        inline-flex items-center rounded-full font-semibold transition-all
         ${config.bg} 
         ${sizeClasses}
-        ${config.pulse ? 'animate-pulse' : ''}
         ${className}
       `}
     >

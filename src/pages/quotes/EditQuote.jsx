@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import QuoteForm from '../../components/quotes/QuoteForm.jsx';
-import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import SEO from '../../components/common/SEO.jsx';
 import quotesService from '../../services/quotesService.js';
 
@@ -80,9 +79,9 @@ const EditQuote = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-center items-center min-h-96">
-          <LoadingSpinner />
+          <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
         </div>
       </div>
     );
@@ -90,23 +89,23 @@ const EditQuote = () => {
 
   if (error || !quote) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="card-modern text-center py-12">
-          <div className="text-red-600 dark:text-red-400 mb-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="theme-card text-center py-12">
+          <div className="text-red-600 mb-4">
             <h3 className="text-lg font-semibold mb-2">Cannot Edit Quote</h3>
             <p className="app-text-muted">{error || 'Quote not found or cannot be edited.'}</p>
           </div>
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => navigate('/quotes')}
-              className="btn-modern-secondary btn-md"
+              className="px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
             >
               Back to Quotes
             </button>
             {quote && (
               <button
                 onClick={() => navigate(`/quotes/${quote.id}`)}
-                className="btn-modern-primary btn-md"
+                className="theme-button"
               >
                 View Quote
               </button>
@@ -119,9 +118,9 @@ const EditQuote = () => {
 
   if (!canEdit) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="card-modern text-center py-12">
-          <div className="text-yellow-600 dark:text-yellow-400 mb-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="theme-card text-center py-12">
+          <div className="text-yellow-600 mb-4">
             <h3 className="text-lg font-semibold mb-2">Quote Cannot Be Edited</h3>
             <p className="app-text-muted">
               This quote is in "{quote.status.replace('_', ' ')}" status and cannot be modified.
@@ -131,13 +130,13 @@ const EditQuote = () => {
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => navigate('/quotes')}
-              className="btn-modern-secondary btn-md"
+              className="px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
             >
               Back to Quotes
             </button>
             <button
               onClick={() => navigate(`/quotes/${quote.id}`)}
-              className="btn-modern-primary btn-md"
+              className="theme-button"
             >
               View Quote Details
             </button>
@@ -154,19 +153,19 @@ const EditQuote = () => {
         description={`Edit quote ${quote.quote_number} for ${quote.cleaning_type} cleaning service`}
       />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-6">
             <button 
               onClick={handleCancel}
-              className="text-blue-600 hover:text-blue-800 transition-colors"
+              className="app-blue hover:text-blue-800 transition-colors"
             >
               ← Back to Quote
             </button>
           </div>
 
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-black text-gradient mb-4">
+            <h1 className="text-4xl font-black app-text-primary mb-4">
               Edit Quote {quote.quote_number}
             </h1>
             <p className="text-lg app-text-muted max-w-2xl mx-auto">
@@ -174,14 +173,14 @@ const EditQuote = () => {
             </p>
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 max-w-2xl mx-auto mb-8">
+          <div className="app-bg-secondary app-border rounded-lg p-4 max-w-2xl mx-auto mb-8">
             <div className="flex items-start gap-3">
-              <div className="text-blue-600 text-xl">ℹ️</div>
+              <div className="app-blue text-xl">ℹ️</div>
               <div>
-                <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-1">
+                <h3 className="font-semibold app-text-primary mb-1">
                   Editing Quote in {quote.status.replace('_', ' ').toUpperCase()} Status
                 </h3>
-                <p className="text-sm text-blue-600 dark:text-blue-300">
+                <p className="text-sm app-text-secondary">
                   {quote.status === 'draft' 
                     ? 'You can modify all fields since this quote is still in draft status.'
                     : 'This quote was rejected and can now be edited and resubmitted.'
@@ -192,26 +191,26 @@ const EditQuote = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-            <div className="card-modern text-center">
+            <div className="theme-card text-center">
               <h3 className="font-semibold app-text-primary mb-2">Current Status</h3>
               <span className={`
                 inline-block px-3 py-1 rounded-full text-sm font-medium
-                ${quote.status === 'draft' ? 'bg-gray-100 text-gray-800' : 'bg-red-100 text-red-800'}
+                ${quote.status === 'draft' ? 'app-bg-secondary app-text-primary' : 'bg-red-100 text-red-800'}
               `}>
                 {quote.status.replace('_', ' ').toUpperCase()}
               </span>
             </div>
 
-            <div className="card-modern text-center">
+            <div className="theme-card text-center">
               <h3 className="font-semibold app-text-primary mb-2">Service Type</h3>
               <p className="app-text-secondary text-sm">
                 {quote.cleaning_type.replace('_', ' ').toUpperCase()}
               </p>
             </div>
 
-            <div className="card-modern text-center">
+            <div className="theme-card text-center">
               <h3 className="font-semibold app-text-primary mb-2">Current Total</h3>
-              <p className="text-lg font-bold text-gradient">
+              <p className="text-lg font-bold app-text-primary">
                 {new Intl.NumberFormat('en-AU', {
                   style: 'currency',
                   currency: 'AUD'
@@ -227,13 +226,12 @@ const EditQuote = () => {
             initialData={prepareFormData(quote)}
             onSuccess={handleUpdateSuccess}
             onCancel={handleCancel}
-            className="animate-fade-in-up"
           />
         </div>
 
         <div className="max-w-4xl mx-auto mt-8">
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-6 text-center">
-            <h3 className="text-lg font-semibold text-gradient mb-2">
+          <div className="app-bg-secondary rounded-lg p-6 text-center">
+            <h3 className="text-lg font-semibold app-text-primary mb-2">
               Need to Start Over?
             </h3>
             <p className="app-text-muted text-sm mb-4">
@@ -243,7 +241,7 @@ const EditQuote = () => {
               onClick={() => navigate('/quotes/create', { 
                 state: { duplicateFrom: quote.id } 
               })}
-              className="btn-modern-secondary btn-sm"
+              className="px-4 py-2 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
             >
               Create New Quote
             </button>

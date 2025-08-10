@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import quotesService from '../../services/quotesService.js';
 import useQuoteActions from '../../hooks/useQuoteActions.js';
-import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import QuoteStatusBadge from '../../components/quotes/QuoteStatusBadge.jsx';
 import SEO from '../../components/common/SEO.jsx';
 
@@ -138,7 +137,7 @@ const QuoteDetail = () => {
   const getUrgencyConfig = (level) => {
     const configs = {
       1: { color: 'text-green-600', label: 'Flexible', bg: 'bg-green-100' },
-      2: { color: 'text-blue-600', label: 'Standard', bg: 'bg-blue-100' },
+      2: { color: 'app-blue', label: 'Standard', bg: 'bg-blue-100' },
       3: { color: 'text-yellow-600', label: 'Priority', bg: 'bg-yellow-100' },
       4: { color: 'text-orange-600', label: 'Urgent', bg: 'bg-orange-100' },
       5: { color: 'text-red-600', label: 'Emergency', bg: 'bg-red-100' }
@@ -169,9 +168,9 @@ const QuoteDetail = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-center items-center min-h-96">
-          <LoadingSpinner />
+          <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
         </div>
       </div>
     );
@@ -179,17 +178,17 @@ const QuoteDetail = () => {
 
   if (error || !quote) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="card-modern text-center py-12">
-          <div className="text-red-600 dark:text-red-400 mb-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="theme-card text-center py-12">
+          <div className="text-red-600 mb-4">
             <h3 className="text-lg font-semibold mb-2">Quote Not Found</h3>
             <p className="app-text-muted">{error || 'The requested quote could not be found.'}</p>
           </div>
           <div className="flex gap-4 justify-center">
-            <Link to="/quotes" className="btn-modern-secondary btn-md">
+            <Link to="/quotes" className="px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white">
               Back to Quotes
             </Link>
-            <button onClick={fetchQuoteDetails} className="btn-modern-primary btn-md">
+            <button onClick={fetchQuoteDetails} className="theme-button">
               Try Again
             </button>
           </div>
@@ -205,12 +204,12 @@ const QuoteDetail = () => {
         description={`Quote details for ${quote.cleaning_type} cleaning service`}
       />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <div className="flex items-center gap-4 mb-4">
             <Link 
               to="/quotes" 
-              className="text-blue-600 hover:text-blue-800 transition-colors"
+              className="app-blue hover:text-blue-800 transition-colors"
             >
               ← Back to Quotes
             </Link>
@@ -219,7 +218,7 @@ const QuoteDetail = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
             <div>
               <div className="flex items-center gap-4 mb-2">
-                <h1 className="text-3xl font-black text-gradient">
+                <h1 className="text-3xl font-black app-text-primary">
                   {quote.quote_number}
                 </h1>
                 <QuoteStatusBadge status={quote.status} size="lg" />
@@ -243,7 +242,7 @@ const QuoteDetail = () => {
               {canEdit() && (
                 <Link
                   to={`/quotes/${quote.id}/edit`}
-                  className="btn-modern-secondary btn-md"
+                  className="px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
                 >
                   Edit Quote
                 </Link>
@@ -253,9 +252,11 @@ const QuoteDetail = () => {
                 <button
                   onClick={() => handleAction(submitQuote, 'Quote submitted successfully')}
                   disabled={actionLoading}
-                  className="btn-modern-primary btn-md"
+                  className="theme-button"
                 >
-                  {actionLoading ? <LoadingSpinner /> : 'Submit Quote'}
+                  {actionLoading ? (
+                    <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+                  ) : 'Submit Quote'}
                 </button>
               )}
 
@@ -263,18 +264,22 @@ const QuoteDetail = () => {
                 <button
                   onClick={handleDownloadPDF}
                   disabled={actionLoading}
-                  className="btn-modern-primary btn-md"
+                  className="theme-button"
                 >
-                  {actionLoading ? <LoadingSpinner /> : 'Download PDF'}
+                  {actionLoading ? (
+                    <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+                  ) : 'Download PDF'}
                 </button>
               )}
 
               <button
                 onClick={handleDuplicate}
                 disabled={actionLoading}
-                className="btn-modern-secondary btn-md"
+                className="px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
               >
-                {actionLoading ? <LoadingSpinner /> : 'Duplicate'}
+                {actionLoading ? (
+                  <div className="w-4 h-4 border-2 app-border rounded-full border-t-transparent animate-spin"></div>
+                ) : 'Duplicate'}
               </button>
 
               {canCancel() && (
@@ -283,7 +288,9 @@ const QuoteDetail = () => {
                   disabled={actionLoading}
                   className="bg-red-100 text-red-800 hover:bg-red-200 rounded-full px-4 py-2 text-sm font-medium transition-all"
                 >
-                  {actionLoading ? <LoadingSpinner /> : 'Cancel Quote'}
+                  {actionLoading ? (
+                    <div className="w-4 h-4 border-2 border-red-800 rounded-full border-t-transparent animate-spin"></div>
+                  ) : 'Cancel Quote'}
                 </button>
               )}
             </div>
@@ -295,17 +302,17 @@ const QuoteDetail = () => {
             </div>
           )}
 
-          <div className="card-modern mb-6">
+          <div className="theme-card mb-6">
             <div className="flex flex-wrap gap-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
                   className={`
-                    px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
+                    px-4 py-2 rounded-full text-sm font-medium transition-all
                     ${activeTab === tab.key
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                      ? 'app-bg-blue text-white'
+                      : 'app-bg-secondary app-text-primary hover:app-bg-blue hover:text-white'
                     }
                   `}
                 >
@@ -315,11 +322,11 @@ const QuoteDetail = () => {
             </div>
           </div>
         </div>
-        <div className="animate-fade-in-up">
-          {activeTab === 'details' && (
+        <div>
+        {activeTab === 'details' && (
             <div className="grid lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-6">
-                <div className="card-modern">
+                <div className="theme-card">
                   <h3 className="text-xl font-bold app-text-primary mb-4">Property Information</h3>
                   <div className="space-y-4">
                     <div>
@@ -333,7 +340,7 @@ const QuoteDetail = () => {
                             <p>{quote.suburb}, {quote.state} {quote.postcode}</p>
                             <button
                               onClick={() => setShowFullAddress(false)}
-                              className="text-blue-600 text-sm hover:underline mt-1"
+                              className="app-blue text-sm hover:underline mt-1"
                             >
                               Show less
                             </button>
@@ -348,7 +355,7 @@ const QuoteDetail = () => {
                             {quote.property_address.length > 50 && (
                               <button
                                 onClick={() => setShowFullAddress(true)}
-                                className="text-blue-600 text-sm hover:underline mt-1"
+                                className="app-blue text-sm hover:underline mt-1"
                               >
                                 Show more
                               </button>
@@ -410,7 +417,7 @@ const QuoteDetail = () => {
                 </div>
 
                 {(quote.special_requirements || quote.access_instructions) && (
-                  <div className="card-modern">
+                  <div className="theme-card">
                     <h3 className="text-xl font-bold app-text-primary mb-4">Additional Information</h3>
                     <div className="space-y-4">
                       {quote.special_requirements && (
@@ -418,7 +425,7 @@ const QuoteDetail = () => {
                           <label className="block text-sm font-semibold app-text-secondary mb-2">
                             Special Requirements
                           </label>
-                          <p className="app-text-primary bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                          <p className="app-text-primary app-bg-secondary p-3 rounded-lg">
                             {quote.special_requirements}
                           </p>
                         </div>
@@ -429,7 +436,7 @@ const QuoteDetail = () => {
                           <label className="block text-sm font-semibold app-text-secondary mb-2">
                             Access Instructions
                           </label>
-                          <p className="app-text-primary bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                          <p className="app-text-primary app-bg-secondary p-3 rounded-lg">
                             {quote.access_instructions}
                           </p>
                         </div>
@@ -439,7 +446,7 @@ const QuoteDetail = () => {
                 )}
 
                 {quote.is_ndis_client && (
-                  <div className="card-modern">
+                  <div className="theme-card">
                     <h3 className="text-xl font-bold app-text-primary mb-4">NDIS Information</h3>
                     <div className="space-y-4">
                       <div>
@@ -482,7 +489,7 @@ const QuoteDetail = () => {
               </div>
 
               <div className="space-y-6">
-                <div className="card-modern">
+                <div className="theme-card">
                   <h3 className="text-xl font-bold app-text-primary mb-4">Pricing Breakdown</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between">
@@ -519,13 +526,13 @@ const QuoteDetail = () => {
                     <hr className="app-border" />
                     
                     <div className="flex justify-between text-lg font-bold">
-                      <span className="text-gradient">Total:</span>
-                      <span className="text-gradient">{formatCurrency(quote.final_price)}</span>
+                      <span className="app-text-primary">Total:</span>
+                      <span className="app-text-primary">{formatCurrency(quote.final_price)}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="card-modern">
+                <div className="theme-card">
                   <h3 className="text-xl font-bold app-text-primary mb-4">Quote Timeline</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
@@ -567,7 +574,7 @@ const QuoteDetail = () => {
           )}
 
           {activeTab === 'items' && (
-            <div className="card-modern">
+            <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Quote Items</h3>
               {quoteItems.length === 0 ? (
                 <p className="app-text-muted text-center py-8">No items found for this quote.</p>
@@ -593,7 +600,7 @@ const QuoteDetail = () => {
           )}
 
           {activeTab === 'attachments' && (
-            <div className="card-modern">
+            <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Attachments</h3>
               {quoteAttachments.length === 0 ? (
                 <p className="app-text-muted text-center py-8">No attachments found for this quote.</p>
@@ -608,7 +615,7 @@ const QuoteDetail = () => {
                         </div>
                         <button
                           onClick={() => window.open(attachment.file_url, '_blank')}
-                          className="btn-modern-secondary btn-sm"
+                          className="px-4 py-2 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
                         >
                           View
                         </button>
@@ -621,7 +628,7 @@ const QuoteDetail = () => {
           )}
 
           {activeTab === 'history' && (
-            <div className="card-modern">
+            <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Quote History</h3>
               {quoteRevisions.length === 0 ? (
                 <p className="app-text-muted text-center py-8">No revision history found for this quote.</p>
@@ -647,6 +654,5 @@ const QuoteDetail = () => {
 };
 
 export default QuoteDetail;
-
 
 

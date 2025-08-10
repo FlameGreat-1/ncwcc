@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useQuoteActions from '../../hooks/useQuoteActions.js';
-import LoadingSpinner from '../common/LoadingSpinner.jsx';
 
 const QuoteForm = ({ 
   initialData = null, 
@@ -197,18 +196,18 @@ const QuoteForm = ({
   };
 
   return (
-    <div className={`card-modern ${className}`}>
+    <div className={`app-bg-card border border-gray-200 dark:border-gray-700 rounded-xl p-6 ${className}`}>
       <div className="mb-6">
-        <h2 className="text-2xl font-black text-gradient mb-2">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           {mode === 'create' ? 'Create New Quote' : 'Edit Quote'}
         </h2>
-        <p className="app-text-muted">
+        <p className="text-gray-600 dark:text-gray-400">
           Fill in the details below to {mode === 'create' ? 'create' : 'update'} your cleaning quote.
         </p>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-6">
           <p className="font-medium">Error</p>
           <p className="text-sm">{error}</p>
         </div>
@@ -217,11 +216,11 @@ const QuoteForm = ({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Service Type *</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Service Type *</label>
             <select
               value={formData.service}
               onChange={(e) => handleInputChange('service', e.target.value)}
-              className={`theme-input w-full ${validationErrors.service ? 'border-red-500' : ''}`}
+              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${validationErrors.service ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
               required
             >
               <option value="">Select a service</option>
@@ -236,11 +235,11 @@ const QuoteForm = ({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Cleaning Type *</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Cleaning Type *</label>
             <select
               value={formData.cleaning_type}
               onChange={(e) => handleInputChange('cleaning_type', e.target.value)}
-              className="theme-input w-full"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             >
               {cleaningTypeOptions.map(option => (
@@ -251,11 +250,11 @@ const QuoteForm = ({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold app-text-primary mb-2">Property Address *</label>
+          <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Property Address *</label>
           <textarea
             value={formData.property_address}
             onChange={(e) => handleInputChange('property_address', e.target.value)}
-            className={`theme-input w-full h-20 resize-none ${validationErrors.property_address ? 'border-red-500' : ''}`}
+            className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-20 resize-none ${validationErrors.property_address ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
             placeholder="Enter the full property address"
             required
           />
@@ -266,12 +265,12 @@ const QuoteForm = ({
 
         <div className="grid md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Suburb *</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Suburb *</label>
             <input
               type="text"
               value={formData.suburb}
               onChange={(e) => handleInputChange('suburb', e.target.value)}
-              className={`theme-input w-full ${validationErrors.suburb ? 'border-red-500' : ''}`}
+              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${validationErrors.suburb ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
               required
             />
             {validationErrors.suburb && (
@@ -280,12 +279,12 @@ const QuoteForm = ({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Postcode *</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Postcode *</label>
             <input
               type="text"
               value={formData.postcode}
               onChange={(e) => handleInputChange('postcode', e.target.value)}
-              className={`theme-input w-full ${validationErrors.postcode ? 'border-red-500' : ''}`}
+              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${validationErrors.postcode ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
               maxLength="4"
               pattern="\d{4}"
               required
@@ -296,11 +295,11 @@ const QuoteForm = ({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">State *</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">State *</label>
             <select
               value={formData.state}
               onChange={(e) => handleInputChange('state', e.target.value)}
-              className="theme-input w-full"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             >
               {stateOptions.map(option => (
@@ -312,12 +311,12 @@ const QuoteForm = ({
 
         <div className="grid md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Number of Rooms *</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Number of Rooms *</label>
             <input
               type="number"
               value={formData.number_of_rooms}
               onChange={(e) => handleInputChange('number_of_rooms', parseInt(e.target.value) || 1)}
-              className={`theme-input w-full ${validationErrors.number_of_rooms ? 'border-red-500' : ''}`}
+              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${validationErrors.number_of_rooms ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
               min="1"
               required
             />
@@ -327,12 +326,12 @@ const QuoteForm = ({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Square Meters</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Square Meters</label>
             <input
               type="number"
               value={formData.square_meters}
               onChange={(e) => handleInputChange('square_meters', e.target.value)}
-              className={`theme-input w-full ${validationErrors.square_meters ? 'border-red-500' : ''}`}
+              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${validationErrors.square_meters ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
               min="1"
               step="0.1"
               placeholder="Optional"
@@ -343,11 +342,11 @@ const QuoteForm = ({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Urgency Level *</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Urgency Level *</label>
             <select
               value={formData.urgency_level}
               onChange={(e) => handleInputChange('urgency_level', parseInt(e.target.value))}
-              className="theme-input w-full"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             >
               {urgencyOptions.map(option => (
@@ -359,12 +358,12 @@ const QuoteForm = ({
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Preferred Date</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Preferred Date</label>
             <input
               type="date"
               value={formData.preferred_date}
               onChange={(e) => handleInputChange('preferred_date', e.target.value)}
-              className={`theme-input w-full ${validationErrors.preferred_date ? 'border-red-500' : ''}`}
+              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${validationErrors.preferred_date ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
               min={new Date().toISOString().split('T')[0]}
             />
             {validationErrors.preferred_date && (
@@ -373,58 +372,59 @@ const QuoteForm = ({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold app-text-primary mb-2">Preferred Time</label>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Preferred Time</label>
             <input
               type="time"
               value={formData.preferred_time}
               onChange={(e) => handleInputChange('preferred_time', e.target.value)}
-              className="theme-input w-full"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>
+
         <div>
-          <label className="block text-sm font-semibold app-text-primary mb-2">Special Requirements</label>
+          <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Special Requirements</label>
           <textarea
             value={formData.special_requirements}
             onChange={(e) => handleInputChange('special_requirements', e.target.value)}
-            className="theme-input w-full h-24 resize-none"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-24 resize-none"
             placeholder="Any special cleaning requirements or instructions..."
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold app-text-primary mb-2">Access Instructions</label>
+          <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Access Instructions</label>
           <textarea
             value={formData.access_instructions}
             onChange={(e) => handleInputChange('access_instructions', e.target.value)}
-            className="theme-input w-full h-20 resize-none"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-20 resize-none"
             placeholder="Property access instructions (keys, codes, etc.)"
           />
         </div>
 
-        <div className="border-t app-border pt-6">
+        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
           <div className="flex items-center gap-3 mb-4">
             <input
               type="checkbox"
               id="ndis-client"
               checked={formData.is_ndis_client}
               onChange={(e) => handleNDISToggle(e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
-            <label htmlFor="ndis-client" className="text-sm font-semibold app-text-primary">
+            <label htmlFor="ndis-client" className="text-sm font-semibold text-gray-900 dark:text-white">
               This is an NDIS client
             </label>
           </div>
 
           {showNDISFields && (
-            <div className="space-y-4 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+            <div className="space-y-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-lg">
               <div>
-                <label className="block text-sm font-semibold app-text-primary mb-2">NDIS Participant Number *</label>
+                <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">NDIS Participant Number *</label>
                 <input
                   type="text"
                   value={formData.ndis_participant_number}
                   onChange={(e) => handleInputChange('ndis_participant_number', e.target.value)}
-                  className={`theme-input w-full ${validationErrors.ndis_participant_number ? 'border-red-500' : ''}`}
+                  className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${validationErrors.ndis_participant_number ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   maxLength="9"
                   required={formData.is_ndis_client}
                 />
@@ -435,44 +435,44 @@ const QuoteForm = ({
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold app-text-primary mb-2">Plan Manager Name</label>
+                  <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Plan Manager Name</label>
                   <input
                     type="text"
                     value={formData.plan_manager_name}
                     onChange={(e) => handleInputChange('plan_manager_name', e.target.value)}
-                    className="theme-input w-full"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold app-text-primary mb-2">Plan Manager Contact</label>
+                  <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Plan Manager Contact</label>
                   <input
                     type="text"
                     value={formData.plan_manager_contact}
                     onChange={(e) => handleInputChange('plan_manager_contact', e.target.value)}
-                    className="theme-input w-full"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold app-text-primary mb-2">Support Coordinator Name</label>
+                  <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Support Coordinator Name</label>
                   <input
                     type="text"
                     value={formData.support_coordinator_name}
                     onChange={(e) => handleInputChange('support_coordinator_name', e.target.value)}
-                    className="theme-input w-full"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold app-text-primary mb-2">Support Coordinator Contact</label>
+                  <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Support Coordinator Contact</label>
                   <input
                     type="text"
                     value={formData.support_coordinator_contact}
                     onChange={(e) => handleInputChange('support_coordinator_contact', e.target.value)}
-                    className="theme-input w-full"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -483,7 +483,7 @@ const QuoteForm = ({
         {calculation && (
           <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
             <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">Price Calculation</h3>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-sm text-green-700 dark:text-green-300">
               <div className="flex justify-between">
                 <span>Base Price:</span>
                 <span>{formatCurrency(calculation.base_price)}</span>
@@ -504,7 +504,7 @@ const QuoteForm = ({
                 <span>GST:</span>
                 <span>{formatCurrency(calculation.gst_amount)}</span>
               </div>
-              <div className="flex justify-between font-bold text-lg border-t pt-2">
+              <div className="flex justify-between font-bold text-lg border-t border-green-300 dark:border-green-700 pt-2">
                 <span>Total:</span>
                 <span>{formatCurrency(calculation.final_price)}</span>
               </div>
@@ -512,14 +512,14 @@ const QuoteForm = ({
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t app-border">
+        <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
           <button
             type="button"
             onClick={handleCalculate}
             disabled={loading || isCalculating}
-            className="btn-modern-secondary btn-md flex-1"
+            className="flex-1 px-6 py-2 border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isCalculating ? <LoadingSpinner /> : 'Calculate Price'}
+            {isCalculating ? 'Calculating...' : 'Calculate Price'}
           </button>
 
           <div className="flex gap-4 flex-1">
@@ -528,7 +528,7 @@ const QuoteForm = ({
                 type="button"
                 onClick={onCancel}
                 disabled={loading}
-                className="btn-sm bg-gray-100 text-gray-800 hover:bg-gray-200 rounded-full px-6 py-2 font-medium transition-all flex-1"
+                className="flex-1 px-6 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
@@ -537,9 +537,9 @@ const QuoteForm = ({
             <button
               type="submit"
               disabled={loading}
-              className="btn-modern-primary btn-md flex-1"
+              className="flex-1 px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? <LoadingSpinner /> : mode === 'create' ? 'Create Quote' : 'Update Quote'}
+              {loading ? 'Processing...' : mode === 'create' ? 'Create Quote' : 'Update Quote'}
             </button>
           </div>
         </div>
@@ -549,5 +549,3 @@ const QuoteForm = ({
 };
 
 export default QuoteForm;
-
-

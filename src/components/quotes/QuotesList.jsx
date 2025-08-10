@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import QuoteCard from './QuoteCard.jsx';
-import LoadingSpinner from '../common/LoadingSpinner.jsx';
 import useQuotes from '../../hooks/useQuotes.js';
 
 const QuotesList = ({ 
@@ -113,14 +112,14 @@ const QuotesList = ({
 
   if (error) {
     return (
-      <div className="card-modern text-center">
+      <div className="app-bg-card app-border border rounded-xl p-6 text-center">
         <div className="text-red-600 dark:text-red-400 mb-4">
-          <h3 className="text-lg font-semibold mb-2">Error Loading Quotes</h3>
+          <h3 className="text-lg font-semibold mb-2 app-text-primary">Error Loading Quotes</h3>
           <p className="app-text-muted">{error}</p>
         </div>
         <button
           onClick={() => refetch()}
-          className="btn-modern-primary btn-sm"
+          className="theme-button"
         >
           Try Again
         </button>
@@ -132,9 +131,9 @@ const QuotesList = ({
     <div className={`space-y-6 ${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-black text-gradient">{title}</h2>
+          <h2 className="text-2xl font-black app-text-primary">{title}</h2>
           {pagination.count > 0 && (
-            <p className="app-text-muted text-sm">
+            <p className="app-text-muted text-sm mt-1">
               {pagination.count} quote{pagination.count !== 1 ? 's' : ''} found
             </p>
           )}
@@ -152,21 +151,21 @@ const QuotesList = ({
             <button
               type="submit"
               disabled={loading}
-              className="btn-modern-primary btn-sm"
+              className="theme-button px-4 py-2 text-sm"
             >
-              Search
+              {loading ? 'Searching...' : 'Search'}
             </button>
           </form>
         )}
       </div>
 
       {showFilters && (
-        <div className="card-modern">
-          <div className="flex flex-wrap gap-4 mb-4">
+        <div className="app-bg-card app-border border rounded-xl p-6">
+          <div className="flex flex-wrap gap-4 items-center">
             <select
               value={filters.status}
               onChange={(e) => handleFilterChange('status', e.target.value)}
-              className="theme-input"
+              className="theme-input min-w-[140px]"
             >
               {statusOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -178,7 +177,7 @@ const QuotesList = ({
             <select
               value={filters.cleaning_type}
               onChange={(e) => handleFilterChange('cleaning_type', e.target.value)}
-              className="theme-input"
+              className="theme-input min-w-[140px]"
             >
               {cleaningTypeOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -190,7 +189,7 @@ const QuotesList = ({
             <select
               value={filters.urgency_level}
               onChange={(e) => handleFilterChange('urgency_level', e.target.value)}
-              className="theme-input"
+              className="theme-input min-w-[140px]"
             >
               {urgencyOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -202,7 +201,7 @@ const QuotesList = ({
             {getActiveFiltersCount() > 0 && (
               <button
                 onClick={clearFilters}
-                className="btn-sm bg-gray-100 text-gray-800 hover:bg-gray-200 rounded-full px-4 py-2 text-sm font-medium transition-all"
+                className="px-4 py-2 text-sm font-medium rounded-full app-bg-secondary app-text-secondary app-border border transition-colors hover:app-bg-primary"
               >
                 Clear Filters ({getActiveFiltersCount()})
               </button>
@@ -213,10 +212,10 @@ const QuotesList = ({
 
       {loading && quotes.length === 0 ? (
         <div className="flex justify-center py-12">
-          <LoadingSpinner />
+          <div className="app-text-muted">Loading quotes...</div>
         </div>
       ) : isEmpty ? (
-        <div className="card-modern text-center py-12">
+        <div className="app-bg-card app-border border rounded-xl p-12 text-center">
           <h3 className="text-lg font-semibold app-text-primary mb-2">
             No quotes found
           </h3>
@@ -229,14 +228,14 @@ const QuotesList = ({
           {getActiveFiltersCount() > 0 ? (
             <button
               onClick={clearFilters}
-              className="btn-modern-secondary btn-sm"
+              className="theme-button"
             >
               Clear Filters
             </button>
           ) : (
             <a
               href="/quotes/create"
-              className="btn-modern-primary btn-sm"
+              className="theme-button inline-block text-decoration-none"
             >
               Create Your First Quote
             </a>
@@ -245,20 +244,19 @@ const QuotesList = ({
       ) : (
         <>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {quotes.map((quote, index) => (
+            {quotes.map((quote) => (
               <QuoteCard
                 key={quote.id}
                 quote={quote}
                 onUpdate={refetch}
                 variant={cardVariant}
-                className={`delay-${Math.min(index * 100, 500)}`}
               />
             ))}
           </div>
 
           {loading && quotes.length > 0 && (
             <div className="flex justify-center py-6">
-              <LoadingSpinner />
+              <div className="app-text-muted">Loading more quotes...</div>
             </div>
           )}
 
@@ -267,7 +265,7 @@ const QuotesList = ({
               <button
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={pagination.page === 1 || loading}
-                className="btn-modern-secondary btn-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="theme-button disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-sm"
               >
                 Previous
               </button>
@@ -282,10 +280,10 @@ const QuotesList = ({
                       key={page}
                       onClick={() => handlePageChange(page)}
                       disabled={loading}
-                      className={`w-8 h-8 rounded-full text-sm font-medium transition-all ${
+                      className={`w-8 h-8 rounded-full text-sm font-medium transition-colors ${
                         isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          ? 'app-bg-blue text-white'
+                          : 'app-bg-secondary app-text-secondary hover:app-bg-primary'
                       }`}
                     >
                       {page}
@@ -297,7 +295,7 @@ const QuotesList = ({
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page === pagination.totalPages || loading}
-                className="btn-modern-secondary btn-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="theme-button disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-sm"
               >
                 Next
               </button>
@@ -309,7 +307,7 @@ const QuotesList = ({
               <button
                 onClick={handleLoadMore}
                 disabled={loading}
-                className="btn-modern-secondary btn-md"
+                className="theme-button px-6 py-3"
               >
                 {loading ? 'Loading...' : 'Load More'}
               </button>
@@ -322,6 +320,4 @@ const QuotesList = ({
 };
 
 export default QuotesList;
-
-      
 
