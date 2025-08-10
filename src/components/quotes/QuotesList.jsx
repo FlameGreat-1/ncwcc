@@ -13,10 +13,10 @@ const QuotesList = ({
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({
-    status: searchParams.get('status') || '',
-    cleaning_type: searchParams.get('cleaning_type') || '',
-    urgency_level: searchParams.get('urgency_level') || '',
-    search: searchParams.get('search') || ''
+    status: searchParams.get('status') || null,
+    cleaning_type: searchParams.get('cleaning_type') || null,
+    urgency_level: searchParams.get('urgency_level') || null,
+    search: searchParams.get('search') || null
   });
 
   const {
@@ -65,27 +65,33 @@ const QuotesList = ({
   ];
 
   const handleFilterChange = (key, value) => {
-    const newFilters = { ...filters, [key]: value };
+    const newFilters = { ...filters, [key]: value === '' ? null : value };
     setFilters(newFilters);
     
     const newSearchParams = new URLSearchParams();
     Object.entries(newFilters).forEach(([k, v]) => {
-      if (v) newSearchParams.set(k, v);
+      if (v && v !== '') newSearchParams.set(k, v);
     });
     setSearchParams(newSearchParams);
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    refetch(filters);
+    const cleanFilters = {};
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value.toString().trim() !== '') {
+        cleanFilters[key] = value;
+      }
+    });
+    refetch(cleanFilters);
   };
 
   const clearFilters = () => {
     const clearedFilters = {
-      status: '',
-      cleaning_type: '',
-      urgency_level: '',
-      search: ''
+      status: null,
+      cleaning_type: null,
+      urgency_level: null,
+      search: null
     };
     setFilters(clearedFilters);
     setSearchParams(new URLSearchParams());
@@ -103,11 +109,17 @@ const QuotesList = ({
   };
 
   const getActiveFiltersCount = () => {
-    return Object.values(filters).filter(value => value !== '').length;
+    return Object.values(filters).filter(value => value && value !== '').length;
   };
 
   useEffect(() => {
-    refetch(filters);
+    const cleanFilters = {};
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value.toString().trim() !== '') {
+        cleanFilters[key] = value;
+      }
+    });
+    refetch(cleanFilters);
   }, [filters, refetch]);
 
   if (error) {
@@ -144,7 +156,7 @@ const QuotesList = ({
             <input
               type="text"
               placeholder="Search quotes..."
-              value={filters.search}
+              value={filters.search || ''}
               onChange={(e) => handleFilterChange('search', e.target.value)}
               className="theme-input w-64"
             />
@@ -163,7 +175,7 @@ const QuotesList = ({
         <div className="app-bg-card app-border border rounded-xl p-6">
           <div className="flex flex-wrap gap-4 items-center">
             <select
-              value={filters.status}
+              value={filters.status || ''}
               onChange={(e) => handleFilterChange('status', e.target.value)}
               className="theme-input min-w-[140px]"
             >
@@ -175,7 +187,7 @@ const QuotesList = ({
             </select>
 
             <select
-              value={filters.cleaning_type}
+              value={filters.cleaning_type || ''}
               onChange={(e) => handleFilterChange('cleaning_type', e.target.value)}
               className="theme-input min-w-[140px]"
             >
@@ -187,7 +199,7 @@ const QuotesList = ({
             </select>
 
             <select
-              value={filters.urgency_level}
+              value={filters.urgency_level || ''}
               onChange={(e) => handleFilterChange('urgency_level', e.target.value)}
               className="theme-input min-w-[140px]"
             >
@@ -320,4 +332,5 @@ const QuotesList = ({
 };
 
 export default QuotesList;
+
 
