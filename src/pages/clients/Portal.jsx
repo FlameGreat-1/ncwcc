@@ -4,10 +4,14 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useLocation } from 'react-router-dom';
 import ProfileAvatar from '../../components/common/ProfileAvatar';
 import useQuotes from '../../hooks/useQuotes';
+import { useInvoices } from '../../hooks/useInvoices';
 import QuoteDetail from '../../pages/quotes/QuoteDetail';
 import CreateQuote from '../../pages/quotes/CreateQuote';
 import EditQuote from '../../pages/quotes/EditQuote';
 import MyQuotes from '../../pages/quotes/MyQuotes';
+import InvoicesList from '../../components/invoices/InvoicesList';
+import InvoiceDetails from '../../components/invoices/InvoiceDetails';
+import { toast } from 'react-hot-toast';
 
 const Portal = () => {
   const { user, isVerified, logout } = useAuth();
@@ -16,6 +20,7 @@ const Portal = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedQuoteId, setSelectedQuoteId] = useState(null);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState(null);
   const [quoteStats, setQuoteStats] = useState({
     total: 0,
     draft: 0,
@@ -25,6 +30,21 @@ const Portal = () => {
   });
 
   const { quotes: allQuotes, loading: quotesLoading, error: quotesError } = useQuotes('my', {}, true);
+  
+  const {
+    invoices: allInvoices,
+    loading: invoicesLoading,
+    error: invoicesError,
+    invoiceStats,
+    overdueInvoices,
+    hasOverdueInvoices,
+    downloadInvoice,
+    resendInvoiceEmail,
+    refreshInvoices
+  } = useInvoices({
+    status: 'all',
+    ordering: '-created_at'
+  });
 
   useEffect(() => {
     const path = location.pathname;
@@ -42,6 +62,12 @@ const Portal = () => {
       setCurrentView('quote-detail');
       const quoteId = path.split('/')[3];
       setSelectedQuoteId(quoteId);
+    } else if (path === '/clients/invoices') {
+      setCurrentView('invoices');
+    } else if (path.includes('/clients/invoices/')) {
+      setCurrentView('invoice-detail');
+      const invoiceId = path.split('/')[3];
+      setSelectedInvoiceId(invoiceId);
     } else if (path.startsWith('/clients/appointments')) {
       setCurrentView('appointments');
     } else if (path.startsWith('/clients/documents')) {
@@ -71,22 +97,44 @@ const Portal = () => {
     }
   }, [allQuotes]);
 
-  const handleNavigation = (view, quoteId = null) => {
+  const handleNavigation = (view, itemId = null) => {
     setCurrentView(view);
-    if (quoteId) {
-      setSelectedQuoteId(quoteId);
+    if (view.includes('quote') && itemId) {
+      setSelectedQuoteId(itemId);
+    } else if (view.includes('invoice') && itemId) {
+      setSelectedInvoiceId(itemId);
     }
     setSidebarOpen(false);
-    window.history.pushState({}, '', getUrlForView(view, quoteId));
+    window.history.pushState({}, '', getUrlForView(view, itemId));
   };
 
-  const getUrlForView = (view, quoteId = null) => {
+  const handleInvoiceDownload = async (invoiceId) => {
+    const result = await downloadInvoice(invoiceId);
+    if (result.success) {
+      toast.success('Invoice downloaded successfully');
+    } else {
+      toast.error(result.error || 'Failed to download invoice');
+    }
+  };
+
+  const handleInvoiceResendEmail = async (invoiceId) => {
+    const result = await resendInvoiceEmail(invoiceId);
+    if (result.success) {
+      toast.success(result.message || 'Invoice email sent successfully');
+    } else {
+      toast.error(result.error || 'Failed to send invoice email');
+    }
+  };
+
+  const getUrlForView = (view, itemId = null) => {
     switch (view) {
       case 'dashboard': return '/clients/portal';
       case 'quotes': return '/clients/quotes';
       case 'create-quote': return '/clients/quotes/create';
-      case 'edit-quote': return quoteId ? `/clients/quotes/${quoteId}/edit` : '/clients/quotes';
-      case 'quote-detail': return quoteId ? `/clients/quotes/${quoteId}` : '/clients/quotes';
+      case 'edit-quote': return itemId ? `/clients/quotes/${itemId}/edit` : '/clients/quotes';
+      case 'quote-detail': return itemId ? `/clients/quotes/${itemId}` : '/clients/quotes';
+      case 'invoices': return '/clients/invoices';
+      case 'invoice-detail': return itemId ? `/clients/invoices/${itemId}` : '/clients/invoices';
       case 'appointments': return '/clients/appointments';
       case 'documents': return '/clients/documents';
       case 'messages': return '/clients/messages';
@@ -117,6 +165,18 @@ const Portal = () => {
       ),
       current: currentView.includes('quote'),
       badge: quoteStats.total > 0 ? quoteStats.total : null
+    },
+    {
+      name: 'My Invoices',
+      view: 'invoices',
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
+        </svg>
+      ),
+      current: currentView.includes('invoice'),
+      badge: invoiceStats?.total > 0 ? invoiceStats.total : null,
+      alert: hasOverdueInvoices
     },
     {
       name: 'Calculator',
@@ -160,75 +220,6 @@ const Portal = () => {
     }
   ];
 
-  const getDashboardStats = () => {
-    return [
-      {
-        title: 'Total Quotes',
-        value: quoteStats.total.toString(),
-        icon: (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        ),
-        bgColor: 'app-bg-secondary',
-        iconBg: 'app-bg-primary',
-        iconColor: 'app-blue',
-        onClick: () => handleNavigation('quotes')
-      },
-      {
-        title: 'Approved Quotes',
-        value: quoteStats.approved.toString(),
-        icon: (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        ),
-        bgColor: 'app-bg-secondary',
-        iconBg: 'bg-green-100',
-        iconColor: 'text-green-600',
-        onClick: () => handleNavigation('quotes')
-      },
-      {
-        title: 'Pending Quotes',
-        value: (quoteStats.draft + quoteStats.submitted).toString(),
-        icon: (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        ),
-        bgColor: 'app-bg-secondary',
-        iconBg: 'bg-yellow-100',
-        iconColor: 'text-yellow-600',
-        onClick: () => handleNavigation('quotes')
-      },
-      {
-        title: 'Quote Value',
-        value: new Intl.NumberFormat('en-AU', {
-          style: 'currency',
-          currency: 'AUD',
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0
-        }).format(quoteStats.totalValue),
-        icon: (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-          </svg>
-        ),
-        bgColor: 'app-bg-secondary',
-        iconBg: 'bg-purple-100',
-        iconColor: 'text-purple-600',
-        onClick: () => handleNavigation('quotes')
-      }
-    ];
-  };
-  
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-AU', {
-      style: 'currency',
-      currency: 'AUD'
-    }).format(amount);
-  };
-
   const getPageTitle = () => {
     switch (currentView) {
       case 'dashboard': return 'Dashboard';
@@ -236,6 +227,8 @@ const Portal = () => {
       case 'create-quote': return 'Create Quote';
       case 'edit-quote': return 'Edit Quote';
       case 'quote-detail': return 'Quote Details';
+      case 'invoices': return 'My Invoices';
+      case 'invoice-detail': return 'Invoice Details';
       case 'appointments': return 'Appointments';
       case 'documents': return 'Documents';
       case 'messages': return 'Messages';
@@ -251,12 +244,114 @@ const Portal = () => {
       case 'create-quote': return 'Request a new cleaning service quote';
       case 'edit-quote': return 'Update your quote details';
       case 'quote-detail': return 'View quote information and status';
+      case 'invoices': return 'View and manage your invoices';
+      case 'invoice-detail': return 'View invoice details and download';
       case 'appointments': return 'Schedule and manage appointments';
       case 'documents': return 'Access your service documents';
       case 'messages': return 'Communication center';
       case 'calculator': return 'Calculate cleaning service costs';
       default: return `Welcome back, ${user?.first_name}`;
     }
+  };
+
+  const getDashboardStats = () => {
+    const stats = [
+      {
+        title: 'Total Quotes',
+        value: quoteStats.total.toString(),
+        icon: (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        ),
+        bgColor: 'app-bg-secondary',
+        iconBg: 'app-bg-primary',
+        iconColor: 'app-blue',
+        onClick: () => handleNavigation('quotes')
+      },
+      {
+        title: 'Total Invoices',
+        value: invoiceStats?.total?.toString() || '0',
+        icon: (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
+          </svg>
+        ),
+        bgColor: 'app-bg-secondary',
+        iconBg: 'bg-blue-100',
+        iconColor: 'text-blue-600',
+        onClick: () => handleNavigation('invoices'),
+        alert: hasOverdueInvoices
+      },
+      {
+        title: 'Approved Quotes',
+        value: quoteStats.approved.toString(),
+        icon: (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        ),
+        bgColor: 'app-bg-secondary',
+        iconBg: 'bg-green-100',
+        iconColor: 'text-green-600',
+        onClick: () => handleNavigation('quotes')
+      },
+      {
+        title: hasOverdueInvoices ? 'Overdue Amount' : 'Invoice Value',
+        value: hasOverdueInvoices 
+          ? new Intl.NumberFormat('en-AU', {
+              style: 'currency',
+              currency: 'AUD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0
+            }).format(invoiceStats?.overdueAmount || 0)
+          : new Intl.NumberFormat('en-AU', {
+              style: 'currency',
+              currency: 'AUD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0
+            }).format(invoiceStats?.totalAmount || 0),
+        icon: hasOverdueInvoices ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+          </svg>
+        ),
+        bgColor: 'app-bg-secondary',
+        iconBg: hasOverdueInvoices ? 'bg-red-100' : 'bg-purple-100',
+        iconColor: hasOverdueInvoices ? 'text-red-600' : 'text-purple-600',
+        onClick: () => handleNavigation('invoices'),
+        alert: hasOverdueInvoices
+      }
+    ];
+
+    if (user?.client_type === 'ndis' && invoiceStats?.ndis > 0) {
+      stats.push({
+        title: 'NDIS Invoices',
+        value: invoiceStats.ndis.toString(),
+        icon: (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        ),
+        bgColor: 'app-bg-secondary',
+        iconBg: 'bg-indigo-100',
+        iconColor: 'text-indigo-600',
+        onClick: () => handleNavigation('invoices')
+      });
+    }
+
+    return stats;
+  };
+  
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-AU', {
+      style: 'currency',
+      currency: 'AUD'
+    }).format(amount);
   };
 
   const ProfessionalThemeToggle = () => {
@@ -313,7 +408,7 @@ const Portal = () => {
               <button
                 key={item.name}
                 onClick={() => handleNavigation(item.view)}
-                className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-colors relative ${
                   item.current
                     ? 'app-bg-blue text-white'
                     : 'app-text-secondary hover:app-text-primary hover:app-bg-secondary'
@@ -323,21 +418,25 @@ const Portal = () => {
                   <span className="mr-3">{item.icon}</span>
                   {item.name}
                 </div>
-                {item.badge && (
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    item.current
-                      ? 'bg-white/20 text-white'
-                      : 'app-bg-primary app-text-muted'
-                  }`}>
-                    {item.badge}
-                  </span>
-                )}
+                <div className="flex items-center gap-2">
+                  {item.badge && (
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      item.current
+                        ? 'bg-white/20 text-white'
+                        : 'app-bg-primary app-text-muted'
+                    }`}>
+                      {item.badge}
+                    </span>
+                  )}
+                  {item.alert && (
+                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                  )}
+                </div>
               </button>
             ))}
           </nav>
         </div>
       </div>
-
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setSidebarOpen(false)}>
           <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -379,7 +478,9 @@ const Portal = () => {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 00-15 0v5h5l-5 5-5-5h5V7a9.5 9.5 0 0119 0v10z" />
                     </svg>
-                    <span className="absolute -top-1 -right-1 block h-2 w-2 rounded-full bg-red-400 ring-1 ring-white"></span>
+                    {hasOverdueInvoices && (
+                      <span className="absolute -top-1 -right-1 block h-2 w-2 rounded-full bg-red-400 ring-1 ring-white"></span>
+                    )}
                   </button>
                   <ProfessionalThemeToggle />
                 </div>
@@ -402,12 +503,37 @@ const Portal = () => {
           <div className="p-4 sm:p-6 lg:p-8">
             {currentView === 'dashboard' && (
               <div className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {hasOverdueInvoices && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 animate-fade-in-up">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <div>
+                        <h3 className="font-semibold text-red-800 mb-1">
+                          Overdue Invoices Require Attention
+                        </h3>
+                        <p className="text-red-700 text-sm mb-2">
+                          You have {overdueInvoices?.length || 0} overdue invoice{(overdueInvoices?.length || 0) !== 1 ? 's' : ''} 
+                          totaling {formatCurrency(invoiceStats?.overdueAmount || 0)}.
+                        </p>
+                        <button
+                          onClick={() => handleNavigation('invoices')}
+                          className="text-red-800 text-sm font-medium hover:text-red-900 underline"
+                        >
+                          View overdue invoices →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                   {getDashboardStats().map((stat, index) => (
                     <button
                       key={index}
                       onClick={stat.onClick}
-                      className={`block p-6 rounded-xl border ${stat.bgColor} transition-all hover:scale-105 hover:shadow-lg`}
+                      className={`block p-6 rounded-xl border ${stat.bgColor} transition-all hover:scale-105 hover:shadow-lg relative`}
                     >
                       <div className="flex items-center justify-between">
                         <div>
@@ -424,12 +550,15 @@ const Portal = () => {
                           </div>
                         </div>
                       </div>
+                      {stat.alert && (
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full ring-2 ring-white"></span>
+                      )}
                     </button>
                   ))}
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                  <div className="xl:col-span-2">
+                  <div className="xl:col-span-2 space-y-8">
                     <div className="theme-card">
                       <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold app-text-primary">
@@ -527,7 +656,99 @@ const Portal = () => {
                         )}
                       </div>
                     </div>
+
+                    {allInvoices && allInvoices.length > 0 && (
+                      <div className="theme-card">
+                        <div className="flex items-center justify-between mb-6">
+                          <h2 className="text-xl font-bold app-text-primary">
+                            Recent Invoice Activity
+                          </h2>
+                          <button 
+                            onClick={() => handleNavigation('invoices')}
+                            className="text-sm font-medium app-blue hover:opacity-80 transition-opacity"
+                          >
+                            View All Invoices
+                          </button>
+                        </div>
+                        <div className="space-y-4">
+                          {invoicesError ? (
+                            <div className="text-center py-8">
+                              <div className="w-16 h-16 mx-auto mb-4 app-bg-secondary rounded-full flex items-center justify-center">
+                                <svg className="w-8 h-8 app-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                              </div>
+                              <h3 className="text-lg font-semibold app-text-primary mb-2">
+                                Unable to load invoices
+                              </h3>
+                              <p className="app-text-muted text-sm mb-4">
+                                There was an issue loading your invoices. Please try again.
+                              </p>
+                              <button
+                                onClick={refreshInvoices}
+                                className="theme-button"
+                              >
+                                Retry
+                              </button>
+                            </div>
+                          ) : invoicesLoading ? (
+                            <div className="flex justify-center py-8">
+                              <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
+                            </div>
+                          ) : (
+                            allInvoices.slice(0, 3).map((invoice) => (
+                              <button
+                                key={invoice.id}
+                                onClick={() => handleNavigation('invoice-detail', invoice.id)}
+                                className="w-full block p-4 rounded-lg app-bg-secondary hover:opacity-80 transition-opacity text-left"
+                              >
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <p className="font-medium app-text-primary">
+                                        Invoice {invoice.invoice_number}
+                                      </p>
+                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                        invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
+                                        invoice.status === 'sent' ? 'bg-blue-100 text-blue-800' :
+                                        invoice.status === 'overdue' ? 'bg-red-100 text-red-800' :
+                                        invoice.status === 'draft' ? 'app-bg-primary app-text-muted' :
+                                        'bg-yellow-100 text-yellow-800'
+                                      }`}>
+                                        {invoice.status.replace('_', ' ').toUpperCase()}
+                                      </span>
+                                      {invoice.is_ndis_invoice && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                          NDIS
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-sm app-text-muted">
+                                      Due: {new Date(invoice.due_date).toLocaleDateString('en-AU')}
+                                    </p>
+                                    <p className="text-xs app-text-muted mt-1">
+                                      Created: {new Date(invoice.created_at).toLocaleDateString('en-AU')}
+                                    </p>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="font-bold app-text-primary">
+                                      {formatCurrency(invoice.total_amount)}
+                                    </p>
+                                    {new Date(invoice.due_date) < new Date() && invoice.status !== 'paid' && (
+                                      <p className="text-xs text-red-600 mt-1">
+                                        Overdue
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </button>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
+
                   <div className="space-y-6">
                     <div className="theme-card">
                       <h3 className="text-lg font-bold mb-4 app-text-primary">
@@ -558,7 +779,7 @@ const Portal = () => {
                           <div className="p-2 rounded-lg bg-green-100">
                             <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
+            </svg>
                           </div>
                           <div className="flex-1 text-left">
                             <p className="font-medium">View All Quotes</p>
@@ -566,6 +787,26 @@ const Portal = () => {
                               Manage existing quotes
                             </p>
                           </div>
+                        </button>
+
+                        <button
+                          onClick={() => handleNavigation('invoices')}
+                          className="w-full flex items-center space-x-3 p-3 rounded-lg transition-all hover:app-bg-secondary app-text-primary hover:scale-105 relative"
+                        >
+                          <div className="p-2 rounded-lg bg-indigo-100">
+                            <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
+                            </svg>
+                          </div>
+                          <div className="flex-1 text-left">
+                            <p className="font-medium">View Invoices</p>
+                            <p className="text-sm app-text-muted">
+                              Manage and download invoices
+                            </p>
+                          </div>
+                          {hasOverdueInvoices && (
+                            <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                          )}
                         </button>
 
                         <button
@@ -649,7 +890,31 @@ const Portal = () => {
               </div>
             )}
 
-            {currentView === 'calculator' && (
+            {currentView === 'invoices' && (
+              <div>
+                <InvoicesList
+                  invoices={allInvoices}
+                  loading={invoicesLoading}
+                  error={invoicesError}
+                  onDownloadInvoice={handleInvoiceDownload}
+                  onResendEmail={handleInvoiceResendEmail}
+                />
+              </div>
+            )}
+
+            {currentView === 'invoice-detail' && selectedInvoiceId && (
+              <div>
+                <InvoiceDetails
+                  invoice={allInvoices?.find(inv => inv.id === selectedInvoiceId)}
+                  loading={invoicesLoading}
+                  error={invoicesError}
+                  onDownload={() => handleInvoiceDownload(selectedInvoiceId)}
+                  onResendEmail={() => handleInvoiceResendEmail(selectedInvoiceId)}
+                />
+              </div>
+            )}
+
+{currentView === 'calculator' && (
               <div className="theme-card text-center py-12">
                 <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
                   <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -715,7 +980,7 @@ const Portal = () => {
               </div>
             )}
 
-{currentView === 'documents' && (
+            {currentView === 'documents' && (
               <div className="theme-card text-center py-12">
                 <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
                   <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -781,22 +1046,39 @@ const Portal = () => {
                   <div className="p-4 rounded-lg border app-border app-bg-secondary">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 rounded bg-orange-100">
-                          <svg className="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        <div className="p-2 rounded bg-indigo-100 relative">
+                          <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
                           </svg>
+                          {hasOverdueInvoices && (
+                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                          )}
                         </div>
                         <div className="text-left">
                           <p className="font-medium app-text-primary">
                             Invoices & Receipts
                           </p>
                           <p className="text-sm app-text-muted">
-                            Payment history and receipts
+                            {invoiceStats?.total > 0 
+                              ? `${invoiceStats.total} invoice${invoiceStats.total !== 1 ? 's' : ''} available`
+                              : 'Payment history and receipts'
+                            }
                           </p>
                         </div>
                       </div>
-                      <button className="px-4 py-2 app-bg-primary app-text-muted rounded-full font-medium cursor-not-allowed" disabled>
-                        Coming Soon
+                      <button
+                        onClick={() => handleNavigation('invoices')}
+                        className={`px-4 py-2 rounded-full font-medium transition-all relative ${
+                          invoiceStats?.total > 0
+                            ? 'bg-transparent border-2 app-border-blue app-text-primary hover:app-bg-blue hover:text-white'
+                            : 'app-bg-primary app-text-muted cursor-not-allowed'
+                        }`}
+                        disabled={!invoiceStats?.total}
+                      >
+                        {invoiceStats?.total > 0 ? 'View' : 'No Invoices'}
+                        {hasOverdueInvoices && (
+                          <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -847,6 +1129,8 @@ const Portal = () => {
 };
 
 export default Portal;
+
+
 
 
 
