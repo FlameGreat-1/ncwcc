@@ -1,88 +1,78 @@
 import api from './api.js';
+import { API_ENDPOINTS } from './apiConfig.js';
 
 class QuotesService {
-  // GET CLIENT'S QUOTES
   async getMyQuotes(params = {}) {
-    const response = await api.get('/quotes/my-quotes/', { params });
+    const response = await api.get(API_ENDPOINTS.QUOTES.MY_QUOTES, { params });
     return response.data;
   }
 
-  // GET SINGLE QUOTE DETAILS
   async getQuote(id) {
-    const response = await api.get(`/quotes/${id}/`);
+    const response = await api.get(`${API_ENDPOINTS.QUOTES.BASE}${id}/`);
     return response.data;
   }
 
-  // CREATE NEW QUOTE REQUEST
   async createQuote(data) {
-    const response = await api.post('/quotes/', data);
+    const response = await api.post(API_ENDPOINTS.QUOTES.BASE, data);
     return response.data;
   }
 
-  // UPDATE QUOTE (only if draft status)
   async updateQuote(id, data) {
-    const response = await api.patch(`/quotes/${id}/`, data);
+    const response = await api.patch(`${API_ENDPOINTS.QUOTES.BASE}${id}/`, data);
     return response.data;
   }
 
-  // SUBMIT QUOTE FOR REVIEW
   async submitQuote(id) {
-    const response = await api.post(`/quotes/${id}/submit/`);
+    const response = await api.post(`${API_ENDPOINTS.QUOTES.BASE}${id}/submit/`);
     return response.data;
   }
 
-  // CANCEL QUOTE (client can cancel their own quotes)
   async cancelQuote(id) {
-    const response = await api.post(`/quotes/${id}/cancel/`);
+    const response = await api.post(`${API_ENDPOINTS.QUOTES.BASE}${id}/cancel/`);
     return response.data;
   }
 
-  // DOWNLOAD QUOTE PDF
   async downloadQuotePDF(id) {
-    const response = await api.get(`/quotes/${id}/pdf/`, {
+    const response = await api.get(`${API_ENDPOINTS.QUOTES.BASE}${id}/pdf/`, {
       responseType: 'blob'
     });
     return response.data;
   }
 
-  // QUOTE CALCULATOR FOR PRICING ESTIMATES
   async calculateQuote(data) {
-    const response = await api.post('/quotes/calculator/', data);
+    const response = await api.post(API_ENDPOINTS.QUOTES.CALCULATOR, data);
     return response.data;
   }
 
-  // DUPLICATE EXISTING QUOTE (create similar quote)
   async duplicateQuote(id, data = {}) {
-    const response = await api.post(`/quotes/${id}/duplicate/`, data);
+    const response = await api.post(`${API_ENDPOINTS.QUOTES.BASE}${id}/duplicate/`, data);
     return response.data;
   }
 
-  // QUOTE ITEMS MANAGEMENT
   async getQuoteItems(quoteId, params = {}) {
-    const response = await api.get('/quotes/items/', { 
+    const response = await api.get(API_ENDPOINTS.QUOTES.ITEMS, { 
       params: { quote_id: quoteId, ...params } 
     });
     return response.data;
   }
 
   async createQuoteItem(data) {
-    const response = await api.post('/quotes/items/', data);
+    const response = await api.post(API_ENDPOINTS.QUOTES.ITEMS, data);
     return response.data;
   }
 
   async updateQuoteItem(id, data) {
-    const response = await api.patch(`/quotes/items/${id}/`, data);
+    const response = await api.patch(`${API_ENDPOINTS.QUOTES.ITEMS}${id}/`, data);
     return response.data;
   }
 
   async deleteQuoteItem(id) {
-    const response = await api.delete(`/quotes/items/${id}/`);
+    const response = await api.delete(`${API_ENDPOINTS.QUOTES.ITEMS}${id}/`);
     return response.data;
   }
 
-  // QUOTE ATTACHMENTS (client can upload images/documents)
   async getQuoteAttachments(quoteId, params = {}) {
-    const response = await api.get('/quotes/attachments/', { 
+    const response = await api.get(API_ENDPOINTS.QUOTES.ATTACHMENTS, { 
       params: { quote_id: quoteId, ...params } 
     });
     return response.data;
@@ -94,7 +84,7 @@ class QuotesService {
       formData.append(key, data[key]);
     });
     
-    const response = await api.post('/quotes/attachments/', formData, {
+    const response = await api.post(API_ENDPOINTS.QUOTES.ATTACHMENTS, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -103,34 +93,32 @@ class QuotesService {
   }
 
   async deleteQuoteAttachment(id) {
-    const response = await api.delete(`/quotes/attachments/${id}/`);
+    const response = await api.delete(`${API_ENDPOINTS.QUOTES.ATTACHMENTS}${id}/`);
     return response.data;
   }
 
   async downloadQuoteAttachment(id) {
-    const response = await api.get(`/quotes/attachments/${id}/download/`, {
+    const response = await api.get(`${API_ENDPOINTS.QUOTES.ATTACHMENTS}${id}/download/`, {
       responseType: 'blob'
     });
     return response.data;
   }
 
-  // GET SERVICES FOR QUOTE CREATION
   async getServices(params = {}) {
-    const response = await api.get('/services/', { params });
+    const response = await api.get(API_ENDPOINTS.SERVICES.BASE, { params });
     return response.data;
   }
 
   async getService(id) {
-    const response = await api.get(`/services/${id}/`);
+    const response = await api.get(`${API_ENDPOINTS.SERVICES.BASE}${id}/`);
     return response.data;
   }
 
   async getServiceAddons(serviceId, params = {}) {
-    const response = await api.get(`/services/${serviceId}/addons/`, { params });
+    const response = await api.get(`${API_ENDPOINTS.SERVICES.BASE}${serviceId}/addons/`, { params });
     return response.data;
   }
 
-  // UTILITY METHODS
   async searchQuotes(searchTerm, filters = {}) {
     const params = {
       search: searchTerm,
@@ -139,37 +127,30 @@ class QuotesService {
     return this.getMyQuotes(params);
   }
 
-  // FILTER QUOTES BY STATUS
   async getQuotesByStatus(status, params = {}) {
     return this.getMyQuotes({ status, ...params });
   }
 
-  // GET DRAFT QUOTES
   async getDraftQuotes(params = {}) {
     return this.getQuotesByStatus('draft', params);
   }
 
-  // GET SUBMITTED QUOTES
   async getSubmittedQuotes(params = {}) {
     return this.getQuotesByStatus('submitted', params);
   }
 
-  // GET APPROVED QUOTES
   async getApprovedQuotes(params = {}) {
     return this.getQuotesByStatus('approved', params);
   }
 
-  // GET REJECTED QUOTES
   async getRejectedQuotes(params = {}) {
     return this.getQuotesByStatus('rejected', params);
   }
 
-  // GET NDIS QUOTES (for NDIS clients)
   async getNDISQuotes(params = {}) {
     return this.getMyQuotes({ is_ndis_client: true, ...params });
   }
 
-  // HELPER METHOD TO CREATE BLOB URL FOR DOWNLOADS
   createDownloadUrl(blob, filename) {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -181,7 +162,6 @@ class QuotesService {
     window.URL.revokeObjectURL(url);
   }
 
-  // DOWNLOAD QUOTE PDF WITH FILENAME
   async downloadQuotePDFWithFilename(id, filename) {
     try {
       const blob = await this.downloadQuotePDF(id);
@@ -193,7 +173,6 @@ class QuotesService {
     }
   }
 
-  // DOWNLOAD ATTACHMENT WITH FILENAME
   async downloadAttachmentWithFilename(id, filename) {
     try {
       const blob = await this.downloadQuoteAttachment(id);
