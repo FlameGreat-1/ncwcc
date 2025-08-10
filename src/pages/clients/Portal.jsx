@@ -183,7 +183,7 @@ const Portal = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         ),
-        bgColor: 'bg-green-50',
+        bgColor: 'app-bg-secondary',
         iconBg: 'bg-green-100',
         iconColor: 'text-green-600',
         onClick: () => handleNavigation('quotes')
@@ -196,7 +196,7 @@ const Portal = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         ),
-        bgColor: 'bg-yellow-50',
+        bgColor: 'app-bg-secondary',
         iconBg: 'bg-yellow-100',
         iconColor: 'text-yellow-600',
         onClick: () => handleNavigation('quotes')
@@ -214,14 +214,14 @@ const Portal = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
           </svg>
         ),
-        bgColor: 'bg-purple-50',
+        bgColor: 'app-bg-secondary',
         iconBg: 'bg-purple-100',
         iconColor: 'text-purple-600',
         onClick: () => handleNavigation('quotes')
       }
     ];
   };
-
+  
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-AU', {
       style: 'currency',
