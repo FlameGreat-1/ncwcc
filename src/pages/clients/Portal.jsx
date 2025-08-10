@@ -3,10 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useLocation } from 'react-router-dom';
 import ProfileAvatar from '../../components/common/ProfileAvatar';
-import ThemeToggle from '../../components/common/ThemeToggle';
 import useQuotes from '../../hooks/useQuotes';
-import QuotesList from '../../components/quotes/QuotesList';
-import QuoteForm from '../../components/quotes/QuoteForm';
 import QuoteDetail from '../../pages/quotes/QuoteDetail';
 import CreateQuote from '../../pages/quotes/CreateQuote';
 import EditQuote from '../../pages/quotes/EditQuote';
@@ -19,7 +16,6 @@ const Portal = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedQuoteId, setSelectedQuoteId] = useState(null);
-  const [avatarDropdownOpen, setAvatarDropdownOpen] = useState(false);
   const [quoteStats, setQuoteStats] = useState({
     total: 0,
     draft: 0,
@@ -263,113 +259,23 @@ const Portal = () => {
     }
   };
 
-  const CustomProfileAvatar = () => {
+  const ProfessionalThemeToggle = () => {
     return (
-      <div className="relative">
-        <button
-          onClick={() => setAvatarDropdownOpen(!avatarDropdownOpen)}
-          className="flex items-center space-x-3 p-2 rounded-lg hover:app-bg-secondary transition-colors"
-        >
-          <div className="w-8 h-8 app-bg-blue rounded-full flex items-center justify-center">
-            <span className="text-white font-medium text-sm">
-              {user?.first_name?.charAt(0)}{user?.last_name?.charAt(0)}
-            </span>
-          </div>
-          <div className="hidden sm:block text-left">
-            <p className="app-text-primary text-sm font-medium">
-              {user?.first_name} {user?.last_name}
-            </p>
-            <p className="app-text-muted text-xs">
-              {user?.client_type === 'ndis' ? 'NDIS Client' : 'General Client'}
-            </p>
-          </div>
-          <svg className="w-4 h-4 app-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      <button
+        onClick={toggleTheme}
+        className="p-2 rounded-lg app-text-muted hover:app-text-primary hover:app-bg-secondary transition-colors"
+        aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      >
+        {isDark ? (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
-        </button>
-
-        {avatarDropdownOpen && (
-          <div className="absolute right-0 mt-2 w-80 theme-card shadow-lg z-50">
-            <div className="p-4 border-b app-border">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 app-bg-blue rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">
-                    {user?.first_name?.charAt(0)}{user?.last_name?.charAt(0)}
-                  </span>
-                </div>
-                <div>
-                  <p className="app-text-primary font-semibold">
-                    {user?.first_name} {user?.last_name}
-                  </p>
-                  <p className="app-text-muted text-sm">{user?.email}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 border-b app-border">
-              <h4 className="app-text-primary font-semibold mb-3">Account Status</h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="app-text-secondary text-sm">Email Verification</span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    isVerified 
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {isVerified ? 'Verified' : 'Pending'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="app-text-secondary text-sm">Account Type</span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    user?.client_type === 'ndis'
-                      ? 'bg-blue-100 text-blue-800'
-                      : 'app-bg-secondary app-text-primary'
-                  }`}>
-                    {user?.client_type === 'ndis' ? 'NDIS Client' : 'General Client'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="app-text-secondary text-sm">Member Since</span>
-                  <span className="app-text-primary text-sm font-medium">
-                    {user?.date_joined ? new Date(user.date_joined).toLocaleDateString('en-AU', { 
-                      year: 'numeric', 
-                      month: 'short' 
-                    }) : 'Recently'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 border-b app-border">
-              <div className="flex items-center justify-between">
-                <span className="app-text-primary font-medium">Theme</span>
-                <ThemeToggle />
-              </div>
-            </div>
-
-            <div className="p-2">
-              <button
-                onClick={() => {
-                  setAvatarDropdownOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 app-text-primary hover:app-bg-secondary rounded-lg transition-colors"
-              >
-                Account Settings
-              </button>
-              <button
-                onClick={() => {
-                  logout();
-                  setAvatarDropdownOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
+        ) : (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
         )}
-      </div>
+      </button>
     );
   };
 
@@ -441,57 +347,57 @@ const Portal = () => {
       <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
         <header className="theme-card border-b app-border sticky top-0 z-30 flex-shrink-0">
           <div className="px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
+            <div className="flex justify-between items-center h-14">
               <div className="flex items-center">
                 <button
                   onClick={() => setSidebarOpen(true)}
                   className="lg:hidden p-2 rounded-md app-text-muted hover:app-text-primary hover:app-bg-secondary transition-colors"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 </button>
                 <div className="ml-4 lg:ml-0">
-                  <h1 className="text-xl font-semibold app-text-primary">
+                  <h1 className="text-lg font-semibold app-text-primary">
                     {getPageTitle()}
                   </h1>
-                  <p className="text-sm app-text-muted">
+                  <p className="text-xs app-text-muted">
                     {getPageSubtitle()}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-4">
-                {currentView === 'quotes' && (
-                  <button
-                    onClick={() => handleNavigation('create-quote')}
-                    className="theme-button hidden sm:inline-flex"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    New Quote
-                  </button>
-                )}
+              <div className="flex items-center space-x-3">
                 <div className="hidden sm:flex items-center space-x-2">
                   <button className="p-2 rounded-lg app-text-muted hover:app-text-primary hover:app-bg-secondary transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </button>
                   <button className="relative p-2 rounded-lg app-text-muted hover:app-text-primary hover:app-bg-secondary transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 00-15 0v5h5l-5 5-5-5h5V7a9.5 9.5 0 0119 0v10z" />
                     </svg>
-                    <span className="absolute -top-1 -right-1 block h-3 w-3 rounded-full bg-red-400 ring-2 ring-white"></span>
+                    <span className="absolute -top-1 -right-1 block h-2 w-2 rounded-full bg-red-400 ring-1 ring-white"></span>
                   </button>
+                  <ProfessionalThemeToggle />
                 </div>
-                <CustomProfileAvatar />
+                
+                <ProfileAvatar 
+                  user={user}
+                  isVerified={isVerified}
+                  onLogout={logout}
+                  showAccountStatus={true}
+                  showThemeToggle={false}
+                  isActive={true}
+                  className="ml-2"
+                />
               </div>
             </div>
           </div>
         </header>
+
         <main className="flex-1 overflow-y-auto">
           <div className="p-4 sm:p-6 lg:p-8">
             {currentView === 'dashboard' && (
@@ -622,7 +528,6 @@ const Portal = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="space-y-6">
                     <div className="theme-card">
                       <h3 className="text-lg font-bold mb-4 app-text-primary">
@@ -777,7 +682,7 @@ const Portal = () => {
               </div>
             )}
 
-{currentView === 'appointments' && (
+            {currentView === 'appointments' && (
               <div className="theme-card text-center py-12">
                 <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
                   <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -810,7 +715,7 @@ const Portal = () => {
               </div>
             )}
 
-            {currentView === 'documents' && (
+{currentView === 'documents' && (
               <div className="theme-card text-center py-12">
                 <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
                   <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -937,13 +842,6 @@ const Portal = () => {
           </div>
         </main>
       </div>
-
-      {avatarDropdownOpen && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={() => setAvatarDropdownOpen(false)}
-        />
-      )}
     </div>
   );
 };
