@@ -54,9 +54,8 @@ const CreateQuote = () => {
 
   const loadServices = async () => {
     try {
-      const response = await fetch('/api/v1/services/');
-      const data = await response.json();
-      setServices(data.results || data);
+      const response = await quotesService.getServices(); e
+      setServices(response.results || response);
     } catch (err) {
       console.error('Failed to load services:', err);
     }

@@ -196,6 +196,16 @@ class QuotesService {
     const response = await api.get(`${API_ENDPOINTS.QUOTES.BASE}${quoteId}/revisions/`, { params });
     return response.data;
   }
+
+  async getQuoteTemplates() {
+    try {
+      const response = await api.get(API_ENDPOINTS.QUOTES.TEMPLATES);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching quote templates:', error);
+      return [];
+    }
+  }  
   
 }
 

@@ -192,6 +192,26 @@ class ApiService {
     return this.getSafe(`/ndis-invoices/${invoiceId}/compliance-check/`);
   }
 
+async getQuoteTemplate(id) {
+  const response = await api.get(`${API_ENDPOINTS.QUOTES.TEMPLATES}${id}/`);
+  return response.data;
+}
+
+async createQuoteTemplate(data) {
+  const response = await api.post(API_ENDPOINTS.QUOTES.TEMPLATES, data);
+  return response.data;
+}
+
+async updateQuoteTemplate(id, data) {
+  const response = await api.patch(`${API_ENDPOINTS.QUOTES.TEMPLATES}${id}/`, data);
+  return response.data;
+}
+
+async deleteQuoteTemplate(id) {
+  const response = await api.delete(`${API_ENDPOINTS.QUOTES.TEMPLATES}${id}/`);
+  return response.data;
+}
+
   handleError(error) {
     const errorResponse = {
       success: false,

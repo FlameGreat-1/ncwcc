@@ -35,6 +35,7 @@ export const API_ENDPOINTS = {
     CALCULATOR: `${API_BASE_URL}/${API_VERSION}/quotes/calculator/`,
     ITEMS: `${API_BASE_URL}/${API_VERSION}/quotes/items/`,
     ATTACHMENTS: `${API_BASE_URL}/${API_VERSION}/quotes/attachments/`,
+    TEMPLATES: `${API_BASE_URL}/${API_VERSION}/quotes/templates/`,
   },
   
   SERVICES: {
