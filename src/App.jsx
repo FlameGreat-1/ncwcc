@@ -127,10 +127,16 @@ const AppContent = () => {
           <Route path="/accounts/email-verification" element={<EmailVerification />} />
           
           <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/quotes" element={<ClientRoute><MyQuotes /></ClientRoute>} />
-          <Route path="/clients/quotes/create" element={<ClientRoute><CreateQuote /></ClientRoute>} />
-          <Route path="/clients/quotes/:id" element={<ClientRoute><QuoteDetail /></ClientRoute>} />
-          <Route path="/clients/quotes/:id/edit" element={<ClientRoute><EditQuote /></ClientRoute>} />
+          <Route path="/clients/quotes" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/quotes/create" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/quotes/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/quotes/:id/edit" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/invoices" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/invoices/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/appointments" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/documents" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/messages" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+          <Route path="/clients/calculator" element={<ClientRoute><ClientPortal /></ClientRoute>} />
           
           <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
           <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
