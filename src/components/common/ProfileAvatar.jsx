@@ -7,7 +7,7 @@ const Avatar = React.forwardRef(({ className, children, ...props }, ref) => {
   return (
     <div
       ref={ref}
-      className={`relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full transition-all duration-300 ease-in-out hover:scale-105 ${className || ''}`}
+      className={`relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full transition-all duration-300 ease-in-out hover:scale-105 ring-2 ring-white dark:ring-gray-800 shadow-lg ${className || ''}`}
       {...props}
     >
       {children}
@@ -19,8 +19,20 @@ const AvatarImage = React.forwardRef(({ className, src, alt, onError, onLoad, ..
   const [isLoaded, setIsLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  const DEFAULT_AVATAR = `https://robohash.org/${Math.random().toString(36).substring(7)}.png`;
-  const finalSrc = src && !imgError ? src : DEFAULT_AVATAR;
+  const getHumanAvatar = (name) => {
+    const avatarStyles = [
+      'avataaars',
+      'personas', 
+      'big-smile',
+      'adventurer',
+      'miniavs'
+    ];
+    const style = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    const seed = name || Math.random().toString(36).substring(7);
+    return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&backgroundColor=1e40af,3b82f6,06b6d4&radius=50`;
+  };
+
+  const finalSrc = src && !imgError ? src : getHumanAvatar(alt);
 
   const handleError = (e) => {
     setImgError(true);
@@ -48,23 +60,36 @@ const AvatarImage = React.forwardRef(({ className, src, alt, onError, onLoad, ..
 const AvatarFallback = React.forwardRef(({ className, children, status, ...props }, ref) => {
   const getStatusColor = () => {
     switch (status) {
-      case 'online': return 'bg-green-500';
-      case 'away': return 'bg-yellow-500';
-      case 'busy': return 'bg-red-500';
-      case 'offline': return 'bg-gray-400';
-      default: return 'bg-gray-400';
+      case 'online': return 'bg-emerald-500 ring-emerald-100';
+      case 'away': return 'bg-amber-500 ring-amber-100';
+      case 'busy': return 'bg-red-500 ring-red-100';
+      case 'offline': return 'bg-gray-400 ring-gray-100';
+      default: return 'bg-gray-400 ring-gray-100';
     }
+  };
+
+  const getGradientColor = (initials) => {
+    const gradients = [
+      'bg-gradient-to-br from-blue-600 to-blue-700',
+      'bg-gradient-to-br from-indigo-600 to-indigo-700', 
+      'bg-gradient-to-br from-purple-600 to-purple-700',
+      'bg-gradient-to-br from-cyan-600 to-cyan-700',
+      'bg-gradient-to-br from-teal-600 to-teal-700',
+      'bg-gradient-to-br from-emerald-600 to-emerald-700'
+    ];
+    const index = (initials?.charCodeAt(0) || 0) % gradients.length;
+    return gradients[index];
   };
 
   return (
     <div
       ref={ref}
-      className={`flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-[#006da6] to-[#0080c7] text-white font-semibold text-sm animate-in fade-in-0 zoom-in-0 duration-300 ${className || ''}`}
+      className={`flex h-full w-full items-center justify-center rounded-full ${getGradientColor(children)} text-white font-bold text-sm shadow-inner animate-in fade-in-0 zoom-in-0 duration-300 ${className || ''}`}
       {...props}
     >
       {children}
       {status && (
-        <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${getStatusColor()}`}></div>
+        <div className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white dark:border-gray-800 ${getStatusColor()} shadow-sm`}></div>
       )}
     </div>
   );
@@ -126,7 +151,7 @@ const ProfileAvatar = () => {
   return (
     <div className="relative" ref={dropdownRef}>
       <Avatar className="cursor-pointer" onClick={toggleDropdown}>
-        <AvatarImage src={user.profile_image} alt={user.first_name} />
+        <AvatarImage src={user.profile_image} alt={`${user.first_name} ${user.last_name}`} />
         <AvatarFallback status={getStatusIndicator()}>
           {getInitials()}
         </AvatarFallback>
@@ -137,7 +162,7 @@ const ProfileAvatar = () => {
           <div className="p-4">
             <div className="flex items-center space-x-3 mb-4">
               <Avatar className="h-12 w-12">
-                <AvatarImage src={user.profile_image} alt={user.first_name} />
+                <AvatarImage src={user.profile_image} alt={`${user.first_name} ${user.last_name}`} />
                 <AvatarFallback status={getStatusIndicator()}>
                   {getInitials()}
                 </AvatarFallback>
@@ -243,3 +268,4 @@ const ProfileAvatar = () => {
 };
 
 export default ProfileAvatar;
+
