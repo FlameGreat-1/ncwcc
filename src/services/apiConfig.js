@@ -29,7 +29,6 @@ export const API_ENDPOINTS = {
   DASHBOARD: `${API_BASE_URL}/${API_VERSION}/accounts/dashboard/`,
   HEALTH: `${API_BASE_URL}/${API_VERSION}/accounts/health/`,
   
-  // CLIENT-FOCUSED QUOTES ENDPOINTS
   QUOTES: {
     BASE: `${API_BASE_URL}/${API_VERSION}/quotes/`,
     MY_QUOTES: `${API_BASE_URL}/${API_VERSION}/quotes/my-quotes/`,
@@ -38,10 +37,17 @@ export const API_ENDPOINTS = {
     ATTACHMENTS: `${API_BASE_URL}/${API_VERSION}/quotes/attachments/`,
   },
   
-  // SERVICES FOR QUOTE CREATION
   SERVICES: {
     BASE: `${API_BASE_URL}/${API_VERSION}/services/`,
     ADDONS: `${API_BASE_URL}/${API_VERSION}/services/addons/`,
+  },
+
+  INVOICES: {
+    BASE: `${API_BASE_URL}/${API_VERSION}/invoices/api/invoices/`,
+    MY_INVOICES: `${API_BASE_URL}/${API_VERSION}/invoices/api/invoices/my-invoices/`,
+    NDIS: `${API_BASE_URL}/${API_VERSION}/invoices/api/ndis-invoices/`,
+    ITEMS: `${API_BASE_URL}/${API_VERSION}/invoices/api/invoice-items/`,
+    DASHBOARD_STATS: `${API_BASE_URL}/${API_VERSION}/invoices/api/invoices/dashboard-stats/`,
   },
 };
 
@@ -54,7 +60,6 @@ const apiClient = axios.create({
   },
 });
 
-// Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -68,7 +73,6 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => {
     return response;

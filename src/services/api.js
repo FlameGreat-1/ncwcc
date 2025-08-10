@@ -123,7 +123,6 @@ class ApiService {
         responseType: 'blob'
       });
 
-      // Create download link
       const blob = new Blob([response.data]);
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -143,6 +142,56 @@ class ApiService {
     }
   }
 
+  // INVOICE-SPECIFIC METHODS
+  async downloadInvoicePDF(url, invoiceNumber = null) {
+    try {
+      const response = await apiClient.get(url, {
+        responseType: 'blob'
+      });
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = invoiceNumber ? `${invoiceNumber}.pdf` : 'invoice.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      return {
+        success: true,
+        message: 'Invoice PDF downloaded successfully',
+      };
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  async getMyInvoices(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const url = queryString ? `/invoices/my-invoices/?${queryString}` : '/invoices/my-invoices/';
+    return this.getSafe(url);
+  }
+
+  async getInvoiceDetail(invoiceId) {
+    return this.getSafe(`/invoices/${invoiceId}/`);
+  }
+
+  async resendInvoiceEmail(invoiceId) {
+    return this.postSafe(`/invoices/${invoiceId}/resend-email/`);
+  }
+
+  async getNDISInvoices(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const url = queryString ? `/ndis-invoices/?${queryString}` : '/ndis-invoices/';
+    return this.getSafe(url);
+  }
+
+  async checkNDISCompliance(invoiceId) {
+    return this.getSafe(`/ndis-invoices/${invoiceId}/compliance-check/`);
+  }
+
   handleError(error) {
     const errorResponse = {
       success: false,
@@ -155,33 +204,28 @@ class ApiService {
       isAuthError: false,
     };
 
-    // Network error (no response from server)
     if (!error.response && error.request) {
       errorResponse.isNetworkError = true;
       errorResponse.message = 'Network error. Please check your internet connection.';
       return errorResponse;
     }
 
-    // Server error (5xx)
     if (error.response?.status >= 500) {
       errorResponse.isServerError = true;
       errorResponse.message = 'Server error. Please try again later.';
       return errorResponse;
     }
 
-    // Authentication error (401)
     if (error.response?.status === 401) {
       errorResponse.isAuthError = true;
       errorResponse.message = 'Authentication required. Please log in.';
       return errorResponse;
     }
 
-    // Validation error (400)
     if (error.response?.status === 400) {
       errorResponse.isValidationError = true;
     }
 
-    // Extract error message and details
     if (error.response?.data) {
       const data = error.response.data;
       
@@ -199,7 +243,6 @@ class ApiService {
           : data.non_field_errors;
       }
 
-      // Extract field-specific errors for form validation
       if (data.errors || (typeof data === 'object' && !data.error && !data.message && !data.detail)) {
         errorResponse.errors = data.errors || data;
       }
@@ -210,7 +253,6 @@ class ApiService {
     return errorResponse;
   }
 
-  // CLIENT-SPECIFIC AUTH METHODS
   setAuthToken(token) {
     if (token) {
       apiClient.defaults.headers.common['Authorization'] = `Token ${token}`;
@@ -235,7 +277,6 @@ class ApiService {
     return !!this.getAuthToken();
   }
 
-  // CLIENT-SPECIFIC USER METHODS
   getCurrentUser() {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
@@ -245,7 +286,6 @@ class ApiService {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
-  // CLIENT-FRIENDLY ERROR CHECKING
   isNetworkError(error) {
     return !error.response && error.request;
   }
@@ -274,7 +314,6 @@ class ApiService {
     return error.response?.status === 404;
   }
 
-  // CLIENT-FRIENDLY ERROR MESSAGES
   getErrorMessage(error) {
     if (this.isNetworkError(error)) {
       return 'Network error. Please check your internet connection.';
@@ -302,7 +341,6 @@ class ApiService {
            'An error occurred. Please try again.';
   }
 
-  // UTILITY METHOD FOR FORM VALIDATION ERRORS
   getFieldErrors(error) {
     if (error.response?.data && typeof error.response.data === 'object') {
       const data = error.response.data;
@@ -310,7 +348,7 @@ class ApiService {
       
       Object.keys(data).forEach(key => {
         if (Array.isArray(data[key])) {
-          fieldErrors[key] = data[key][0]; // Take first error message
+          fieldErrors[key] = data[key][0];
         } else if (typeof data[key] === 'string') {
           fieldErrors[key] = data[key];
         }
@@ -320,6 +358,90 @@ class ApiService {
     }
     return {};
   }
+
+  formatCurrency(amount, currency = 'AUD') {
+    return new Intl.NumberFormat('en-AU', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
+  }
+
+  formatDate(dateString, options = {}) {
+    const defaultOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    };
+    
+    return new Date(dateString).toLocaleDateString('en-AU', {
+      ...defaultOptions,
+      ...options
+    });
+  }
+
+  formatDateTime(dateString, options = {}) {
+    const defaultOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    
+    return new Date(dateString).toLocaleDateString('en-AU', {
+      ...defaultOptions,
+      ...options
+    });
+  }
+
+  isDateOverdue(dateString) {
+    return new Date(dateString) < new Date();
+  }
+
+  calculateDaysDifference(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  buildQueryString(params) {
+    const filteredParams = Object.entries(params)
+      .filter(([key, value]) => value !== null && value !== undefined && value !== '')
+      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+    
+    return new URLSearchParams(filteredParams).toString();
+  }
+
+  validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  validatePhone(phone) {
+    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+    return phoneRegex.test(phone);
+  }
+
+  sanitizeInput(input) {
+    if (typeof input !== 'string') return input;
+    return input.trim().replace(/[<>]/g, '');
+  }
+
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
 }
 
 export default new ApiService();
+
