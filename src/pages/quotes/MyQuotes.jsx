@@ -117,6 +117,14 @@ const MyQuotes = () => {
     }
   ];
 
+  const isRealError = (error) => {
+    if (!error) return false;
+    const errorMessage = error.toLowerCase();
+    return !errorMessage.includes('404') && 
+           !errorMessage.includes('not found') && 
+           !errorMessage.includes('no quotes found');
+  };
+
   return (
     <>
       <SEO 
@@ -179,39 +187,40 @@ const MyQuotes = () => {
             </div>
           )}
 
-          <div className="theme-card mb-6">
-            <div className="flex flex-wrap gap-2">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => handleTabChange(tab.key)}
-                  className={`
-                    px-4 py-2 rounded-full text-sm font-medium transition-all
-                    ${activeTab === tab.key
-                      ? 'app-bg-blue text-white'
-                      : 'app-bg-secondary app-text-primary hover:app-bg-blue hover:text-white'
-                    }
-                  `}
-                >
-                  {tab.label}
-                  {tab.count > 0 && (
-                    <span className={`
-                      ml-2 px-2 py-0.5 rounded-full text-xs
+          {allQuotes.length > 0 && (
+            <div className="theme-card mb-6">
+              <div className="flex flex-wrap gap-2">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => handleTabChange(tab.key)}
+                    className={`
+                      px-4 py-2 rounded-full text-sm font-medium transition-all
                       ${activeTab === tab.key
-                        ? 'bg-white/20 text-white'
-                        : 'app-bg-primary app-text-muted'
+                        ? 'app-bg-blue text-white'
+                        : 'app-bg-secondary app-text-primary hover:app-bg-blue hover:text-white'
                       }
-                    `}>
-                      {tab.count}
-                    </span>
-                  )}
-                </button>
-              ))}
+                    `}
+                  >
+                    {tab.label}
+                    {tab.count > 0 && (
+                      <span className={`
+                        ml-2 px-2 py-0.5 rounded-full text-xs
+                        ${activeTab === tab.key
+                          ? 'bg-white/20 text-white'
+                          : 'app-bg-primary app-text-muted'
+                        }
+                      `}>
+                        {tab.count}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
-
-        {allError ? (
+        {isRealError(allError) ? (
           <div className="theme-card text-center py-12">
             <div className="text-red-600 mb-4">
               <h3 className="text-lg font-semibold mb-2">Error Loading Quotes</h3>
@@ -223,6 +232,23 @@ const MyQuotes = () => {
             >
               Try Again
             </button>
+          </div>
+        ) : allQuotes.length === 0 && !allLoading ? (
+          <div className="theme-card text-center py-12">
+            <div className="mb-6">
+              <div className="w-16 h-16 mx-auto mb-4 app-bg-secondary rounded-full flex items-center justify-center">
+                <span className="text-2xl">📋</span>
+              </div>
+              <h3 className="text-xl font-bold app-text-primary mb-2">
+                No Quotes Yet
+              </h3>
+              <p className="app-text-muted mb-6">
+                You haven't created any cleaning quotes yet. Get started by creating your first quote!
+              </p>
+              <Link to="/quotes/create" className="theme-button">
+                Create Your First Quote
+              </Link>
+            </div>
           </div>
         ) : (
           <div>
@@ -242,23 +268,28 @@ const MyQuotes = () => {
                   </div>
                 ) : getCurrentQuotes().quotes.length === 0 ? (
                   <div className="theme-card text-center py-12">
-                    <h3 className="text-lg font-semibold app-text-primary mb-2">
-                      No {activeTab} quotes found
-                    </h3>
-                    <p className="app-text-muted mb-6">
-                      {activeTab === 'draft' 
-                        ? "You don't have any draft quotes yet."
-                        : activeTab === 'submitted'
-                        ? "You don't have any submitted quotes yet."
-                        : "You don't have any approved quotes yet."
-                      }
-                    </p>
-                    <Link
-                      to="/quotes/create"
-                      className="theme-button"
-                    >
-                      Create New Quote
-                    </Link>
+                    <div className="mb-6">
+                      <div className="w-12 h-12 mx-auto mb-4 app-bg-secondary rounded-full flex items-center justify-center">
+                        <span className="text-xl">📄</span>
+                      </div>
+                      <h3 className="text-lg font-semibold app-text-primary mb-2">
+                        No {activeTab} quotes found
+                      </h3>
+                      <p className="app-text-muted mb-6">
+                        {activeTab === 'draft' 
+                          ? "You don't have any draft quotes yet."
+                          : activeTab === 'submitted'
+                          ? "You don't have any submitted quotes yet."
+                          : "You don't have any approved quotes yet."
+                        }
+                      </p>
+                      <Link
+                        to="/quotes/create"
+                        className="theme-button"
+                      >
+                        Create New Quote
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -328,3 +359,4 @@ const MyQuotes = () => {
 };
 
 export default MyQuotes;
+
