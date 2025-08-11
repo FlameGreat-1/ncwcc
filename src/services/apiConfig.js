@@ -39,7 +39,7 @@ export const API_ENDPOINTS = {
   },
   
   SERVICES: {
-    BASE: `${API_BASE_URL}/${API_VERSION}/services/`,
+    BASE: `${API_BASE_URL}/${API_VERSION}/services/services/`,  
     ADDONS: `${API_BASE_URL}/${API_VERSION}/services/addons/`,
   },
 
