@@ -54,13 +54,19 @@ const CreateQuote = () => {
 
   const loadServices = async () => {
     try {
+      console.log('🔄 Loading services...');
       const response = await quotesService.getServices(); 
+      console.log('📦 Services response:', response);
+      console.log('📦 Response type:', typeof response);
+      console.log('📦 Response.results:', response.results);
       setServices(response.results || response);
+      console.log('✅ Services set to state:', response.results || response);
     } catch (err) {
-      console.error('Failed to load services:', err);
+      console.error('❌ Failed to load services:', err);
+      console.error('❌ Error details:', err.message);
     }
   };
-
+  
   const loadTemplates = async () => {
     try {
       const response = await quotesService.getQuoteTemplates({ limit: 10 });
