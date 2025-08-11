@@ -37,10 +37,11 @@ export const API_ENDPOINTS = {
     ATTACHMENTS: `${API_BASE_URL}/${API_VERSION}/quotes/attachments/`,
     TEMPLATES: `${API_BASE_URL}/${API_VERSION}/quotes/templates/`,
   },
-  
+
   SERVICES: {
-    BASE: `${API_BASE_URL}/${API_VERSION}/services/services/`,  
+    BASE: `${API_BASE_URL}/${API_VERSION}/services/`,
     ADDONS: `${API_BASE_URL}/${API_VERSION}/services/addons/`,
+    LIST: `${API_BASE_URL}/${API_VERSION}/services/services/`,
   },
 
   INVOICES: {

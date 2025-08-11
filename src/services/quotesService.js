@@ -113,7 +113,7 @@ class QuotesService {
   }
 
   async getServices(params = {}) {
-    const response = await api.get(API_ENDPOINTS.SERVICES.BASE, { params });
+    const response = await api.get(API_ENDPOINTS.SERVICES.LIST, { params });
     return response.data;
   }
 
