@@ -31,7 +31,7 @@ const CreateQuote = () => {
       loadTemplate(templateId);
     } else if (serviceId || clientId) {
       setInitialFormData({
-        service: serviceId || '',
+        service_type: serviceId || '',
         client: clientId || ''
       });
     }
@@ -46,7 +46,6 @@ const CreateQuote = () => {
       ]);
     } catch (err) {
       setError('Failed to initialize page data');
-      console.error('Initialization error:', err);
     } finally {
       setLoading(false);
     }
@@ -54,16 +53,10 @@ const CreateQuote = () => {
 
   const loadServices = async () => {
     try {
-      console.log('🔄 Loading services...');
       const response = await quotesService.getServices(); 
-      console.log('📦 Services response:', response);
-      console.log('📦 Response type:', typeof response);
-      console.log('📦 Response.results:', response.results);
       setServices(response.results || response);
-      console.log('✅ Services set to state:', response.results || response);
     } catch (err) {
-      console.error('❌ Failed to load services:', err);
-      console.error('❌ Error details:', err.message);
+      console.error('Failed to load services:', err);
     }
   };
   
@@ -83,7 +76,7 @@ const CreateQuote = () => {
       const template = await quotesService.getQuoteTemplate(templateId);
       setSelectedTemplate(template);
       setInitialFormData({
-        service: template.service || '',
+        service_type: template.service || '',
         cleaning_type: template.cleaning_type || 'general',
         number_of_rooms: template.number_of_rooms || 1,
         square_meters: template.square_meters || '',
@@ -94,7 +87,6 @@ const CreateQuote = () => {
       });
     } catch (err) {
       setError('Failed to load template');
-      console.error('Template loading error:', err);
     } finally {
       setLoading(false);
     }
@@ -241,7 +233,6 @@ const CreateQuote = () => {
                     </button>
                   ))}
                 </div>
-
                 {templates.length > 0 && (
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -400,3 +391,4 @@ const CreateQuote = () => {
 };
 
 export default CreateQuote;
+

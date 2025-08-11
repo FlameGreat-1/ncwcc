@@ -14,7 +14,7 @@ const QuoteForm = ({
   const { createQuote, updateQuote, calculateQuote, loading, error, clearError } = useQuoteActions();
 
   const [formData, setFormData] = useState({
-    service: '',
+    service_type: '',
     cleaning_type: 'general',
     property_address: '',
     suburb: '',
@@ -91,7 +91,7 @@ const QuoteForm = ({
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.service) errors.service = 'Service is required';
+    if (!formData.service_type) errors.service_type = 'Service is required';
     if (!formData.property_address.trim()) errors.property_address = 'Property address is required';
     if (!formData.suburb.trim()) errors.suburb = 'Suburb is required';
     if (!formData.postcode.trim()) errors.postcode = 'Postcode is required';
@@ -135,9 +135,9 @@ const QuoteForm = ({
   };
 
   const handleCalculate = async () => {
-    if (!formData.service || !formData.postcode || !formData.number_of_rooms) {
+    if (!formData.service_type || !formData.postcode || !formData.number_of_rooms) {
       setValidationErrors({
-        service: !formData.service ? 'Service is required for calculation' : '',
+        service_type: !formData.service_type ? 'Service is required for calculation' : '',
         postcode: !formData.postcode ? 'Postcode is required for calculation' : '',
         number_of_rooms: !formData.number_of_rooms ? 'Number of rooms is required for calculation' : ''
       });
@@ -146,7 +146,7 @@ const QuoteForm = ({
     setIsCalculating(true);
     try {
       const calculationData = {
-        service_id: formData.service,
+        service_id: formData.service_type,
         cleaning_type: formData.cleaning_type,
         number_of_rooms: parseInt(formData.number_of_rooms),
         square_meters: formData.square_meters ? parseFloat(formData.square_meters) : null,
@@ -220,15 +220,15 @@ const QuoteForm = ({
           <div>
             <label className="block text-sm font-semibold app-text-primary mb-2">Service Type *</label>
             <select
-              value={formData.service}
-              onChange={(e) => handleInputChange('service', e.target.value)}
-              className={`theme-input ${validationErrors.service ? 'border-red-500' : ''}`}
+              value={formData.service_type} 
+              onChange={(e) => handleInputChange('service_type', e.target.value)}
+              className={`theme-input ${validationErrors.service_type ? 'border-red-500' : ''}`}
               required
             >
               <option value="">Select a service</option>
               {services && Array.isArray(services) && services.length > 0 ? (
                 services.map(service => (
-                  <option key={service.id} value={service.id}>
+                  <option key={service.id} value={service.service_type || service.type || service.name.toLowerCase().replace(' ', '_')}>
                     {service.name}
                   </option>
                 ))
@@ -236,8 +236,8 @@ const QuoteForm = ({
                 <option value="" disabled>Loading services...</option>
               )}
             </select>
-            {validationErrors.service && (
-              <p className="text-red-500 text-xs mt-1">{validationErrors.service}</p>
+            {validationErrors.service_type && (
+              <p className="text-red-500 text-xs mt-1">{validationErrors.service_type}</p>
             )}
           </div>
   
@@ -255,7 +255,7 @@ const QuoteForm = ({
             </select>
           </div>
         </div>
-  
+
         <div>
           <label className="block text-sm font-semibold app-text-primary mb-2">Property Address *</label>
           <textarea
