@@ -100,9 +100,21 @@ const CreateQuote = () => {
   };
 
   const handleQuoteSuccess = (newQuote) => {
-    navigate(`/quotes/${newQuote.id}`, {
-      state: { message: 'Quote created successfully!' }
-    });
+    console.log('🔍 Full quote response:', newQuote);
+    console.log('🔍 Quote ID:', newQuote?.id);
+    console.log('🔍 Quote number:', newQuote?.quote_number);
+    
+    if (newQuote?.id) {
+      navigate(`/quotes/${newQuote.id}`, {
+        state: { message: 'Quote created successfully!' }
+      });
+    } else {
+      console.error('❌ No quote ID found in response');
+      setError('Quote created but unable to redirect. Please check your quotes list.');
+      navigate('/quotes', {
+        state: { message: 'Quote created successfully! Check your quotes list.' }
+      });
+    }
   };
 
   const handleCancel = () => {
