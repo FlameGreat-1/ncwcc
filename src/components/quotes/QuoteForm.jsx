@@ -171,7 +171,8 @@ const QuoteForm = ({
         ...formData,
         number_of_rooms: parseInt(formData.number_of_rooms),
         urgency_level: parseInt(formData.urgency_level),
-        square_meters: formData.square_meters ? parseFloat(formData.square_meters) : null
+        square_meters: formData.square_meters ? parseFloat(formData.square_meters) : null,
+        preferred_time: formData.preferred_time ? `${formData.preferred_time}:00` : null,
       };
       let result;
       if (mode === 'create') {
@@ -188,7 +189,7 @@ const QuoteForm = ({
       console.error('Form submission failed:', err.message);
     }
   };
-
+  
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-AU', {
       style: 'currency',
