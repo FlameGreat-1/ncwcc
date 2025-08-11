@@ -226,11 +226,15 @@ const QuoteForm = ({
               required
             >
               <option value="">Select a service</option>
-              {services.map(service => (
-                <option key={service.id} value={service.id}>
-                  {service.name}
-                </option>
-              ))}
+              {services && Array.isArray(services) && services.length > 0 ? (
+                services.map(service => (
+                  <option key={service.id} value={service.id}>
+                    {service.name}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>Loading services...</option>
+              )}
             </select>
             {validationErrors.service && (
               <p className="text-red-500 text-xs mt-1">{validationErrors.service}</p>
