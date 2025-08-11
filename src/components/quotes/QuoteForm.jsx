@@ -174,6 +174,9 @@ const QuoteForm = ({
         square_meters: formData.square_meters ? parseFloat(formData.square_meters) : null,
         preferred_time: formData.preferred_time ? `${formData.preferred_time}:00` : null,
       };
+      
+      console.log('🚀 Submitting data:', JSON.stringify(submitData, null, 2));
+      
       let result;
       if (mode === 'create') {
         result = await createQuote(submitData);
@@ -187,9 +190,10 @@ const QuoteForm = ({
       }
     } catch (err) {
       console.error('Form submission failed:', err.message);
+      console.error('Full error:', err);
     }
   };
-  
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-AU', {
       style: 'currency',
