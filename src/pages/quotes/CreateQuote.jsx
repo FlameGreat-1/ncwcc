@@ -54,7 +54,7 @@ const CreateQuote = () => {
 
   const loadServices = async () => {
     try {
-      const response = await quotesService.getServices(); e
+      const response = await quotesService.getServices(); 
       setServices(response.results || response);
     } catch (err) {
       console.error('Failed to load services:', err);
@@ -320,6 +320,7 @@ const CreateQuote = () => {
           <QuoteForm
             mode="create"
             initialData={initialFormData}
+            services={services}
             onSuccess={handleQuoteSuccess}
             onCancel={handleCancel}
           />

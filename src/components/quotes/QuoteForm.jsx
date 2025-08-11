@@ -5,6 +5,7 @@ import useQuoteActions from '../../hooks/useQuoteActions.js';
 const QuoteForm = ({ 
   initialData = null, 
   mode = 'create',
+  services = [],
   onSuccess,
   onCancel,
   className = ''
@@ -205,14 +206,14 @@ const QuoteForm = ({
           Fill in the details below to {mode === 'create' ? 'create' : 'update'} your cleaning quote.
         </p>
       </div>
-
+  
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
           <p className="font-medium">Error</p>
           <p className="text-sm">{error}</p>
         </div>
       )}
-
+  
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
@@ -224,16 +225,17 @@ const QuoteForm = ({
               required
             >
               <option value="">Select a service</option>
-              <option value="1">Standard Cleaning</option>
-              <option value="2">Deep Cleaning</option>
-              <option value="3">End of Lease Cleaning</option>
-              <option value="4">NDIS Cleaning</option>
+              {services.map(service => (
+                <option key={service.id} value={service.id}>
+                  {service.name}
+                </option>
+              ))}
             </select>
             {validationErrors.service && (
               <p className="text-red-500 text-xs mt-1">{validationErrors.service}</p>
             )}
           </div>
-
+  
           <div>
             <label className="block text-sm font-semibold app-text-primary mb-2">Cleaning Type *</label>
             <select
@@ -248,7 +250,7 @@ const QuoteForm = ({
             </select>
           </div>
         </div>
-
+  
         <div>
           <label className="block text-sm font-semibold app-text-primary mb-2">Property Address *</label>
           <textarea
