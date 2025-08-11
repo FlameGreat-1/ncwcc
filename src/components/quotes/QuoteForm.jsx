@@ -52,14 +52,14 @@ const QuoteForm = ({
   ];
 
   const stateOptions = [
-    { value: 'NSW', label: 'New South Wales' },
-    { value: 'VIC', label: 'Victoria' },
-    { value: 'QLD', label: 'Queensland' },
-    { value: 'WA', label: 'Western Australia' },
-    { value: 'SA', label: 'South Australia' },
-    { value: 'TAS', label: 'Tasmania' },
-    { value: 'ACT', label: 'Australian Capital Territory' },
-    { value: 'NT', label: 'Northern Territory' }
+    { value: 'NSW', label: 'New South Wales (NSW)' },
+    { value: 'VIC', label: 'Victoria (VIC)' },
+    { value: 'QLD', label: 'Queensland (QLD)' },
+    { value: 'WA', label: 'Western Australia (WA)' },
+    { value: 'SA', label: 'South Australia (SA)' },
+    { value: 'TAS', label: 'Tasmania (TAS)' },
+    { value: 'ACT', label: 'Australian Capital Territory (ACT)' },
+    { value: 'NT', label: 'Northern Territory (NT)' }
   ];
 
   const urgencyOptions = [
