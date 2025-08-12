@@ -18,7 +18,7 @@ const MyQuotes = () => {
   } = useQuotes('my', {}, true);
 
   const stats = useMemo(() => {
-    if (allQuotes.length === 0) return { 
+    if (!allQuotes || allQuotes.length === 0) return { 
       total: 0, 
       draft: 0, 
       submitted: 0, 
@@ -40,8 +40,8 @@ const MyQuotes = () => {
       rejected: 0,
       totalValue: 0
     });
-  }, [allQuotes]);
-
+  }, [allQuotes]); 
+  
   const tabs = [
     { key: 'all', label: 'All Quotes', count: stats.total },
     { key: 'draft', label: 'Drafts', count: stats.draft },
