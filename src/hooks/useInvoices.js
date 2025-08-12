@@ -106,7 +106,7 @@ export const useInvoices = (initialFilters = {}) => {
     }
     
     return invoicesService.sortInvoices(result, filters.ordering);
-  }, [invoices, filters]);
+  }, [invoices, filters.search, filters.status, filters.is_ndis_invoice, filters.email_sent, filters.ordering]); 
 
   const invoiceStats = useMemo(() => {
     const stats = {
