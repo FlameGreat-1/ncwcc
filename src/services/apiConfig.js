@@ -45,11 +45,11 @@ export const API_ENDPOINTS = {
   },
 
   INVOICES: {
-    BASE: `${API_BASE_URL}/${API_VERSION}/invoices/invoices/`,
-    MY_INVOICES: `${API_BASE_URL}/${API_VERSION}/invoices/invoices/my-invoices/`,
-    NDIS: `${API_BASE_URL}/${API_VERSION}/invoices/ndis-invoices/`,
-    ITEMS: `${API_BASE_URL}/${API_VERSION}/invoices/invoice-items/`,
-    DASHBOARD_STATS: `${API_BASE_URL}/${API_VERSION}/invoices/invoices/dashboard-stats/`,
+    BASE: `${API_BASE_URL}/${API_VERSION}/invoices/`,
+    MY_INVOICES: `${API_BASE_URL}/${API_VERSION}/invoices/`,
+    NDIS: `${API_BASE_URL}/${API_VERSION}/invoices/ndis/`,
+    ITEMS: `${API_BASE_URL}/${API_VERSION}/invoices/items/`,
+    DASHBOARD_STATS: `${API_BASE_URL}/${API_VERSION}/invoices/dashboard-stats/`,
   },
 };
 
