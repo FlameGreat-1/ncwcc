@@ -26,6 +26,7 @@ const Portal = () => {
     draft: 0,
     submitted: 0,
     approved: 0,
+    rejected: 0,
     totalValue: 0
   });
 
@@ -91,9 +92,19 @@ const Portal = () => {
         draft: 0,
         submitted: 0,
         approved: 0,
+        rejected: 0,
         totalValue: 0
       });
       setQuoteStats(stats);
+    } else {
+      setQuoteStats({
+        total: 0,
+        draft: 0,
+        submitted: 0,
+        approved: 0,
+        rejected: 0,
+        totalValue: 0
+      });
     }
   }, [allQuotes]);
 
@@ -238,8 +249,9 @@ const Portal = () => {
   };
 
   const getPageSubtitle = () => {
+    const userName = user?.first_name || user?.last_name || user?.email?.split('@')[0] || 'User';
     switch (currentView) {
-      case 'dashboard': return `Welcome back, ${user?.first_name}`;
+      case 'dashboard': return `Welcome back, ${userName}`;
       case 'quotes': return 'Manage your cleaning service quotes';
       case 'create-quote': return 'Request a new cleaning service quote';
       case 'edit-quote': return 'Update your quote details';
@@ -250,15 +262,15 @@ const Portal = () => {
       case 'documents': return 'Access your service documents';
       case 'messages': return 'Communication center';
       case 'calculator': return 'Calculate cleaning service costs';
-      default: return `Welcome back, ${user?.first_name}`;
+      default: return `Welcome back, ${userName}`;
     }
   };
-
+  
   const getDashboardStats = () => {
     const stats = [
       {
         title: 'Total Quotes',
-        value: quoteStats.total.toString(),
+        value: (quoteStats?.total || 0).toString(),
         icon: (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -271,7 +283,7 @@ const Portal = () => {
       },
       {
         title: 'Total Invoices',
-        value: invoiceStats?.total?.toString() || '0',
+        value: (invoiceStats?.total || 0).toString(),
         icon: (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
@@ -285,7 +297,7 @@ const Portal = () => {
       },
       {
         title: 'Approved Quotes',
-        value: quoteStats.approved.toString(),
+        value: (quoteStats?.approved || 0).toString(),
         icon: (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -615,14 +627,14 @@ const Portal = () => {
                                       quote.status === 'draft' ? 'app-bg-primary app-text-muted' :
                                       'bg-yellow-100 text-yellow-800'
                                     }`}>
-                                      {quote.status.replace('_', ' ').toUpperCase()}
+                                      {(quote.status || 'unknown').replace('_', ' ').toUpperCase()}
                                     </span>
                                   </div>
                                   <p className="text-sm app-text-muted">
-                                    {quote.cleaning_type.replace('_', ' ')} • {quote.property_address.substring(0, 30)}...
+                                    {quote.cleaning_type?.replace('_', ' ') || 'N/A'} • {(quote.property_address || 'No address').substring(0, 30)}...
                                   </p>
                                   <p className="text-xs app-text-muted mt-1">
-                                    {new Date(quote.created_at).toLocaleDateString('en-AU')}
+                                    {quote.created_at ? new Date(quote.created_at).toLocaleDateString('en-AU') : 'N/A'}
                                   </p>
                                 </div>
                                 <div className="text-right">
