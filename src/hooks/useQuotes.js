@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import quotesService from '../services/quotesService.js';
 
 const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
@@ -13,6 +13,16 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
     totalPages: 1
   });
 
+  const isRequestInProgress = useRef(false);
+
+  const stableParams = useRef(params);
+  const stableType = useRef(type);
+  
+  useEffect(() => {
+    stableParams.current = params;
+    stableType.current = type;
+  }, [params, type]);
+
   const serviceMap = {
     my: quotesService.getMyQuotes,
     draft: quotesService.getDraftQuotes,
@@ -23,17 +33,27 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
   };
 
   const fetchQuotes = useCallback(async (fetchParams = {}) => {
-    if (!serviceMap[type]) {
+    const currentType = stableType.current;
+    
+    if (!serviceMap[currentType]) {
       setError('Invalid quote type');
       return;
     }
 
+    if (isRequestInProgress.current) {
+      console.log('🔍 Request already in progress, skipping...');
+      return;
+    }
+
+    isRequestInProgress.current = true;
     setLoading(true);
     setError(null);
 
     try {
-      const mergedParams = { ...params, ...fetchParams };
-      const response = await serviceMap[type](mergedParams);
+      const mergedParams = { ...stableParams.current, ...fetchParams };
+      console.log('🔍 Making API request with params:', mergedParams);
+      
+      const response = await serviceMap[currentType](mergedParams);
       
       if (response.results) {
         setQuotes(response.results);
@@ -55,29 +75,32 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
         });
       }
     } catch (err) {
+      console.error('🔍 API request failed:', err);
       setError(err.response?.data?.message || err.message || 'Failed to fetch quotes');
       setQuotes([]);
     } finally {
       setLoading(false);
+      isRequestInProgress.current = false;
     }
-  }, [type, params]);
-
+  }, []); 
   const refetch = useCallback((newParams = {}) => {
     return fetchQuotes(newParams);
   }, [fetchQuotes]);
 
   const loadMore = useCallback(() => {
-    if (pagination.next && !loading) {
-      const currentOffset = (pagination.page - 1) * (params.limit || 20);
-      const nextOffset = currentOffset + (params.limit || 20);
-      return fetchQuotes({ ...params, offset: nextOffset });
+    if (pagination.next && !loading && !isRequestInProgress.current) {
+      const currentOffset = (pagination.page - 1) * (stableParams.current.limit || 20);
+      const nextOffset = currentOffset + (stableParams.current.limit || 20);
+      return fetchQuotes({ ...stableParams.current, offset: nextOffset });
     }
-  }, [pagination, params, loading, fetchQuotes]);
+  }, [pagination, loading, fetchQuotes]);
 
   const goToPage = useCallback((page) => {
-    const offset = (page - 1) * (params.limit || 20);
-    return fetchQuotes({ ...params, offset });
-  }, [params, fetchQuotes]);
+    if (!isRequestInProgress.current) {
+      const offset = (page - 1) * (stableParams.current.limit || 20);
+      return fetchQuotes({ ...stableParams.current, offset });
+    }
+  }, [fetchQuotes]);
 
   const updateQuoteInList = useCallback((updatedQuote) => {
     setQuotes(prevQuotes => 
@@ -98,8 +121,11 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
   }, []);
 
   const searchQuotes = useCallback(async (searchTerm, filters = {}) => {
+    if (isRequestInProgress.current) return;
+    
     setLoading(true);
     setError(null);
+    isRequestInProgress.current = true;
     
     try {
       const response = await quotesService.searchQuotes(searchTerm, filters);
@@ -108,6 +134,7 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
       setError(err.response?.data?.message || err.message || 'Search failed');
     } finally {
       setLoading(false);
+      isRequestInProgress.current = false;
     }
   }, []);
 
@@ -128,9 +155,10 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
 
   useEffect(() => {
     if (autoFetch) {
+      console.log('🔍 Initial fetch triggered');
       fetchQuotes();
     }
-  }, [fetchQuotes, autoFetch]);
+  }, [autoFetch]);
 
   return {
     quotes,
