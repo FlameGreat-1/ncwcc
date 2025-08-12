@@ -20,7 +20,7 @@ const initialState = {
   isAuthenticated: isAuthenticated(),
   isLoading: false,
   error: null,
-  isInitialized: false,
+  isInitialized: true,
 };
 
 const authReducer = (state, action) => {
