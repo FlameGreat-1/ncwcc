@@ -27,21 +27,17 @@ const MyQuotes = () => {
       totalValue: 0 
     };
     
-    return allQuotes.reduce((acc, quote) => {
-      acc.total += 1;
-      acc[quote.status] = (acc[quote.status] || 0) + 1;
-      acc.totalValue += parseFloat(quote.final_price || 0);
-      return acc;
-    }, {
-      total: 0,
-      draft: 0,
-      submitted: 0,
-      approved: 0,
-      rejected: 0,
-      totalValue: 0
+    const result = { total: 0, draft: 0, submitted: 0, approved: 0, rejected: 0, totalValue: 0 };
+    
+    allQuotes.forEach(quote => {
+      result.total += 1;
+      result[quote.status] = (result[quote.status] || 0) + 1;
+      result.totalValue += parseFloat(quote.final_price || 0);
     });
-  }, [allQuotes]); 
-  
+    
+    return result;
+  }, [allQuotes]);
+
   const tabs = [
     { key: 'all', label: 'All Quotes', count: stats.total },
     { key: 'draft', label: 'Drafts', count: stats.draft },
