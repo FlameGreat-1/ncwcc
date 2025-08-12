@@ -30,9 +30,8 @@ const Portal = () => {
     totalValue: 0
   });
 
-  const stableQuoteParams = useMemo(() => ({}), []);
-  const { quotes: allQuotes, loading: quotesLoading, error: quotesError } = useQuotes('my', stableQuoteParams, true);
-  
+  const { quotes: allQuotes, loading: quotesLoading, error: quotesError } = useQuotes('my', {}, true);
+
   const {
     invoices: allInvoices,
     loading: invoicesLoading,
