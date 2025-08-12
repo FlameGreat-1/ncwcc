@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
+import { initializeAuth } from './config/apiConfig.js';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import Header from './components/common/Header.jsx';
@@ -152,6 +153,10 @@ const AppContent = () => {
 };
 
 const App = () => {
+  useEffect(() => {
+    initializeAuth();
+  }, []);
+
   return (
     <ThemeProvider>
       <AuthProvider>

@@ -51,7 +51,6 @@ export const API_ENDPOINTS = {
     ITEMS: `${API_BASE_URL}/${API_VERSION}/invoices/invoice-items/`,
     DASHBOARD_STATS: `${API_BASE_URL}/${API_VERSION}/invoices/invoices/dashboard-stats/`,
   },
-  
 };
 
 const apiClient = axios.create({
@@ -63,29 +62,20 @@ const apiClient = axios.create({
   },
 });
 
-const getAuthToken = () => {
-  try {
-    return localStorage.getItem('authToken');
-  } catch (error) {
-    console.warn('Failed to get auth token from localStorage:', error);
-    return null;
-  }
-};
-
-const setAuthHeader = (config) => {
-  const token = getAuthToken();
-  if (token && token.trim()) {
-    config.headers = config.headers || {};
-    config.headers['Authorization'] = `Token ${token}`;
-  }
-  return config;
-};
-
 apiClient.interceptors.request.use(
   (config) => {
-    return setAuthHeader(config);
+    const token = localStorage.getItem('authToken');
+    if (token && token.trim()) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Token ${token}`;
+      console.log('🔍 Request interceptor added token:', token.substring(0, 10) + '...');
+    } else {
+      console.log('🔍 Request interceptor: No token found');
+    }
+    return config;
   },
   (error) => {
+    console.error('🔍 Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -96,30 +86,29 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      try {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-        localStorage.removeItem('userProfile');
-      } catch (e) {
-        console.warn('Failed to clear localStorage:', e);
-      }
-      
-      if (typeof window !== 'undefined' && window.location) {
-        window.location.href = '/accounts/login';
-      }
+      console.log('🔍 401 error - clearing auth data');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      window.location.href = '/accounts/login';
     }
     return Promise.reject(error);
   }
 );
 
-const initializeAuthToken = () => {
-  const token = getAuthToken();
+const initializeAuth = () => {
+  const token = localStorage.getItem('authToken');
   if (token && token.trim()) {
     apiClient.defaults.headers.common['Authorization'] = `Token ${token}`;
+    console.log('🔍 Auth initialized with token:', token.substring(0, 10) + '...');
   }
 };
 
-initializeAuthToken();
+initializeAuth();
 
-export { initializeAuthToken };
+if (typeof window !== 'undefined') {
+  window.apiClient = apiClient;
+  window.initializeAuth = initializeAuth;
+}
+
+export { initializeAuth };
 export default apiClient;
