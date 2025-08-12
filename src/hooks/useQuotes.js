@@ -14,7 +14,7 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
   });
 
   const isRequestInProgress = useRef(false);
-
+  const hasInitialized = useRef(false);
   const stableParams = useRef(params);
   const stableType = useRef(type);
   
@@ -83,6 +83,7 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
       isRequestInProgress.current = false;
     }
   }, []); 
+
   const refetch = useCallback((newParams = {}) => {
     return fetchQuotes(newParams);
   }, [fetchQuotes]);
@@ -154,8 +155,9 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
   }, [fetchQuotes]);
 
   useEffect(() => {
-    if (autoFetch) {
+    if (autoFetch && !hasInitialized.current) {
       console.log('🔍 Initial fetch triggered');
+      hasInitialized.current = true;
       fetchQuotes();
     }
   }, [autoFetch]);
