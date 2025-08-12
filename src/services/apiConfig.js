@@ -63,13 +63,27 @@ const apiClient = axios.create({
   },
 });
 
+const getAuthToken = () => {
+  try {
+    return localStorage.getItem('authToken');
+  } catch (error) {
+    console.warn('Failed to get auth token from localStorage:', error);
+    return null;
+  }
+};
+
+const setAuthHeader = (config) => {
+  const token = getAuthToken();
+  if (token && token.trim()) {
+    config.headers = config.headers || {};
+    config.headers['Authorization'] = `Token ${token}`;
+  }
+  return config;
+};
+
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Token ${token}`;
-    }
-    return config;
+    return setAuthHeader(config);
   },
   (error) => {
     return Promise.reject(error);
@@ -82,12 +96,30 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      window.location.href = '/accounts/login';
+      try {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        localStorage.removeItem('userProfile');
+      } catch (e) {
+        console.warn('Failed to clear localStorage:', e);
+      }
+      
+      if (typeof window !== 'undefined' && window.location) {
+        window.location.href = '/accounts/login';
+      }
     }
     return Promise.reject(error);
   }
 );
 
+const initializeAuthToken = () => {
+  const token = getAuthToken();
+  if (token && token.trim()) {
+    apiClient.defaults.headers.common['Authorization'] = `Token ${token}`;
+  }
+};
+
+initializeAuthToken();
+
+export { initializeAuthToken };
 export default apiClient;
