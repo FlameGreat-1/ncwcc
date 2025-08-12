@@ -186,7 +186,9 @@ const QuoteForm = ({
       if (onSuccess) {
         onSuccess(result);
       } else {
-        navigate(`/quotes/${result.id}`);
+        setTimeout(() => {
+          navigate(`/quotes/${result.id}`);
+        }, 1000);
       }
     } catch (err) {
       console.error('Form submission failed:', err.message);

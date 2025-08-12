@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import QuoteCard from './QuoteCard.jsx';
 import useQuotes from '../../hooks/useQuotes.js';
@@ -64,26 +64,33 @@ const QuotesList = ({
     { value: '5', label: 'Emergency (ASAP)' }
   ];
 
-  const handleFilterChange = (key, value) => {
-    const newFilters = { ...filters, [key]: value === '' ? null : value };
-    setFilters(newFilters);
-    
-    const newSearchParams = new URLSearchParams();
-    Object.entries(newFilters).forEach(([k, v]) => {
-      if (v && v !== '') newSearchParams.set(k, v);
-    });
-    setSearchParams(newSearchParams);
+  const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const cleanFilters = {};
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value && value.toString().trim() !== '') {
-        cleanFilters[key] = value;
-      }
-    });
-    refetch(cleanFilters);
+  const debouncedUpdateFilters = useCallback(
+    debounce((newFilters) => {
+      setFilters(newFilters);
+      const newSearchParams = new URLSearchParams();
+      Object.entries(newFilters).forEach(([k, v]) => {
+        if (v && v !== '') newSearchParams.set(k, v);
+      });
+      setSearchParams(newSearchParams);
+    }, 300),
+    []
+  );
+
+  const handleFilterChange = (key, value) => {
+    const newFilters = { ...filters, [key]: value === '' ? null : value };
+    debouncedUpdateFilters(newFilters);
   };
 
   const clearFilters = () => {
@@ -105,7 +112,11 @@ const QuotesList = ({
 
   const handlePageChange = (page) => {
     goToPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      if (document.body) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 0);
   };
 
   const getActiveFiltersCount = () => {
@@ -120,7 +131,7 @@ const QuotesList = ({
       }
     });
     refetch(cleanFilters);
-  }, [filters, refetch]);
+  }, [filters]);
 
   if (error) {
     return (
@@ -152,7 +163,7 @@ const QuotesList = ({
         </div>
 
         {showSearch && (
-          <form onSubmit={handleSearch} className="flex gap-2">
+          <div className="flex gap-2">
             <input
               type="text"
               placeholder="Search quotes..."
@@ -160,14 +171,7 @@ const QuotesList = ({
               onChange={(e) => handleFilterChange('search', e.target.value)}
               className="theme-input w-64"
             />
-            <button
-              type="submit"
-              disabled={loading}
-              className="theme-button px-4 py-2 text-sm"
-            >
-              {loading ? 'Searching...' : 'Search'}
-            </button>
-          </form>
+          </div>
         )}
       </div>
 
@@ -332,5 +336,3 @@ const QuotesList = ({
 };
 
 export default QuotesList;
-
-

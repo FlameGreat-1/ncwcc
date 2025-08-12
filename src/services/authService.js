@@ -345,11 +345,13 @@ class AuthService {
 
   setAuthData(token, userData) {
     apiService.setAuthToken(token);
+    localStorage.setItem('authToken', token);
     localStorage.setItem('user', JSON.stringify(userData.user || userData));
   }
 
   clearAuthData() {
     apiService.removeAuthToken();
+    localStorage.removeItem('authToken');
     localStorage.removeItem('user');
   }
 

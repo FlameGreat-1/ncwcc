@@ -127,6 +127,7 @@ export const AuthProvider = ({ children }) => {
       }
       
       clearAuthData();
+      authService.clearAuthData();
       googleAuthService.signOut();
       dispatch({ type: 'LOGOUT' });
       
@@ -359,6 +360,7 @@ export const AuthProvider = ({ children }) => {
     const user = getUser();
     
     if (token && user) {
+      authService.setAuthData(token, { user });
       dispatch({ 
         type: 'LOGIN_SUCCESS', 
         payload: { user, token } 

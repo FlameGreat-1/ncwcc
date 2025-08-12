@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import QuotesList from '../../components/quotes/QuotesList.jsx';
 import SEO from '../../components/common/SEO.jsx';
 import useQuotes from '../../hooks/useQuotes.js';
-import useQuoteActions from '../../hooks/useQuoteActions.js';
 
 const MyQuotes = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
   const [showStats, setShowStats] = useState(true);
   
@@ -17,29 +17,30 @@ const MyQuotes = () => {
     refetch: refetchAll 
   } = useQuotes('my', {}, true);
 
-  const { 
-    quotes: draftQuotes, 
-    loading: draftLoading 
-  } = useQuotes('my', { status: 'draft' }, activeTab === 'draft');
-
-  const { 
-    quotes: submittedQuotes, 
-    loading: submittedLoading 
-  } = useQuotes('my', { status: 'submitted' }, activeTab === 'submitted');
-
-  const { 
-    quotes: approvedQuotes, 
-    loading: approvedLoading 
-  } = useQuotes('my', { status: 'approved' }, activeTab === 'approved');
-
-  const [stats, setStats] = useState({
-    total: 0,
-    draft: 0,
-    submitted: 0,
-    approved: 0,
-    rejected: 0,
-    totalValue: 0
-  });
+  const stats = useMemo(() => {
+    if (allQuotes.length === 0) return { 
+      total: 0, 
+      draft: 0, 
+      submitted: 0, 
+      approved: 0, 
+      rejected: 0, 
+      totalValue: 0 
+    };
+    
+    return allQuotes.reduce((acc, quote) => {
+      acc.total += 1;
+      acc[quote.status] = (acc[quote.status] || 0) + 1;
+      acc.totalValue += parseFloat(quote.final_price || 0);
+      return acc;
+    }, {
+      total: 0,
+      draft: 0,
+      submitted: 0,
+      approved: 0,
+      rejected: 0,
+      totalValue: 0
+    });
+  }, [allQuotes]);
 
   const tabs = [
     { key: 'all', label: 'All Quotes', count: stats.total },
@@ -53,47 +54,21 @@ const MyQuotes = () => {
     setActiveTab(initialTab);
   }, [searchParams]);
 
-  useEffect(() => {
-    if (allQuotes.length > 0) {
-      const newStats = allQuotes.reduce((acc, quote) => {
-        acc.total += 1;
-        acc[quote.status] = (acc[quote.status] || 0) + 1;
-        acc.totalValue += parseFloat(quote.final_price || 0);
-        return acc;
-      }, {
-        total: 0,
-        draft: 0,
-        submitted: 0,
-        approved: 0,
-        rejected: 0,
-        totalValue: 0
-      });
-      setStats(newStats);
-    }
-  }, [allQuotes]);
-
   const getCurrentQuotes = () => {
-    switch (activeTab) {
-      case 'draft':
-        return { quotes: draftQuotes, loading: draftLoading };
-      case 'submitted':
-        return { quotes: submittedQuotes, loading: submittedLoading };
-      case 'approved':
-        return { quotes: approvedQuotes, loading: approvedLoading };
-      default:
-        return { quotes: allQuotes, loading: allLoading };
+    if (activeTab === 'all') {
+      return { quotes: allQuotes, loading: allLoading };
     }
+    const filteredQuotes = allQuotes.filter(quote => quote.status === activeTab);
+    return { quotes: filteredQuotes, loading: allLoading };
   };
 
   const handleTabChange = (tabKey) => {
     setActiveTab(tabKey);
-    const newSearchParams = new URLSearchParams(searchParams);
     if (tabKey === 'all') {
-      newSearchParams.delete('tab');
+      navigate('/quotes', { replace: true });
     } else {
-      newSearchParams.set('tab', tabKey);
+      navigate(`/quotes?tab=${tabKey}`, { replace: true });
     }
-    window.history.replaceState({}, '', `${window.location.pathname}?${newSearchParams}`);
   };
 
   const formatCurrency = (amount) => {
@@ -116,6 +91,10 @@ const MyQuotes = () => {
       className: 'px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-bold transition-all hover:app-bg-blue hover:text-white'
     }
   ];
+
+  const handlePDFDownload = (quoteId) => {
+    window.open(`/api/quotes/${quoteId}/pdf/`, '_blank');
+  };
 
   return (
     <>
@@ -305,9 +284,7 @@ const MyQuotes = () => {
                           </Link>
                           {quote.status === 'approved' && (
                             <button
-                              onClick={() => {
-                                
-                              }}
+                              onClick={() => handlePDFDownload(quote.id)}
                               className="px-4 py-2 theme-button"
                             >
                               PDF
@@ -328,3 +305,4 @@ const MyQuotes = () => {
 };
 
 export default MyQuotes;
+
