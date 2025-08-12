@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useLocation } from 'react-router-dom';
@@ -30,7 +30,8 @@ const Portal = () => {
     totalValue: 0
   });
 
-  const { quotes: allQuotes, loading: quotesLoading, error: quotesError } = useQuotes('my', {}, true);
+  const stableQuoteParams = useMemo(() => ({}), []);
+  const { quotes: allQuotes, loading: quotesLoading, error: quotesError } = useQuotes('my', stableQuoteParams, true);
   
   const {
     invoices: allInvoices,
