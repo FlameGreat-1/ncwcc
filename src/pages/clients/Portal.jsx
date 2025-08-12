@@ -1,17 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useLocation } from 'react-router-dom';
 
 const Portal = () => {
-  const [test] = useState('Portal Test');
+  const { user } = useAuth();
+  const { isDark } = useTheme();
+  const location = useLocation();
   
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Portal Component Test</h1>
-        <p>If you see this, the Portal component itself is not the issue.</p>
-        <p>Status: {test}</p>
+        <h1>Portal with basic hooks</h1>
+        <p>User: {user?.email}</p>
+        <p>Theme: {isDark ? 'Dark' : 'Light'}</p>
       </div>
     </div>
   );
 };
-
-export default Portal;
