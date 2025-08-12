@@ -87,6 +87,8 @@ export const useInvoices = (initialFilters = {}) => {
   }, []);
 
   const filteredInvoices = useMemo(() => {
+    if (!invoices || invoices.length === 0) return [];
+    
     let result = [...invoices];
     
     if (filters.search) {
@@ -106,9 +108,22 @@ export const useInvoices = (initialFilters = {}) => {
     }
     
     return invoicesService.sortInvoices(result, filters.ordering);
-  }, [invoices, filters.search, filters.status, filters.is_ndis_invoice, filters.email_sent, filters.ordering]); 
+  }, [invoices, filters.search, filters.status, filters.is_ndis_invoice, filters.email_sent, filters.ordering]);
 
   const invoiceStats = useMemo(() => {
+    if (!invoices || invoices.length === 0) {
+      return {
+        total: 0,
+        draft: 0,
+        sent: 0,
+        paid: 0,
+        overdue: 0,
+        ndis: 0,
+        totalAmount: 0,
+        overdueAmount: 0
+      };
+    }
+
     const stats = {
       total: invoices.length,
       draft: 0,
@@ -137,6 +152,7 @@ export const useInvoices = (initialFilters = {}) => {
   }, [invoices]);
 
   const overdueInvoices = useMemo(() => {
+    if (!invoices || invoices.length === 0) return [];
     return invoices.filter(invoice => 
       invoicesService.isInvoiceOverdue(invoice.due_date) && 
       invoice.status !== 'paid' && 
@@ -145,22 +161,31 @@ export const useInvoices = (initialFilters = {}) => {
   }, [invoices]);
 
   const recentInvoices = useMemo(() => {
-    return invoicesService.sortInvoices(invoices, '-created_at').slice(0, 5);
+    if (!invoices || invoices.length === 0) return [];
+    return invoicesService.sortInvoices([...invoices], '-created_at').slice(0, 5);
   }, [invoices]);
 
   const ndisInvoices = useMemo(() => {
+    if (!invoices || invoices.length === 0) return [];
     return invoices.filter(invoice => invoice.is_ndis_invoice);
   }, [invoices]);
 
   const getInvoiceById = useCallback((invoiceId) => {
+    if (!invoices || invoices.length === 0) return null;
     return invoices.find(invoice => invoice.id === invoiceId);
   }, [invoices]);
 
-  const hasInvoices = useMemo(() => invoices.length > 0, [invoices]);
+  const hasInvoices = useMemo(() => {
+    return invoices && invoices.length > 0;
+  }, [invoices]);
 
-  const hasOverdueInvoices = useMemo(() => overdueInvoices.length > 0, [overdueInvoices]);
+  const hasOverdueInvoices = useMemo(() => {
+    return overdueInvoices && overdueInvoices.length > 0;
+  }, [overdueInvoices]);
 
-  const hasNDISInvoices = useMemo(() => ndisInvoices.length > 0, [ndisInvoices]);
+  const hasNDISInvoices = useMemo(() => {
+    return ndisInvoices && ndisInvoices.length > 0;
+  }, [ndisInvoices]);
 
   useEffect(() => {
     fetchInvoices();
@@ -320,3 +345,4 @@ export const useNDISInvoices = () => {
     checkCompliance
   };
 };
+
