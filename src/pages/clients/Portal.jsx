@@ -48,6 +48,18 @@ const Portal = () => {
     ordering: '-created_at'
   });
 
+  console.log('🔍 Portal Debug - quoteStats:', quoteStats);
+  console.log('🔍 Portal Debug - invoiceStats:', invoiceStats);
+  console.log('🔍 Portal Debug - overdueInvoices:', overdueInvoices);
+  console.log('🔍 Portal Debug - hasOverdueInvoices:', hasOverdueInvoices);
+  console.log('🔍 Portal Debug - allQuotes:', allQuotes);
+  console.log('🔍 Portal Debug - allInvoices:', allInvoices);
+
+  console.log('🔍 Current user ID:', user?.id);
+  console.log('🔍 Current user client ID:', user?.client_id);
+  console.log('🔍 Full user object:', user);
+
+
   useEffect(() => {
     const path = location.pathname;
     if (path === '/clients/portal') {
