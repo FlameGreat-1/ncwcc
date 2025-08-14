@@ -59,7 +59,6 @@ const Portal = () => {
   console.log('🔍 Current user client ID:', user?.client_id);
   console.log('🔍 Full user object:', user);
 
-
   useEffect(() => {
     const path = location.pathname;
     if (path === '/clients/portal') {
@@ -94,8 +93,15 @@ const Portal = () => {
   }, [location.pathname]);
 
   useEffect(() => {
+    console.log('🔍 Quote stats useEffect triggered');
+    console.log('🔍 allQuotes in useEffect:', allQuotes);
+    console.log('🔍 allQuotes.length:', allQuotes?.length);
+    console.log('🔍 Array.isArray(allQuotes):', Array.isArray(allQuotes));
+    
     if (Array.isArray(allQuotes) && allQuotes.length > 0) {
+      console.log('🔍 Processing quotes for stats...');
       const stats = allQuotes.reduce((acc, quote) => {
+        console.log('🔍 Processing quote:', quote.quote_number, 'status:', quote.status, 'final_price:', quote.final_price);
         acc.total += 1;
         acc[quote.status] = (acc[quote.status] || 0) + 1;
         acc.totalValue += parseFloat(quote.final_price || 0);
@@ -108,8 +114,10 @@ const Portal = () => {
         rejected: 0,
         totalValue: 0
       });
+      console.log('🔍 Calculated stats:', stats);
       setQuoteStats(stats);
     } else {
+      console.log('🔍 No quotes to process or not an array');
       setQuoteStats({
         total: 0,
         draft: 0,
