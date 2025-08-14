@@ -48,19 +48,15 @@ const Portal = () => {
     ordering: '-created_at'
   });
 
-  console.log('🔍 Portal Debug - quoteStats:', quoteStats);
-  console.log('🔍 Portal Debug - invoiceStats:', invoiceStats);
-  console.log('🔍 Portal Debug - overdueInvoices:', overdueInvoices);
-  console.log('🔍 Portal Debug - hasOverdueInvoices:', hasOverdueInvoices);
-  console.log('🔍 Portal Debug - allQuotes:', allQuotes);
-  console.log('🔍 Portal Debug - allInvoices:', allInvoices);
-
-  console.log('🔍 Current user ID:', user?.id);
-  console.log('🔍 Current user client ID:', user?.client_id);
-  console.log('🔍 Full user object:', user);
+  // Keep only essential debug logs
+  console.log('🔍 Final Quote Stats:', quoteStats);
+  console.log('🔍 User ID:', user?.id);
 
   useEffect(() => {
     const path = location.pathname;
+    console.log('🔍 Current path:', path);
+    console.log('🔍 Path segments:', path.split('/'));
+    
     if (path === '/clients/portal') {
       setCurrentView('dashboard');
     } else if (path === '/clients/quotes') {
@@ -70,16 +66,20 @@ const Portal = () => {
     } else if (path.includes('/clients/quotes/') && path.includes('/edit')) {
       setCurrentView('edit-quote');
       const quoteId = path.split('/')[3];
+      console.log('🔍 Edit Quote ID extracted:', quoteId);
       setSelectedQuoteId(quoteId);
     } else if (path.includes('/clients/quotes/')) {
       setCurrentView('quote-detail');
       const quoteId = path.split('/')[3];
+      console.log('🔍 Quote Detail ID extracted:', quoteId);
+      console.log('🔍 Setting selectedQuoteId to:', quoteId);
       setSelectedQuoteId(quoteId);
     } else if (path === '/clients/invoices') {
       setCurrentView('invoices');
     } else if (path.includes('/clients/invoices/')) {
       setCurrentView('invoice-detail');
       const invoiceId = path.split('/')[3];
+      console.log('🔍 Invoice ID extracted:', invoiceId);
       setSelectedInvoiceId(invoiceId);
     } else if (path.startsWith('/clients/appointments')) {
       setCurrentView('appointments');
@@ -91,17 +91,11 @@ const Portal = () => {
       setCurrentView('calculator');
     }
   }, [location.pathname]);
+  
 
   useEffect(() => {
-    console.log('🔍 Quote stats useEffect triggered');
-    console.log('🔍 allQuotes in useEffect:', allQuotes);
-    console.log('🔍 allQuotes.length:', allQuotes?.length);
-    console.log('🔍 Array.isArray(allQuotes):', Array.isArray(allQuotes));
-    
     if (Array.isArray(allQuotes) && allQuotes.length > 0) {
-      console.log('🔍 Processing quotes for stats...');
       const stats = allQuotes.reduce((acc, quote) => {
-        console.log('🔍 Processing quote:', quote.quote_number, 'status:', quote.status, 'final_price:', quote.final_price);
         acc.total += 1;
         acc[quote.status] = (acc[quote.status] || 0) + 1;
         acc.totalValue += parseFloat(quote.final_price || 0);
@@ -114,10 +108,8 @@ const Portal = () => {
         rejected: 0,
         totalValue: 0
       });
-      console.log('🔍 Calculated stats:', stats);
       setQuoteStats(stats);
     } else {
-      console.log('🔍 No quotes to process or not an array');
       setQuoteStats({
         total: 0,
         draft: 0,
