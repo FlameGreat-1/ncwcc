@@ -112,9 +112,9 @@ export const useInvoices = (initialFilters = {}) => {
     
     return invoicesService.sortInvoices(Array.isArray(result) ? result : [], filters.ordering);
   }, [invoices, filters.search, filters.status, filters.is_ndis_invoice, filters.email_sent, filters.ordering]);
-  
+
   const invoiceStats = useMemo(() => {
-    if (!invoices || invoices.length === 0) {
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) {
       return {
         total: 0,
         draft: 0,
@@ -126,7 +126,7 @@ export const useInvoices = (initialFilters = {}) => {
         overdueAmount: 0
       };
     }
-
+  
     const stats = {
       total: invoices.length,
       draft: 0,
@@ -138,7 +138,9 @@ export const useInvoices = (initialFilters = {}) => {
       overdueAmount: 0
     };
     
-    invoices.forEach(invoice => {
+    const invoicesArray = Array.isArray(invoices) ? invoices : [];
+    
+    invoicesArray.forEach(invoice => {
       stats[invoice.status] = (stats[invoice.status] || 0) + 1;
       stats.totalAmount += parseFloat(invoice.total_amount || 0);
       
@@ -153,7 +155,7 @@ export const useInvoices = (initialFilters = {}) => {
     
     return stats;
   }, [invoices]);
-
+  
   const overdueInvoices = useMemo(() => {
     if (!invoices || invoices.length === 0) return [];
     return invoices.filter(invoice => 
