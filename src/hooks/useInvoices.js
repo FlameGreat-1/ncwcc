@@ -29,9 +29,10 @@ export const useInvoices = (initialFilters = {}) => {
       };
       
       const data = await invoicesService.getMyInvoices(params);
-      setInvoices(data);
+      setInvoices(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch invoices');
+      setInvoices([]);
     } finally {
       setLoading(false);
     }
@@ -71,11 +72,14 @@ export const useInvoices = (initialFilters = {}) => {
     try {
       const result = await invoicesService.resendInvoiceEmail(invoiceId);
       
-      setInvoices(prev => prev.map(invoice => 
-        invoice.id === invoiceId 
-          ? { ...invoice, email_sent: true, email_sent_at: new Date().toISOString() }
-          : invoice
-      ));
+      setInvoices(prev => {
+        const prevArray = Array.isArray(prev) ? prev : [];
+        return prevArray.map(invoice => 
+          invoice.id === invoiceId 
+            ? { ...invoice, email_sent: true, email_sent_at: new Date().toISOString() }
+            : invoice
+        );
+      });
       
       return { success: true, message: result.message };
     } catch (err) {
@@ -87,9 +91,9 @@ export const useInvoices = (initialFilters = {}) => {
   }, []);
 
   const filteredInvoices = useMemo(() => {
-    if (!invoices || invoices.length === 0) return [];
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return [];
     
-    let result = Array.isArray(invoices) ? [...invoices] : [];
+    let result = [...invoices];
     
     if (filters.search) {
       result = invoicesService.searchInvoices(result, filters.search);
@@ -107,7 +111,7 @@ export const useInvoices = (initialFilters = {}) => {
     }
     
     if (filters.email_sent !== null) {
-      result = result.filter(invoice => invoice.email_sent === filters.email_sent);
+      result = Array.isArray(result) ? result.filter(invoice => invoice.email_sent === filters.email_sent) : [];
     }
     
     return invoicesService.sortInvoices(Array.isArray(result) ? result : [], filters.ordering);
@@ -126,7 +130,7 @@ export const useInvoices = (initialFilters = {}) => {
         overdueAmount: 0
       };
     }
-  
+
     const stats = {
       total: invoices.length,
       draft: 0,
@@ -138,9 +142,7 @@ export const useInvoices = (initialFilters = {}) => {
       overdueAmount: 0
     };
     
-    const invoicesArray = Array.isArray(invoices) ? invoices : [];
-    
-    invoicesArray.forEach(invoice => {
+    invoices.forEach(invoice => {
       stats[invoice.status] = (stats[invoice.status] || 0) + 1;
       stats.totalAmount += parseFloat(invoice.total_amount || 0);
       
@@ -155,9 +157,9 @@ export const useInvoices = (initialFilters = {}) => {
     
     return stats;
   }, [invoices]);
-  
+
   const overdueInvoices = useMemo(() => {
-    if (!invoices || invoices.length === 0) return [];
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return [];
     return invoices.filter(invoice => 
       invoicesService.isInvoiceOverdue(invoice.due_date) && 
       invoice.status !== 'paid' && 
@@ -166,30 +168,30 @@ export const useInvoices = (initialFilters = {}) => {
   }, [invoices]);
 
   const recentInvoices = useMemo(() => {
-    if (!invoices || invoices.length === 0) return [];
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return [];
     return invoicesService.sortInvoices([...invoices], '-created_at').slice(0, 5);
   }, [invoices]);
 
   const ndisInvoices = useMemo(() => {
-    if (!invoices || invoices.length === 0) return [];
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return [];
     return invoices.filter(invoice => invoice.is_ndis_invoice);
   }, [invoices]);
 
   const getInvoiceById = useCallback((invoiceId) => {
-    if (!invoices || invoices.length === 0) return null;
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return null;
     return invoices.find(invoice => invoice.id === invoiceId);
   }, [invoices]);
 
   const hasInvoices = useMemo(() => {
-    return invoices && invoices.length > 0;
+    return Array.isArray(invoices) && invoices.length > 0;
   }, [invoices]);
 
   const hasOverdueInvoices = useMemo(() => {
-    return overdueInvoices && overdueInvoices.length > 0;
+    return Array.isArray(overdueInvoices) && overdueInvoices.length > 0;
   }, [overdueInvoices]);
 
   const hasNDISInvoices = useMemo(() => {
-    return ndisInvoices && ndisInvoices.length > 0;
+    return Array.isArray(ndisInvoices) && ndisInvoices.length > 0;
   }, [ndisInvoices]);
 
   useEffect(() => {
@@ -318,9 +320,10 @@ export const useNDISInvoices = () => {
     
     try {
       const data = await invoicesService.getNDISInvoices(params);
-      setNdisInvoices(data);
+      setNdisInvoices(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch NDIS invoices');
+      setNdisInvoices([]);
     } finally {
       setLoading(false);
     }
@@ -350,4 +353,3 @@ export const useNDISInvoices = () => {
     checkCompliance
   };
 };
-
