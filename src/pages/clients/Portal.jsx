@@ -82,7 +82,7 @@ const Portal = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (allQuotes && allQuotes.length > 0) {
+    if (Array.isArray(allQuotes) && allQuotes.length > 0) {
       const stats = allQuotes.reduce((acc, quote) => {
         acc.total += 1;
         acc[quote.status] = (acc[quote.status] || 0) + 1;
@@ -610,7 +610,7 @@ const Portal = () => {
                             <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
                           </div>
                         ) : allQuotes && allQuotes.length > 0 ? (
-                          allQuotes.slice(0, 3).map((quote) => (
+                          (allQuotes || []).slice(0, 3).map((quote) => (
                             <button
                               key={quote.id}
                               onClick={() => handleNavigation('quote-detail', quote.id)}
@@ -709,7 +709,7 @@ const Portal = () => {
                               <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
                             </div>
                           ) : (
-                            allInvoices.slice(0, 3).map((invoice) => (
+                            (allInvoices || []).slice(0, 3).map((invoice) => (
                               <button
                                 key={invoice.id}
                                 onClick={() => handleNavigation('invoice-detail', invoice.id)}
@@ -918,7 +918,7 @@ const Portal = () => {
             {currentView === 'invoice-detail' && selectedInvoiceId && (
               <div>
                 <InvoiceDetails
-                  invoice={allInvoices?.find(inv => inv.id === selectedInvoiceId)}
+                  invoice={(allInvoices || []).find(inv => inv.id === selectedInvoiceId)}
                   loading={invoicesLoading}
                   error={invoicesError}
                   onDownload={() => handleInvoiceDownload(selectedInvoiceId)}

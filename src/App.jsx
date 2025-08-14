@@ -8,6 +8,7 @@ import Footer from './components/common/Footer.jsx';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx';
 import ProtectedRoute, { ClientRoute } from './components/common/ProtectedRoute.jsx';
 import RouteGuard from './components/common/RouteGuard.jsx';
+import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 import './styles/theme.css';
 import './styles/globals.css';
 
@@ -113,40 +114,42 @@ const AppContent = () => {
   return (
     <LayoutWrapper>
       <Suspense fallback={<LoadingFallback />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/quote" element={<QuoteCalculator />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/ndis" element={<NDISInfo />} />
-          <Route path="/faq" element={<FAQ />} />
-          
-          <Route path="/accounts/login" element={<Login />} />
-          <Route path="/accounts/register" element={<Register />} />
-          <Route path="/accounts/password-reset" element={<PasswordReset />} />
-          <Route path="/accounts/email-verification" element={<EmailVerification />} />
-          
-          <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/quotes" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/quotes/create" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/quotes/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/quotes/:id/edit" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/invoices" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/invoices/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/appointments" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/documents" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/messages" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          <Route path="/clients/calculator" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-          
-          <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
-          <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
-          <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
-          <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
-          
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/quote" element={<QuoteCalculator />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/ndis" element={<NDISInfo />} />
+            <Route path="/faq" element={<FAQ />} />
+            
+            <Route path="/accounts/login" element={<Login />} />
+            <Route path="/accounts/register" element={<Register />} />
+            <Route path="/accounts/password-reset" element={<PasswordReset />} />
+            <Route path="/accounts/email-verification" element={<EmailVerification />} />
+            
+            <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/quotes" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/quotes/create" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/quotes/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/quotes/:id/edit" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/invoices" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/invoices/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/appointments" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/documents" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/messages" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            <Route path="/clients/calculator" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+            
+            <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
+            <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
+            <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
+            <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
+            
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ErrorBoundary>
       </Suspense>
     </LayoutWrapper>
   );
