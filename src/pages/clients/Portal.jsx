@@ -176,7 +176,7 @@ const Portal = () => {
         </svg>
       ),
       current: currentView.includes('quote'),
-      badge: quoteStats.total > 0 ? quoteStats.total : null
+      badge: (quoteStats?.total ?? 0) > 0 ? String(quoteStats?.total ?? 0) : null
     },
     {
       name: 'My Invoices',
@@ -187,7 +187,7 @@ const Portal = () => {
         </svg>
       ),
       current: currentView.includes('invoice'),
-      badge: invoiceStats?.total > 0 ? invoiceStats.total : null,
+      badge: (invoiceStats?.total ?? 0) > 0 ? String(invoiceStats?.total ?? 0) : null,
       alert: hasOverdueInvoices
     },
     {
@@ -271,7 +271,7 @@ const Portal = () => {
     const stats = [
       {
         title: 'Total Quotes',
-        value: (quoteStats?.total || 0).toString(),
+        value: String(quoteStats?.total ?? 0),
         icon: (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -284,7 +284,7 @@ const Portal = () => {
       },
       {
         title: 'Total Invoices',
-        value: (invoiceStats?.total || 0).toString(),
+        value: String(invoiceStats?.total ?? 0),
         icon: (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
@@ -298,7 +298,7 @@ const Portal = () => {
       },
       {
         title: 'Approved Quotes',
-        value: (quoteStats?.approved || 0).toString(),
+        value: String(quoteStats?.approved ?? 0),
         icon: (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -341,10 +341,10 @@ const Portal = () => {
       }
     ];
 
-    if (user?.client_type === 'ndis' && invoiceStats?.ndis > 0) {
+    if (user?.client_type === 'ndis' && (invoiceStats?.ndis ?? 0) > 0) {
       stats.push({
         title: 'NDIS Invoices',
-        value: invoiceStats.ndis.toString(),
+        value: String(invoiceStats?.ndis ?? 0),
         icon: (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -527,8 +527,8 @@ const Portal = () => {
                           Overdue Invoices Require Attention
                         </h3>
                         <p className="text-red-700 text-sm mb-2">
-                          You have {overdueInvoices?.length || 0} overdue invoice{(overdueInvoices?.length || 0) !== 1 ? 's' : ''} 
-                          totaling {formatCurrency(invoiceStats?.overdueAmount || 0)}.
+                          You have {overdueInvoices?.length ?? 0} overdue invoice{(overdueInvoices?.length ?? 0) !== 1 ? 's' : ''}
+                          totaling {formatCurrency(invoiceStats?.overdueAmount ?? 0)}.
                         </p>
                         <button
                           onClick={() => handleNavigation('invoices')}
@@ -640,7 +640,7 @@ const Portal = () => {
                                 </div>
                                 <div className="text-right">
                                   <p className="font-bold app-text-primary">
-                                    {formatCurrency(quote.final_price)}
+                                    {formatCurrency(quote?.final_price ?? 0)}
                                   </p>
                                 </div>
                               </div>
@@ -728,7 +728,7 @@ const Portal = () => {
                                         invoice.status === 'draft' ? 'app-bg-primary app-text-muted' :
                                         'bg-yellow-100 text-yellow-800'
                                       }`}>
-                                        {invoice.status.replace('_', ' ').toUpperCase()}
+                                        {(invoice?.status ?? 'unknown').replace('_', ' ').toUpperCase()}
                                       </span>
                                       {invoice.is_ndis_invoice && (
                                         <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
@@ -1072,8 +1072,8 @@ const Portal = () => {
                             Invoices & Receipts
                           </p>
                           <p className="text-sm app-text-muted">
-                            {invoiceStats?.total > 0 
-                              ? `${invoiceStats.total} invoice${invoiceStats.total !== 1 ? 's' : ''} available`
+                            {(invoiceStats?.total ?? 0) > 0 
+                              ? `${invoiceStats?.total ?? 0} invoice${(invoiceStats?.total ?? 0) !== 1 ? 's' : ''} available`
                               : 'Payment history and receipts'
                             }
                           </p>
@@ -1082,13 +1082,13 @@ const Portal = () => {
                       <button
                         onClick={() => handleNavigation('invoices')}
                         className={`px-4 py-2 rounded-full font-medium transition-all relative ${
-                          invoiceStats?.total > 0
+                          (invoiceStats?.total ?? 0) > 0
                             ? 'bg-transparent border-2 app-border-blue app-text-primary hover:app-bg-blue hover:text-white'
                             : 'app-bg-primary app-text-muted cursor-not-allowed'
                         }`}
-                        disabled={!invoiceStats?.total}
+                        disabled={!(invoiceStats?.total ?? 0)}
                       >
-                        {invoiceStats?.total > 0 ? 'View' : 'No Invoices'}
+                        {(invoiceStats?.total ?? 0) > 0 ? 'View' : 'No Invoices'}
                         {hasOverdueInvoices && (
                           <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                         )}
