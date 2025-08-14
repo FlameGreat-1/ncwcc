@@ -89,27 +89,30 @@ export const useInvoices = (initialFilters = {}) => {
   const filteredInvoices = useMemo(() => {
     if (!invoices || invoices.length === 0) return [];
     
-    let result = [...invoices];
+    let result = Array.isArray(invoices) ? [...invoices] : [];
     
     if (filters.search) {
       result = invoicesService.searchInvoices(result, filters.search);
+      result = Array.isArray(result) ? result : [];
     }
     
     if (filters.status && filters.status !== 'all') {
       result = invoicesService.filterInvoicesByStatus(result, filters.status);
+      result = Array.isArray(result) ? result : [];
     }
     
     if (filters.is_ndis_invoice !== null) {
       result = invoicesService.filterInvoicesByNDIS(result, filters.is_ndis_invoice);
+      result = Array.isArray(result) ? result : [];
     }
     
     if (filters.email_sent !== null) {
       result = result.filter(invoice => invoice.email_sent === filters.email_sent);
     }
     
-    return invoicesService.sortInvoices(result, filters.ordering);
+    return invoicesService.sortInvoices(Array.isArray(result) ? result : [], filters.ordering);
   }, [invoices, filters.search, filters.status, filters.is_ndis_invoice, filters.email_sent, filters.ordering]);
-
+  
   const invoiceStats = useMemo(() => {
     if (!invoices || invoices.length === 0) {
       return {
