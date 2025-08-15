@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useEmailVerification } from '../../../hooks/useAuth';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { validateEmail } from '../../../utils/auth';
@@ -27,26 +27,7 @@ const EmailVerificationForm = ({
   console.log("🔍 EmailVerificationForm - token:", token);
   console.log("🔍 EmailVerificationForm - token length:", token?.length);
 
-  useEffect(() => {
-    console.log("🔍 EmailVerificationForm - useEffect triggered");
-    console.log("🔍 - token:", token);
-    console.log("🔍 - token exists:", !!token);
-    console.log("🔍 - token length > 10:", token && token.length > 10);
-    console.log("🔍 - !isVerified:", !isVerified);
-    console.log("🔍 - !verificationAttempted.current:", !verificationAttempted.current);
-    
-    if (token && 
-        token.length > 10 && 
-        !isVerified && 
-        !verificationAttempted.current) {
-      console.log("🔍 EmailVerificationForm - All conditions met, calling handleTokenVerification");
-      handleTokenVerification();
-    } else {
-      console.log("🔍 EmailVerificationForm - Conditions not met, skipping verification");
-    }
-  }, [token, isVerified]); 
-  
-  const handleTokenVerification = async () => {
+  const handleTokenVerification = useCallback(async () => {
     console.log("🔍 EmailVerificationForm - handleTokenVerification called");
     console.log("🔍 - verificationAttempted.current:", verificationAttempted.current);
 
@@ -85,11 +66,29 @@ const EmailVerificationForm = ({
         : 'Email verification failed. Please try again.';
       onError?.(errorMessage);
     } finally {
-
       setAutoVerifying(false);
     }
-  };
-  
+  }, [token, verifyEmail, onSuccess, onError]);
+
+  useEffect(() => {
+    console.log("🔍 EmailVerificationForm - useEffect triggered");
+    console.log("🔍 - token:", token);
+    console.log("🔍 - token exists:", !!token);
+    console.log("🔍 - token length > 10:", token && token.length > 10);
+    console.log("🔍 - !isVerified:", !isVerified);
+    console.log("🔍 - !verificationAttempted.current:", !verificationAttempted.current);
+    
+    if (token && 
+        token.length > 10 && 
+        !isVerified && 
+        !verificationAttempted.current) {
+      console.log("🔍 EmailVerificationForm - All conditions met, calling handleTokenVerification");
+      handleTokenVerification();
+    } else {
+      console.log("🔍 EmailVerificationForm - Conditions not met, skipping verification");
+    }
+  }, [token, isVerified, handleTokenVerification]);
+
   const handleInputChange = (e) => {
     setEmail(e.target.value);
     
