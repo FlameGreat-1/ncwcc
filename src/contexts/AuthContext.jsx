@@ -314,25 +314,36 @@ export const AuthProvider = ({ children }) => {
   const verifyEmail = useCallback(async (token) => {
     setLoading(true);
     clearError();
-
+  
     try {
       const response = await authService.verifyEmail(token);
       
-      if (response.success) {
-        updateUser(response.data.user);
-        return response;
+      if (response && (response.success || response.data || response.message)) {
+        if (state.user) {
+          const updatedUser = { ...state.user, is_verified: true };
+          updateUser(updatedUser);
+        }
+        
+        const result = {
+          success: true,
+          data: response.data || response,
+          message: response.message || response.data?.message || 'Email verified successfully'
+        };
+        
+        return result;
       } else {
-        setError(response.message || 'Email verification failed');
-        return response;
+        const errorMsg = response?.message || response?.error || 'Email verification failed';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
       }
     } catch (error) {
-      const errorMessage = 'Email verification failed. Please try again.';
+      const errorMessage = error.response?.data?.message || 'Email verification failed. Please try again.';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
     }
-  }, [updateUser, setLoading, clearError, setError]);
+  }, [updateUser, setLoading, clearError, setError, state.user]);
 
   const resendVerification = useCallback(async (email) => {
     setLoading(true);
