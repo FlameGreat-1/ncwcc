@@ -32,7 +32,12 @@ const Portal = () => {
   });
 
   const emptyParams = {};
-  const { quotes: allQuotes, loading: quotesLoading, error: quotesError } = useQuotes('my', emptyParams, true);
+  const { 
+    quotes: allQuotes, 
+    loading: quotesLoading, 
+    error: quotesError,
+    totalCount 
+  } = useQuotes('my', emptyParams, true);
 
   const {
     invoices: allInvoices,
@@ -92,17 +97,15 @@ const Portal = () => {
       setCurrentView('calculator');
     }
   }, [location.pathname]);
-  
 
   useEffect(() => {
     if (Array.isArray(allQuotes) && allQuotes.length > 0) {
       const stats = allQuotes.reduce((acc, quote) => {
-        acc.total += 1;
         acc[quote.status] = (acc[quote.status] || 0) + 1;
         acc.totalValue += parseFloat(quote.final_price || 0);
         return acc;
       }, {
-        total: 0,
+        total: totalCount || 0, 
         draft: 0,
         submitted: 0,
         approved: 0,
@@ -112,7 +115,7 @@ const Portal = () => {
       setQuoteStats(stats);
     } else {
       setQuoteStats({
-        total: 0,
+        total: totalCount || 0, 
         draft: 0,
         submitted: 0,
         approved: 0,
@@ -120,8 +123,8 @@ const Portal = () => {
         totalValue: 0
       });
     }
-  }, [allQuotes]);
-
+  }, [allQuotes, totalCount]); 
+  
   const handleNavigation = (view, itemId = null) => {
     setCurrentView(view);
     if (view.includes('quote') && itemId) {
