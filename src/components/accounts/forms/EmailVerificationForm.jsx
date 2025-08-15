@@ -115,6 +115,28 @@ const EmailVerificationForm = ({
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
   
+  useEffect(() => {
+    if (token && token.length > 10) {
+      const handleBeforeUnload = () => {
+        verificationAttempted.current = true;
+      };
+      
+      const handleFocus = () => {
+        if (verificationAttempted.current && isVerified) {
+          window.close();
+        }
+      };
+  
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      window.addEventListener('focus', handleFocus);
+      
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+        window.removeEventListener('focus', handleFocus);
+      };
+    }
+  }, [token, isVerified]);
+  
   const handleInputChange = (e) => {
     setEmail(e.target.value);
     
