@@ -623,12 +623,10 @@ const Portal = () => {
                             <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
                           </div>
                         ) : allQuotes && allQuotes.length > 0 ? (
-                          (allQuotes || []).slice(0, 3).map((quote) => (
+                          (allQuotes || []).slice(0, 6).map((quote) => (
                             <button
                               key={quote.id}
                               onClick={() => {
-                                console.log('🔍 Dashboard quote object:', quote);
-                                console.log('🔍 Dashboard quote.id:', quote.id);
                                 navigate(`/clients/quotes/${quote.id}`);
                               }}
                               className="w-full block p-4 rounded-lg app-bg-secondary hover:opacity-80 transition-opacity text-left"
