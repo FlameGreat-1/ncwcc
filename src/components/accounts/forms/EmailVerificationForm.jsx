@@ -96,6 +96,25 @@ const EmailVerificationForm = ({
     }
   }, [token, isVerified, handleTokenVerification]);
   
+  useEffect(() => {
+    return () => {
+      if (verificationAttempted.current) {
+        verificationAttempted.current = true;
+      }
+    };
+  }, []);
+  
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && verificationAttempted.current) {
+        return;
+      }
+    };
+  
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+  
   const handleInputChange = (e) => {
     setEmail(e.target.value);
     
