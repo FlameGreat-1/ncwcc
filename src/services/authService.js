@@ -218,6 +218,7 @@ class AuthService {
       const response = await apiService.post(API_ENDPOINTS.AUTH.PASSWORD_RESET_CONFIRM, {
         token,
         new_password: newPassword,
+        new_password_confirm: newPassword  
       });
       return response.data;
     } catch (error) {
