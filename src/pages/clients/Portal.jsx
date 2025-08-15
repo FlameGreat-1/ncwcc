@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProfileAvatar from '../../components/common/ProfileAvatar';
 import useQuotes from '../../hooks/useQuotes';
 import { useInvoices } from '../../hooks/useInvoices';
@@ -17,6 +17,7 @@ const Portal = () => {
   const { user, isVerified, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedQuoteId, setSelectedQuoteId] = useState(null);
@@ -628,7 +629,7 @@ const Portal = () => {
                               onClick={() => {
                                 console.log('🔍 Dashboard quote object:', quote);
                                 console.log('🔍 Dashboard quote.id:', quote.id);
-                                handleNavigation('quote-detail', quote.id);
+                                navigate(`/clients/quotes/${quote.id}`);
                               }}
                               className="w-full block p-4 rounded-lg app-bg-secondary hover:opacity-80 transition-opacity text-left"
                             >
