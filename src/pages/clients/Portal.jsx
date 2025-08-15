@@ -122,16 +122,27 @@ const Portal = () => {
   }, [allQuotes]);
 
   const handleNavigation = (view, itemId = null) => {
+    console.log('🔍 Navigation called:', view, 'ID:', itemId); // Debug log
+    
     setCurrentView(view);
-    if (view.includes('quote') && itemId) {
+    
+    // Clear previous selections first
+    setSelectedQuoteId(null);
+    setSelectedInvoiceId(null);
+    
+    // Set the appropriate ID based on the specific view
+    if (view === 'quote-detail' && itemId) {
       setSelectedQuoteId(itemId);
-    } else if (view.includes('invoice') && itemId) {
+    } else if (view === 'edit-quote' && itemId) {
+      setSelectedQuoteId(itemId);
+    } else if (view === 'invoice-detail' && itemId) {
       setSelectedInvoiceId(itemId);
     }
+    
     setSidebarOpen(false);
     window.history.pushState({}, '', getUrlForView(view, itemId));
   };
-
+  
   const handleInvoiceDownload = async (invoiceId) => {
     const result = await downloadInvoice(invoiceId);
     if (result.success) {
