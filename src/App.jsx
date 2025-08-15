@@ -88,15 +88,18 @@ const ThemeOrchestrator = ({ children }) => {
 
 const LayoutWrapper = ({ children }) => {
   const location = useLocation();
-  const isPortalRoute = location.pathname.startsWith('/clients/');
-  const isQuoteRoute = location.pathname.startsWith('/quotes/');
+  const isPortalRoute = location.pathname.startsWith('/clients');
+  const isQuoteRoute = location.pathname.startsWith('/quotes');
+  const isAccountRoute = location.pathname.startsWith('/accounts');
 
   console.log('🔍 LayoutWrapper - Current path:', location.pathname);
   console.log('🔍 LayoutWrapper - isPortalRoute:', isPortalRoute);
   console.log('🔍 LayoutWrapper - isQuoteRoute:', isQuoteRoute);
-  console.log('🔍 LayoutWrapper - Should hide Header/Footer:', isPortalRoute || isQuoteRoute);
+  console.log('🔍 LayoutWrapper - isAccountRoute:', isAccountRoute);
+  console.log('🔍 LayoutWrapper - Should hide Header/Footer:', isPortalRoute || isQuoteRoute || isAccountRoute);
 
-  if (isPortalRoute || isQuoteRoute) {
+  if (isPortalRoute || isQuoteRoute || isAccountRoute) {
+    console.log('🔍 LayoutWrapper - Rendering WITHOUT Header/Footer');
     return (
       <div className="min-h-screen app-bg-primary app-text-primary app-transition">
         {children}
