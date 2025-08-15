@@ -30,7 +30,7 @@ const EmailVerificationForm = ({
   const handleTokenVerification = useCallback(async () => {
     console.log("🔍 EmailVerificationForm - handleTokenVerification called");
     console.log("🔍 - verificationAttempted.current:", verificationAttempted.current);
-
+  
     if (verificationAttempted.current) {
       console.log("🔍 EmailVerificationForm - Verification already attempted, exiting");
       return;
@@ -54,6 +54,13 @@ const EmailVerificationForm = ({
       if (response?.success) {
         console.log("✅ Email verification successful");
         setIsVerified(true);
+        
+        if (window.history.replaceState) {
+          const url = new URL(window.location);
+          url.searchParams.delete('token');
+          window.history.replaceState({}, '', url);
+        }
+        
         onSuccess?.(response);
       } else {
         console.error("❌ Email verification failed:", response?.error);
