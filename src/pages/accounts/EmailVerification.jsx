@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -32,7 +32,7 @@ const EmailVerification = () => {
     }
   }, [message]);
 
-  const handleVerificationSuccess = (response) => {
+  const handleVerificationSuccess = useCallback((response) => {
     if (token) {
       setSuccess('Email verified successfully!');
       setError('');
@@ -48,21 +48,21 @@ const EmailVerification = () => {
       setSuccess('Verification email sent successfully! Please check your inbox.');
       setError('');
     }
-  };
+  }, [token, isAuthenticated, user, navigate]);
 
-  const handleVerificationError = (errorMessage) => {
+  const handleVerificationError = useCallback((errorMessage) => {
     setError(errorMessage);
     setSuccess('');
-  };
+  }, []);
 
-  const handleBackToLogin = () => {
+  const handleBackToLogin = useCallback(() => {
     if (isAuthenticated && user) {
       const redirectPath = redirectAfterLogin(user.user_type);
       navigate(redirectPath, { replace: true });
     } else {
       navigate('/accounts/login');
     }
-  };
+  }, [isAuthenticated, user, navigate]);
 
   const getPageTitle = () => {
     return token ? 'Verify Your Email' : 'Email Verification';

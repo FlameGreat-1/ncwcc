@@ -242,6 +242,15 @@ class AuthService {
       const response = await apiService.post(API_ENDPOINTS.AUTH.EMAIL_VERIFY, {
         token,
       });
+      
+      if (response.status === 200 || response.status === 201) {
+        return {
+          success: true,
+          data: response.data,
+          message: response.data.message || 'Email verified successfully'
+        };
+      }
+      
       return response.data;
     } catch (error) {
       if (error.response && error.response.data) {
