@@ -81,8 +81,7 @@ const EmailVerificationForm = ({
     if (token && 
         token.length > 10 && 
         !isVerified && 
-        !verificationAttempted.current &&
-        !autoVerifying) {
+        !verificationAttempted.current) {
       console.log("🔍 EmailVerificationForm - All conditions met, calling handleTokenVerification");
       handleTokenVerification();
     } else {
