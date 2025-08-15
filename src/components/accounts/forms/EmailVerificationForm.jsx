@@ -33,28 +33,25 @@ const EmailVerificationForm = ({
     console.log("🔍 - token exists:", !!token);
     console.log("🔍 - token length > 10:", token && token.length > 10);
     console.log("🔍 - !isVerified:", !isVerified);
-    console.log("🔍 - !autoVerifying:", !autoVerifying);
     console.log("🔍 - !verificationAttempted.current:", !verificationAttempted.current);
     
     if (token && 
         token.length > 10 && 
         !isVerified && 
-        !autoVerifying && 
         !verificationAttempted.current) {
       console.log("🔍 EmailVerificationForm - All conditions met, calling handleTokenVerification");
       handleTokenVerification();
     } else {
       console.log("🔍 EmailVerificationForm - Conditions not met, skipping verification");
     }
-  }, [token]);
-
+  }, [token, isVerified]); 
+  
   const handleTokenVerification = async () => {
     console.log("🔍 EmailVerificationForm - handleTokenVerification called");
-    console.log("🔍 - autoVerifying:", autoVerifying);
     console.log("🔍 - verificationAttempted.current:", verificationAttempted.current);
-    
-    if (autoVerifying || verificationAttempted.current) {
-      console.log("🔍 EmailVerificationForm - Exiting early");
+
+    if (verificationAttempted.current) {
+      console.log("🔍 EmailVerificationForm - Verification already attempted, exiting");
       return;
     }
     
@@ -68,23 +65,31 @@ const EmailVerificationForm = ({
         setTimeout(() => reject(new Error('Verification timeout')), 30000)
       );
       
-      const verificationPromise = verifyEmail(token);
+      const response = await Promise.race([
+        verifyEmail(token),
+        timeoutPromise
+      ]);
       
-      const response = await Promise.race([verificationPromise, timeoutPromise]);
-      
-      if (response.success) {
+      if (response?.success) {
+        console.log("✅ Email verification successful");
         setIsVerified(true);
         onSuccess?.(response);
       } else {
-        onError?.(response.error || 'Email verification failed');
+        console.error("❌ Email verification failed:", response?.error);
+        onError?.(response?.error || 'Email verification failed');
       }
     } catch (err) {
-      onError?.(err.message === 'Verification timeout' ? 'Verification timed out. Please try again.' : 'Email verification failed');
+      console.error("❌ Email verification error:", err);
+      const errorMessage = err.message === 'Verification timeout' 
+        ? 'Verification timed out. Please try again.' 
+        : 'Email verification failed. Please try again.';
+      onError?.(errorMessage);
     } finally {
+
       setAutoVerifying(false);
     }
   };
-
+  
   const handleInputChange = (e) => {
     setEmail(e.target.value);
     
