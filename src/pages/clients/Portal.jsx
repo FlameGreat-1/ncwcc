@@ -627,6 +627,8 @@ const Portal = () => {
                             <button
                               key={quote.id}
                               onClick={() => {
+                                console.log('🔍 Dashboard quote object:', quote);
+                                console.log('🔍 Dashboard quote.id:', quote.id);
                                 navigate(`/clients/quotes/${quote.id}`);
                               }}
                               className="w-full block p-4 rounded-lg app-bg-secondary hover:opacity-80 transition-opacity text-left"
