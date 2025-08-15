@@ -14,8 +14,11 @@ const Header = () => {
   const { isAuthenticated, user, logout } = useAuth();
 
   const landingPages = ['/', '/about', '/services', '/contact', '/quote', '/gallery', '/ndis', '/faq'];
+  const isEmailVerificationPage = location.pathname.includes('/email-verification') || 
+                               location.pathname.includes('/verify-email') ||
+                               location.search.includes('token=');
   const isLandingPage = landingPages.includes(location.pathname);
-  const showAuthButtons = isAuthenticated && !isLandingPage;
+  const showAuthButtons = isAuthenticated && !isLandingPage && !isEmailVerificationPage;
 
   useEffect(() => {
     const handleScroll = () => {
