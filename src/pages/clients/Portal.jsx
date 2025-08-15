@@ -122,27 +122,16 @@ const Portal = () => {
   }, [allQuotes]);
 
   const handleNavigation = (view, itemId = null) => {
-    console.log('🔍 Navigation called:', view, 'ID:', itemId); // Debug log
-    
     setCurrentView(view);
-    
-    // Clear previous selections first
-    setSelectedQuoteId(null);
-    setSelectedInvoiceId(null);
-    
-    // Set the appropriate ID based on the specific view
-    if (view === 'quote-detail' && itemId) {
+    if (view.includes('quote') && itemId) {
       setSelectedQuoteId(itemId);
-    } else if (view === 'edit-quote' && itemId) {
-      setSelectedQuoteId(itemId);
-    } else if (view === 'invoice-detail' && itemId) {
+    } else if (view.includes('invoice') && itemId) {
       setSelectedInvoiceId(itemId);
     }
-    
     setSidebarOpen(false);
     window.history.pushState({}, '', getUrlForView(view, itemId));
   };
-  
+
   const handleInvoiceDownload = async (invoiceId) => {
     const result = await downloadInvoice(invoiceId);
     if (result.success) {
@@ -636,7 +625,11 @@ const Portal = () => {
                           (allQuotes || []).slice(0, 3).map((quote) => (
                             <button
                               key={quote.id}
-                              onClick={() => handleNavigation('quote-detail', quote.id)}
+                              onClick={() => {
+                                console.log('🔍 Dashboard quote object:', quote);
+                                console.log('🔍 Dashboard quote.id:', quote.id);
+                                handleNavigation('quote-detail', quote.id);
+                              }}
                               className="w-full block p-4 rounded-lg app-bg-secondary hover:opacity-80 transition-opacity text-left"
                             >
                               <div className="flex items-start justify-between">
