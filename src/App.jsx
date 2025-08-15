@@ -91,6 +91,11 @@ const LayoutWrapper = ({ children }) => {
   const isPortalRoute = location.pathname.startsWith('/clients/');
   const isQuoteRoute = location.pathname.startsWith('/quotes/');
 
+  console.log('🔍 LayoutWrapper - Current path:', location.pathname);
+  console.log('🔍 LayoutWrapper - isPortalRoute:', isPortalRoute);
+  console.log('🔍 LayoutWrapper - isQuoteRoute:', isQuoteRoute);
+  console.log('🔍 LayoutWrapper - Should hide Header/Footer:', isPortalRoute || isQuoteRoute);
+
   if (isPortalRoute || isQuoteRoute) {
     return (
       <div className="min-h-screen app-bg-primary app-text-primary app-transition">
@@ -98,6 +103,8 @@ const LayoutWrapper = ({ children }) => {
       </div>
     );
   }
+
+  console.log('🔍 LayoutWrapper - Rendering WITH Header/Footer');
 
   return (
     <div className="min-h-screen app-bg-primary app-text-primary flex flex-col app-transition">
