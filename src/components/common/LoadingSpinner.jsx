@@ -7,62 +7,93 @@ const LoadingSpinner = ({
   text = '',
   className = ''
 }) => {
-  const logoSizeClasses = {
-    nano: { container: 'w-3 h-3', logo: 'w-2 h-2', ring: 'w-3 h-3' },
-    micro: { container: 'w-4 h-4', logo: 'w-2.5 h-2.5', ring: 'w-4 h-4' },
-    tiny: { container: 'w-5 h-5', logo: 'w-3 h-3', ring: 'w-5 h-5' },
-    xxs: { container: 'w-6 h-6', logo: 'w-4 h-4', ring: 'w-6 h-6' },
-    xs: { container: 'w-8 h-8', logo: 'w-5 h-5', ring: 'w-8 h-8' },
-    sm: { container: 'w-12 h-12', logo: 'w-8 h-8', ring: 'w-12 h-12' },
-    md: { container: 'w-16 h-16', logo: 'w-10 h-10', ring: 'w-16 h-16' },
-    lg: { container: 'w-20 h-20', logo: 'w-12 h-12', ring: 'w-20 h-20' },
-    xl: { container: 'w-28 h-28', logo: 'w-16 h-16', ring: 'w-28 h-28' },
-    '2xl': { container: 'w-32 h-32', logo: 'w-20 h-20', ring: 'w-32 h-32' }
+  const logoSizeStyles = {
+    nano: { 
+      container: { width: '10px', height: '10px' }, 
+      logo: { width: '6px', height: '6px' }, 
+      ring: { width: '10px', height: '10px' } 
+    },
+    micro: { 
+      container: { width: '12px', height: '12px' }, 
+      logo: { width: '8px', height: '8px' }, 
+      ring: { width: '12px', height: '12px' } 
+    },
+    tiny: { 
+      container: { width: '16px', height: '16px' }, 
+      logo: { width: '10px', height: '10px' }, 
+      ring: { width: '16px', height: '16px' } 
+    }
   };
 
-  const sizeClasses = {
-    nano: 'w-0.5 h-0.5',
-    micro: 'w-1 h-1',
-    tiny: 'w-1.5 h-1.5',
-    xxs: 'w-2 h-2',
-    xs: 'w-2.5 h-2.5',
-    sm: 'w-3 h-3',
-    md: 'w-4 h-4',
-    lg: 'w-6 h-6',
-    xl: 'w-8 h-8',
-    '2xl': 'w-12 h-12'
+  const sizeStyles = {
+    nano: { width: '4px', height: '4px' },
+    micro: { width: '6px', height: '6px' },
+    tiny: { width: '8px', height: '8px' }
   };
   
   const colorClasses = {
-    primary: 'border-[#006da6]',
-    white: 'border-white',
-    gray: 'border-gray-400',
-    black: 'border-black',
-    gradient: 'border-transparent'
+    primary: '#006da6',
+    white: '#ffffff',
+    gray: '#9ca3af',
+    black: '#000000'
   };
 
   const BrandedSpinner = () => {
-    const sizes = logoSizeClasses[size];
+    const sizes = logoSizeStyles[size];
     
     return (
-      <div className="flex flex-col items-center justify-center">
-        <div className={`relative flex items-center justify-center ${sizes.container}`}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ 
+          position: 'relative', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          ...sizes.container
+        }}>
           <img
             src="/logo.svg"
             alt="NSWCC Logo"
-            className={`${sizes.logo} object-contain z-10`}
+            style={{
+              ...sizes.logo,
+              objectFit: 'contain',
+              zIndex: 10
+            }}
           />
           <div 
-            className={`absolute top-0 left-0 ${sizes.ring} border-[0.25px] border-transparent border-t-[#006da6] border-r-[#0080c7] rounded-full animate-spin`}
-            style={{ animationDuration: '2s' }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              ...sizes.ring,
+              border: '0.5px solid transparent',
+              borderTopColor: '#006da6',
+              borderRightColor: '#0080c7',
+              borderRadius: '50%',
+              animation: 'spin 2s linear infinite'
+            }}
           ></div>
           <div 
-            className={`absolute top-0 left-0 ${sizes.ring} border-[0.25px] border-transparent border-b-[#180c2e] border-l-[#2d1b4e] rounded-full animate-spin`}
-            style={{ animationDuration: '3s', animationDirection: 'reverse' }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              ...sizes.ring,
+              border: '0.5px solid transparent',
+              borderBottomColor: '#180c2e',
+              borderLeftColor: '#2d1b4e',
+              borderRadius: '50%',
+              animation: 'spin 3s linear infinite reverse'
+            }}
           ></div>
         </div>
         {text && (
-          <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 animate-pulse mt-0.5">
+          <p style={{ 
+            fontSize: '8px', 
+            fontWeight: '500', 
+            color: '#6b7280', 
+            marginTop: '2px',
+            animation: 'pulse 2s ease-in-out infinite'
+          }}>
             {text}
           </p>
         )}
@@ -71,14 +102,21 @@ const LoadingSpinner = ({
   };
 
   const ClassicSpinner = () => (
-    <div className="flex flex-col items-center justify-center">
-      <div className={`animate-spin rounded-full border-[0.25px] border-transparent ${sizeClasses[size]} ${
-        color === 'gradient' 
-          ? 'border-t-[#006da6] border-r-[#0080c7] border-b-[#180c2e]' 
-          : `border-t-current ${colorClasses[color]}`
-      }`}></div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{
+        ...sizeStyles[size],
+        border: '0.5px solid transparent',
+        borderTopColor: colorClasses[color] || '#006da6',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite'
+      }}></div>
       {text && (
-        <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 mt-0.5">
+        <p style={{ 
+          fontSize: '8px', 
+          fontWeight: '500', 
+          color: '#6b7280', 
+          marginTop: '2px'
+        }}>
           {text}
         </p>
       )}
@@ -86,10 +124,20 @@ const LoadingSpinner = ({
   );
 
   const PulseSpinner = () => (
-    <div className="flex flex-col items-center justify-center">
-      <div className={`${sizeClasses[size]} rounded-full bg-gradient-to-r from-[#006da6] to-[#180c2e] animate-pulse`}></div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{
+        ...sizeStyles[size],
+        borderRadius: '50%',
+        background: 'linear-gradient(to right, #006da6, #180c2e)',
+        animation: 'pulse 2s ease-in-out infinite'
+      }}></div>
       {text && (
-        <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 mt-0.5">
+        <p style={{ 
+          fontSize: '8px', 
+          fontWeight: '500', 
+          color: '#6b7280', 
+          marginTop: '2px'
+        }}>
           {text}
         </p>
       )}
@@ -97,14 +145,40 @@ const LoadingSpinner = ({
   );
 
   const DotsSpinner = () => (
-    <div className="flex flex-col items-center justify-center">
-      <div className="flex space-x-0.5">
-        <div className="w-0.5 h-0.5 bg-[#006da6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-        <div className="w-0.5 h-0.5 bg-[#0080c7] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-        <div className="w-0.5 h-0.5 bg-[#180c2e] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', gap: '1px' }}>
+        <div style={{
+          width: '2px',
+          height: '2px',
+          backgroundColor: '#006da6',
+          borderRadius: '50%',
+          animation: 'bounce 1.4s ease-in-out infinite',
+          animationDelay: '0ms'
+        }}></div>
+        <div style={{
+          width: '2px',
+          height: '2px',
+          backgroundColor: '#0080c7',
+          borderRadius: '50%',
+          animation: 'bounce 1.4s ease-in-out infinite',
+          animationDelay: '150ms'
+        }}></div>
+        <div style={{
+          width: '2px',
+          height: '2px',
+          backgroundColor: '#180c2e',
+          borderRadius: '50%',
+          animation: 'bounce 1.4s ease-in-out infinite',
+          animationDelay: '300ms'
+        }}></div>
       </div>
       {text && (
-        <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 mt-0.5">
+        <p style={{ 
+          fontSize: '8px', 
+          fontWeight: '500', 
+          color: '#6b7280', 
+          marginTop: '2px'
+        }}>
           {text}
         </p>
       )}
