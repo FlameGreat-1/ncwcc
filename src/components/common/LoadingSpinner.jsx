@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 
 const LoadingSpinner = ({ 
-  size = 'md', 
+  size = 'xs', 
   variant = 'branded',
   color = 'primary', 
   text = '',
   className = ''
 }) => {
   const logoSizeClasses = {
+    xxs: { container: 'w-8 h-8', logo: 'w-5 h-5', ring: 'w-8 h-8' },
     xs: { container: 'w-12 h-12', logo: 'w-8 h-8', ring: 'w-12 h-12' },
     sm: { container: 'w-16 h-16', logo: 'w-10 h-10', ring: 'w-16 h-16' },
     md: { container: 'w-20 h-20', logo: 'w-12 h-12', ring: 'w-20 h-20' },
@@ -17,6 +18,7 @@ const LoadingSpinner = ({
   };
 
   const sizeClasses = {
+    xxs: 'w-2 h-2',
     xs: 'w-3 h-3',
     sm: 'w-4 h-4',
     md: 'w-6 h-6',
