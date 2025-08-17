@@ -219,19 +219,22 @@
   .loading-spinner-modern {
     @apply relative;
   }
-
+  
   .loading-spinner-modern::before {
     @apply absolute -inset-2 rounded-full blur-lg animate-pulse;
     content: '';
     background: var(--gradient-glow);
   }
-
+  
   .loading-spinner-modern::after {
-    @apply w-6 h-6 border-2 border-transparent rounded-full animate-spin;
+    @apply border-2 border-transparent rounded-full animate-spin;
     content: '';
     border-image: var(--gradient-primary) 1;
     border-top-color: var(--color-primary-blue);
-  }
+    width: inherit;
+    height: inherit;
+  }  
+ 
 }
 
 @layer utilities {
