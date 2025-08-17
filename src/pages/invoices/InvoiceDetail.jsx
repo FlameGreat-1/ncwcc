@@ -17,6 +17,11 @@ const InvoiceDetail = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   
+  if (!id) {
+    navigate('/clients/invoices');
+    return null;
+  }
+  
   const {
     invoice,
     loading,
@@ -25,6 +30,30 @@ const InvoiceDetail = () => {
     downloadInvoice,
     resendEmail
   } = useInvoiceDetail(id);
+
+  if (!downloadInvoice || !resendEmail) {
+    return (
+      <div className="min-h-screen app-bg-primary">
+        <div className="container section-padding">
+          <div className="text-center py-16">
+            <ExclamationTriangleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold app-text-primary mb-2">
+              System Error
+            </h1>
+            <p className="app-text-muted mb-6">
+              Unable to initialize invoice system. Please try again.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="btn-md btn-modern-primary"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleDownloadInvoice = async () => {
     const result = await downloadInvoice();
@@ -222,7 +251,7 @@ const InvoiceDetail = () => {
             />
           </div>
 
-          {invoice.quote && (
+          {invoice.quote?.id && (
             <div className="mt-8 glass-card animate-fade-in-up delay-200">
               <h3 className="font-semibold app-text-primary mb-3">
                 Related Quote

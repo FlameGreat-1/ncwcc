@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from 'react';
+import { memo, useState, useMemo, useRef } from 'react';
 import { 
   MagnifyingGlassIcon, 
   FunnelIcon,
@@ -21,6 +21,7 @@ const InvoicesList = memo(({
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [localSearch, setLocalSearch] = useState(filters.search || '');
+  const searchTimeoutRef = useRef(null);
 
   const statusOptions = [
     { value: 'all', label: 'All Status' },
@@ -45,11 +46,13 @@ const InvoicesList = memo(({
     const value = e.target.value;
     setLocalSearch(value);
     
-    const timeoutId = setTimeout(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    searchTimeoutRef.current = setTimeout(() => {
       onFiltersChange?.({ ...filters, search: value });
     }, 300);
-
-    return () => clearTimeout(timeoutId);
   };
 
   const handleFilterChange = (key, value) => {

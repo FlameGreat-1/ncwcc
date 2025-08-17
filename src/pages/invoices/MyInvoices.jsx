@@ -17,7 +17,7 @@ import { toast } from 'react-hot-toast';
 const MyInvoices = () => {
   const { user } = useAuth();
   const [selectedTab, setSelectedTab] = useState('all');
-  
+
   const {
     invoices,
     loading,
@@ -34,13 +34,30 @@ const MyInvoices = () => {
     status: 'all',
     ordering: '-created_at'
   });
+  
+  if (!invoiceStats) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <ExclamationTriangleIcon className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold app-text-primary mb-2">
+            Failed to Load Invoice Data
+          </h3>
+          <p className="app-text-muted mb-4">Unable to initialize invoice system</p>
+          <button onClick={() => window.location.reload()} className="btn-md btn-modern-primary">
+            Reload Page
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const tabs = [
-    { id: 'all', label: 'All Invoices', count: invoiceStats.total },
-    { id: 'draft', label: 'Draft', count: invoiceStats.draft },
-    { id: 'sent', label: 'Sent', count: invoiceStats.sent },
-    { id: 'paid', label: 'Paid', count: invoiceStats.paid },
-    { id: 'overdue', label: 'Overdue', count: invoiceStats.overdue }
+    { id: 'all', label: 'All Invoices', count: invoiceStats?.total || 0 },
+    { id: 'draft', label: 'Draft', count: invoiceStats?.draft || 0 },
+    { id: 'sent', label: 'Sent', count: invoiceStats?.sent || 0 },
+    { id: 'paid', label: 'Paid', count: invoiceStats?.paid || 0 },
+    { id: 'overdue', label: 'Overdue', count: invoiceStats?.overdue || 0 }
   ];
 
   const handleTabChange = (tabId) => {
@@ -73,50 +90,59 @@ const MyInvoices = () => {
     updateFilters(newFilters);
   };
 
-  const statsCards = useMemo(() => [
-    {
-      title: 'Total Invoices',
-      value: invoiceStats.total,
-      icon: DocumentTextIcon,
-      color: 'blue',
-      bgColor: 'bg-blue-50',
-      textColor: 'text-blue-600',
-      borderColor: 'border-blue-200'
-    },
-    {
-      title: 'Total Amount',
-      value: new Intl.NumberFormat('en-AU', {
-        style: 'currency',
-        currency: 'AUD'
-      }).format(invoiceStats.totalAmount),
-      icon: CurrencyDollarIcon,
-      color: 'green',
-      bgColor: 'bg-green-50',
-      textColor: 'text-green-600',
-      borderColor: 'border-green-200'
-    },
-    {
-      title: 'Overdue Amount',
-      value: new Intl.NumberFormat('en-AU', {
-        style: 'currency',
-        currency: 'AUD'
-      }).format(invoiceStats.overdueAmount),
-      icon: ExclamationTriangleIcon,
-      color: 'red',
-      bgColor: 'bg-red-50',
-      textColor: 'text-red-600',
-      borderColor: 'border-red-200'
-    },
-    {
-      title: 'NDIS Invoices',
-      value: invoiceStats.ndis,
-      icon: ShieldCheckIcon,
-      color: 'indigo',
-      bgColor: 'bg-indigo-50',
-      textColor: 'text-indigo-600',
-      borderColor: 'border-indigo-200'
-    }
-  ], [invoiceStats]);
+  const statsCards = useMemo(() => {
+    const safeStats = {
+      total: invoiceStats?.total || 0,
+      totalAmount: invoiceStats?.totalAmount || 0,
+      overdueAmount: invoiceStats?.overdueAmount || 0,
+      ndis: invoiceStats?.ndis || 0
+    };
+  
+    return [
+      {
+        title: 'Total Invoices',
+        value: safeStats.total,
+        icon: DocumentTextIcon,
+        color: 'blue',
+        bgColor: 'bg-blue-50',
+        textColor: 'text-blue-600',
+        borderColor: 'border-blue-200'
+      },
+      {
+        title: 'Total Amount',
+        value: new Intl.NumberFormat('en-AU', {
+          style: 'currency',
+          currency: 'AUD'
+        }).format(safeStats.totalAmount),
+        icon: CurrencyDollarIcon,
+        color: 'green',
+        bgColor: 'bg-green-50',
+        textColor: 'text-green-600',
+        borderColor: 'border-green-200'
+      },
+      {
+        title: 'Overdue Amount',
+        value: new Intl.NumberFormat('en-AU', {
+          style: 'currency',
+          currency: 'AUD'
+        }).format(safeStats.overdueAmount),
+        icon: ExclamationTriangleIcon,
+        color: 'red',
+        bgColor: 'bg-red-50',
+        textColor: 'text-red-600',
+        borderColor: 'border-red-200'
+      },
+      {
+        title: 'NDIS Invoices',
+        value: safeStats.ndis,
+        icon: ShieldCheckIcon,
+        color: 'indigo',
+        bgColor: 'bg-indigo-50',
+        textColor: 'text-indigo-600',
+        borderColor: 'border-indigo-200'
+      }
+    ];
+  }, [invoiceStats]);
 
   useEffect(() => {
     document.title = 'My Invoices - Client Portal';
@@ -313,7 +339,7 @@ const MyInvoices = () => {
                 
                 <div className="text-center p-4 app-bg-secondary rounded-lg">
                   <p className="text-2xl font-bold text-green-600">
-                    {Math.round((invoiceStats.ndis / invoiceStats.total) * 100)}%
+                  {invoiceStats?.total > 0 ? Math.round((invoiceStats.ndis / invoiceStats.total) * 100) : 0}%
                   </p>
                   <p className="text-sm app-text-muted">of Total Invoices</p>
                 </div>

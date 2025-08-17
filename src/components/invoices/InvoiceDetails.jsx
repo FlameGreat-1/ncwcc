@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { 
   DocumentArrowDownIcon,
   EnvelopeIcon,
@@ -29,6 +29,11 @@ const InvoiceDetails = memo(({
     download: false,
     email: false
   });
+  const [isMounted, setIsMounted] = useState(true);
+
+  useEffect(() => {
+    return () => setIsMounted(false);
+  }, []);
 
   if (loading) {
     return (
@@ -74,7 +79,9 @@ const InvoiceDetails = memo(({
     try {
       await onDownload?.(invoice.id);
     } finally {
-      setActionLoading(prev => ({ ...prev, download: false }));
+      if (isMounted) {
+        setActionLoading(prev => ({ ...prev, download: false }));
+      }
     }
   };
 
@@ -85,7 +92,9 @@ const InvoiceDetails = memo(({
     try {
       await onResendEmail?.(invoice.id);
     } finally {
-      setActionLoading(prev => ({ ...prev, email: false }));
+      if (isMounted) {
+        setActionLoading(prev => ({ ...prev, email: false }));
+      }
     }
   };
 
@@ -99,7 +108,7 @@ const InvoiceDetails = memo(({
 
   return (
     <div className={`space-y-6 ${className}`}>
-          <div className="glass-card">
+      <div className="glass-card">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-6">
           <div className="flex-1">
             <div className="flex items-center gap-4 mb-4">
@@ -335,6 +344,3 @@ const InvoiceDetails = memo(({
 InvoiceDetails.displayName = 'InvoiceDetails';
 
 export default InvoiceDetails;
-
-
-    
