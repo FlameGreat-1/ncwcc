@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 
 const LoadingSpinner = ({ 
-  size = 'micro', 
+  size = 'nano', 
   variant = 'branded',
   color = 'primary', 
   text = '',
   className = ''
 }) => {
   const logoSizeClasses = {
+    nano: { container: 'w-3 h-3', logo: 'w-2 h-2', ring: 'w-3 h-3' },
     micro: { container: 'w-4 h-4', logo: 'w-2.5 h-2.5', ring: 'w-4 h-4' },
     tiny: { container: 'w-5 h-5', logo: 'w-3 h-3', ring: 'w-5 h-5' },
     xxs: { container: 'w-6 h-6', logo: 'w-4 h-4', ring: 'w-6 h-6' },
@@ -20,6 +21,7 @@ const LoadingSpinner = ({
   };
 
   const sizeClasses = {
+    nano: 'w-0.5 h-0.5',
     micro: 'w-1 h-1',
     tiny: 'w-1.5 h-1.5',
     xxs: 'w-2 h-2',
@@ -43,7 +45,7 @@ const LoadingSpinner = ({
     const sizes = logoSizeClasses[size];
     
     return (
-      <div className="flex flex-col items-center justify-center space-y-1">
+      <div className="flex flex-col items-center justify-center">
         <div className={`relative flex items-center justify-center ${sizes.container}`}>
           <img
             src="/logo.svg"
@@ -51,16 +53,16 @@ const LoadingSpinner = ({
             className={`${sizes.logo} object-contain z-10`}
           />
           <div 
-            className={`absolute top-0 left-0 ${sizes.ring} border-[0.5px] border-transparent border-t-[#006da6] border-r-[#0080c7] rounded-full animate-spin`}
+            className={`absolute top-0 left-0 ${sizes.ring} border-[0.25px] border-transparent border-t-[#006da6] border-r-[#0080c7] rounded-full animate-spin`}
             style={{ animationDuration: '2s' }}
           ></div>
           <div 
-            className={`absolute top-0 left-0 ${sizes.ring} border-[0.5px] border-transparent border-b-[#180c2e] border-l-[#2d1b4e] rounded-full animate-spin`}
+            className={`absolute top-0 left-0 ${sizes.ring} border-[0.25px] border-transparent border-b-[#180c2e] border-l-[#2d1b4e] rounded-full animate-spin`}
             style={{ animationDuration: '3s', animationDirection: 'reverse' }}
           ></div>
         </div>
         {text && (
-          <p className="text-[10px] font-medium text-gray-600 dark:text-gray-300 animate-pulse">
+          <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 animate-pulse mt-0.5">
             {text}
           </p>
         )}
@@ -69,14 +71,14 @@ const LoadingSpinner = ({
   };
 
   const ClassicSpinner = () => (
-    <div className="flex flex-col items-center justify-center space-y-1">
-      <div className={`animate-spin rounded-full border-[0.5px] border-transparent ${sizeClasses[size]} ${
+    <div className="flex flex-col items-center justify-center">
+      <div className={`animate-spin rounded-full border-[0.25px] border-transparent ${sizeClasses[size]} ${
         color === 'gradient' 
           ? 'border-t-[#006da6] border-r-[#0080c7] border-b-[#180c2e]' 
           : `border-t-current ${colorClasses[color]}`
       }`}></div>
       {text && (
-        <p className="text-[10px] font-medium text-gray-600 dark:text-gray-300">
+        <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 mt-0.5">
           {text}
         </p>
       )}
@@ -84,10 +86,10 @@ const LoadingSpinner = ({
   );
 
   const PulseSpinner = () => (
-    <div className="flex flex-col items-center justify-center space-y-1">
+    <div className="flex flex-col items-center justify-center">
       <div className={`${sizeClasses[size]} rounded-full bg-gradient-to-r from-[#006da6] to-[#180c2e] animate-pulse`}></div>
       {text && (
-        <p className="text-[10px] font-medium text-gray-600 dark:text-gray-300">
+        <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 mt-0.5">
           {text}
         </p>
       )}
@@ -95,14 +97,14 @@ const LoadingSpinner = ({
   );
 
   const DotsSpinner = () => (
-    <div className="flex flex-col items-center justify-center space-y-1">
+    <div className="flex flex-col items-center justify-center">
       <div className="flex space-x-0.5">
         <div className="w-0.5 h-0.5 bg-[#006da6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
         <div className="w-0.5 h-0.5 bg-[#0080c7] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
         <div className="w-0.5 h-0.5 bg-[#180c2e] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
       </div>
       {text && (
-        <p className="text-[10px] font-medium text-gray-600 dark:text-gray-300">
+        <p className="text-[8px] font-medium text-gray-600 dark:text-gray-300 mt-0.5">
           {text}
         </p>
       )}
