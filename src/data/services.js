@@ -77,7 +77,7 @@ export const servicesData = [
     id: SERVICES.PET_TREATMENT,
     title: 'office and commecial cleaning & Odour Treatment',
     description: 'Add-on service for homes with pets.',
-    icon: '🐶',
+    icon: '🏢',
     basePrice: 50,
     duration: '1-2 hours',
     includes: [
