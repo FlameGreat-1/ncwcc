@@ -1139,8 +1139,8 @@ const Portal = () => {
                       1300 123 456
                     </a>{' '}
                     or email{' '}
-                    <a href="mailto:support@nswcc.com.au" className="font-medium underline app-blue">
-                      support@nswcc.com.au
+                    <a href="mailto:support@nswcleaningcompany.com" className="font-medium underline app-blue">
+                      support@nswcleaningcompany.com
                     </a>
                   </p>
                 </div>

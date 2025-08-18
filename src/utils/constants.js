@@ -1,10 +1,10 @@
 export const COMPANY_INFO = {
-    name: 'NSWCC',
-    domain: 'nswcc.com',
+    name: 'NSW Cleaning Company',
+    domain: 'nswcleaningcompany.com',
     abn: '82 512 603 347',
     email: {
-      support: 'support@nswcc.com',
-      bookings: 'bookings@nswcc.com'
+      support: 'support@nswcleaningcompany.com',
+      bookings: 'bookings@nswcleaningcompany.com'
     },
     phone: '+61 0406977014',
     address: {
@@ -124,8 +124,8 @@ export const COMPANY_INFO = {
     wednesday: '7:00 AM - 6:00 PM',
     thursday: '7:00 AM - 6:00 PM',
     friday: '7:00 AM - 6:00 PM',
-    saturday: '8:00 AM - 4:00 PM',
-    sunday: 'Closed'
+    saturday: '7:00 AM - 6:00 PM',
+    sunday: '7:00 AM - 4:00 PM'
   };
   
   export const SERVICE_AREAS = [
