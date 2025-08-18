@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { useNavigate } from 'react-router-dom'; 
 import { 
   DocumentArrowDownIcon, 
   CalendarIcon,
@@ -12,18 +11,16 @@ import invoicesService from '../../services/invoicesService';
 const InvoiceCard = memo(({ 
   invoice, 
   onDownload, 
+  onInvoiceClick,
   className = '' 
 }) => {
-  const navigate = useNavigate(); 
   const summary = invoicesService.getInvoiceSummary(invoice);
 
-  const handleCardClick = (e) => {
-    alert(`Clicked invoice: ${invoice.id}`); // ADD THIS FOR TESTING
-    console.log('🔍 Invoice card clicked!');
-    console.log('🔍 Invoice ID:', invoice.id);
-    e.preventDefault();
-    e.stopPropagation();
-    navigate(`/clients/invoices/${invoice.id}`);
+  const handleCardClick = () => {
+    console.log('🔍 InvoiceCard clicked:', invoice.id); // DEBUG
+    if (onInvoiceClick) {
+      onInvoiceClick(invoice.id); // USE SAME AS DASHBOARD
+    }
   };
   
   const handleDownload = async (e) => {

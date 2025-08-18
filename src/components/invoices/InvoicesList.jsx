@@ -16,6 +16,7 @@ const InvoicesList = memo(({
   filters = {},
   onFiltersChange,
   onDownloadInvoice,
+  onInvoiceClick,
   className = ''
 }) => {
   const [showFilters, setShowFilters] = useState(false);
@@ -209,6 +210,7 @@ const InvoicesList = memo(({
               key={invoice.id}
               invoice={invoice}
               onDownload={onDownloadInvoice}
+              onInvoiceClick={onInvoiceClick}
               className={`animate-fade-in-up delay-${Math.min(index * 100, 500)}`}
             />
           ))}
