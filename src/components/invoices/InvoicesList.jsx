@@ -16,6 +16,7 @@ const InvoicesList = memo(({
   filters = {},
   onFiltersChange,
   onDownloadInvoice,
+  onInvoiceClick,
   className = ''
 }) => {
   const [showFilters, setShowFilters] = useState(false);
