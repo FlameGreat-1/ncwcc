@@ -122,8 +122,9 @@ const Portal = () => {
       });
     }
   }, [allQuotes, totalCount]); 
-  
+
   const handleNavigation = (view, itemId = null) => {
+    console.log('🔍 Navigation called:', view, itemId);
     setCurrentView(view);
     if (view.includes('quote') && itemId) {
       setSelectedQuoteId(itemId);
@@ -131,7 +132,8 @@ const Portal = () => {
       setSelectedInvoiceId(itemId);
     }
     setSidebarOpen(false);
-    window.history.pushState({}, '', getUrlForView(view, itemId));
+    
+    navigate(getUrlForView(view, itemId));
   };
 
   const handleInvoiceDownload = async (invoiceId) => {
@@ -721,7 +723,11 @@ const Portal = () => {
                             (allInvoices || []).slice(0, 3).map((invoice) => (
                               <button
                                 key={invoice.id}
-                                onClick={() => handleNavigation('invoice-detail', invoice.id)}
+                                onClick={() => {
+                                  console.log('🔍 Clicked invoice:', invoice.id);
+                                  console.log('🔍 Invoice object:', invoice);
+                                  handleNavigation('invoice-detail', invoice.id);
+                                }}
                                 className="w-full block p-4 rounded-lg app-bg-secondary hover:opacity-80 transition-opacity text-left"
                               >
                                 <div className="flex items-start justify-between">
