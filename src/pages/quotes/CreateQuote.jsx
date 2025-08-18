@@ -66,7 +66,6 @@ const CreateQuote = () => {
     try {
       const response = await quotesService.getQuoteTemplates({ limit: 10 });
       setTemplates(response.results || response);
-      setShowTemplates((response.results || response).length > 0);
     } catch (err) {
       console.error('Failed to load templates:', err);
     }
@@ -172,6 +171,10 @@ const CreateQuote = () => {
     setShowTemplates(false);
   };
 
+  const handleShowTemplates = () => {
+    setShowTemplates(true);
+  };
+
   if (loading && !initialFormData) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -206,8 +209,18 @@ const CreateQuote = () => {
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Create New Quote</h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Get started by choosing a template, using quick start options, or creating a quote from scratch
+              Create a new cleaning service quote with our easy-to-use form
             </p>
+            {templates.length > 0 && !selectedTemplate && !showTemplates && (
+              <div className="mt-6">
+                <button
+                  onClick={handleShowTemplates}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+                >
+                  Use Template
+                </button>
+              </div>
+            )}
           </div>
 
           {error && (
@@ -335,73 +348,9 @@ const CreateQuote = () => {
             onCancel={handleCancel}
           />
         </div>
-
-        <div className="max-w-4xl mx-auto mt-8">
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Need Help?</h3>
-            <div className="grid md:grid-cols-3 gap-4 text-sm">
-              <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Pricing Calculator</h4>
-                <p className="text-gray-600 dark:text-gray-400 mb-3">
-                  Get instant pricing estimates before creating your quote
-                </p>
-                <a
-                  href="/calculator"
-                  className="inline-block px-4 py-2 border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:ring-2 focus:ring-blue-500"
-                >
-                  Open Calculator
-                </a>
-              </div>
-
-              <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Service Guide</h4>
-                <p className="text-gray-600 dark:text-gray-400 mb-3">
-                  Learn about different cleaning services and requirements
-                </p>
-                <a
-                  href="/services"
-                  className="inline-block px-4 py-2 border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:ring-2 focus:ring-blue-500"
-                >
-                  View Services
-                </a>
-              </div>
-
-              <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Contact Support</h4>
-                <p className="text-gray-600 dark:text-gray-400 mb-3">
-                  Get help from our team if you have questions
-                </p>
-                <a
-                  href="/contact"
-                  className="inline-block px-4 py-2 border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:ring-2 focus:ring-blue-500"
-                >
-                  Get Help
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-4xl mx-auto mt-6">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 text-center">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              Save Time with Templates
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-              Create templates from your frequently used quote configurations to speed up future quote creation
-            </p>
-            <a
-              href="/templates"
-              className="inline-block px-4 py-2 border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:ring-2 focus:ring-blue-500"
-            >
-              Manage Templates
-            </a>
-          </div>
-        </div>
       </div>
     </>
   );
 };
 
 export default CreateQuote;
-
