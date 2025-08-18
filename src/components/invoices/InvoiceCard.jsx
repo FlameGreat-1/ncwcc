@@ -17,12 +17,12 @@ const InvoiceCard = memo(({
   const navigate = useNavigate(); 
   const summary = invoicesService.getInvoiceSummary(invoice);
 
-  const handleCardClick = (e) => { // ADD EVENT PARAMETER
-    e.preventDefault(); // ADD THIS
-    e.stopPropagation(); // ADD THIS
+  const handleCardClick = (e) => {
+    alert(`Clicked invoice: ${invoice.id}`); // ADD THIS FOR TESTING
     console.log('🔍 Invoice card clicked!');
     console.log('🔍 Invoice ID:', invoice.id);
-    console.log('🔍 Navigating to:', `/clients/invoices/${invoice.id}`);
+    e.preventDefault();
+    e.stopPropagation();
     navigate(`/clients/invoices/${invoice.id}`);
   };
   
