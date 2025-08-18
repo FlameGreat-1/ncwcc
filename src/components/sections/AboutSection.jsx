@@ -10,7 +10,7 @@ const AboutSection = () => {
   const features = [
     {
       icon: '🛡️',
-      text: 'NDIS registered or compliant',
+      text: 'NDIS registered provider',
       highlight: true,
       color: 'from-[#006da6] to-[#0080c7]'
     },
