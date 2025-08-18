@@ -146,10 +146,15 @@ const QuoteDetail = () => {
   };
 
   const canEdit = () => {
-    return quote && ['draft', 'rejected'].includes(quote.status) && 
-           (user?.id === quote.client || user?.is_staff);
+    if (!quote || !user) return false;
+    
+    const editableStatuses = ['draft', 'rejected'];
+    const isOwner = user.id === quote.client?.id || user.id === quote.client;
+    const isStaff = user.is_staff;
+    
+    return editableStatuses.includes(quote.status) && (isOwner || isStaff);
   };
-
+  
   const canSubmit = () => {
     return quote && quote.status === 'draft' && user?.id === quote.client;
   };
@@ -168,8 +173,7 @@ const QuoteDetail = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-center items-center min-h-96">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="flex justify-center items-center min-h-96">
           <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
         </div>
       </div>
@@ -178,16 +182,12 @@ const QuoteDetail = () => {
 
   if (error || !quote) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="theme-card text-center py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="theme-card text-center py-12">
           <div className="text-red-600 mb-4">
             <h3 className="text-lg font-semibold mb-2">Quote Not Found</h3>
             <p className="app-text-muted">{error || 'The requested quote could not be found.'}</p>
           </div>
           <div className="flex gap-4 justify-center">
-            <Link to="/quotes" className="px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white">
-              Back to Quotes
-            </Link>
             <button onClick={fetchQuoteDetails} className="theme-button">
               Try Again
             </button>
@@ -204,17 +204,7 @@ const QuoteDetail = () => {
         description={`Quote details for ${quote.cleaning_type} cleaning service`}
       />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <div className="flex items-center gap-4 mb-4">
-            <Link 
-              to="/quotes" 
-              className="app-blue hover:text-blue-800 transition-colors"
-            >
-              ← Back to Quotes
-            </Link>
-          </div>
-
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
             <div>
               <div className="flex items-center gap-4 mb-2">

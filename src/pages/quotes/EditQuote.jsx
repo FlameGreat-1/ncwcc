@@ -79,8 +79,7 @@ const EditQuote = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-center items-center min-h-96">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="flex justify-center items-center min-h-96">
           <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
         </div>
       </div>
@@ -89,8 +88,7 @@ const EditQuote = () => {
 
   if (error || !quote) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="theme-card text-center py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="theme-card text-center py-12">
           <div className="text-red-600 mb-4">
             <h3 className="text-lg font-semibold mb-2">Cannot Edit Quote</h3>
             <p className="app-text-muted">{error || 'Quote not found or cannot be edited.'}</p>
@@ -118,8 +116,7 @@ const EditQuote = () => {
 
   if (!canEdit) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="theme-card text-center py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="theme-card text-center py-12">
           <div className="text-yellow-600 mb-4">
             <h3 className="text-lg font-semibold mb-2">Quote Cannot Be Edited</h3>
             <p className="app-text-muted">
@@ -153,8 +150,7 @@ const EditQuote = () => {
         description={`Edit quote ${quote.quote_number} for ${quote.cleaning_type} cleaning service`}
       />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="mb-8">
           <div className="flex items-center gap-4 mb-6">
             <button 
               onClick={handleCancel}
