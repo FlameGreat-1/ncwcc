@@ -464,8 +464,7 @@ const Portal = () => {
           <div className="absolute inset-0 bg-black opacity-50"></div>
         </div>
       )}
-
-      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
         <header className="theme-card border-b app-border sticky top-0 z-30 flex-shrink-0">
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-14">
