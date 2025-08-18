@@ -108,7 +108,7 @@ const MyQuotes = () => {
         description="View and manage all your cleaning service quotes"
       />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
@@ -252,7 +252,7 @@ const MyQuotes = () => {
                     </Link>
                   </div>
                 ) : (
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {getCurrentQuotes().quotes.map((quote) => (
                       <div key={quote.id} className="theme-card">
                         <div className="flex justify-between items-start mb-4">
@@ -308,7 +308,7 @@ const MyQuotes = () => {
                             >
                               PDF
                             </button>
-                          )}
+                            )}
                         </div>
                       </div>
                     ))}
