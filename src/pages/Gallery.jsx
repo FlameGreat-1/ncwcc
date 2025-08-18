@@ -158,7 +158,7 @@ const Gallery = () => {
       serviceType: 'ndis',
       beforeImage: '/images/gallery/before-8.jpg',
       afterImage: '/images/gallery/after-8.jpg',
-      location: 'Sutherland Shire, NSW',
+      location: 'Greater Western Sydney, NSW',
       description: 'Regular NDIS cleaning support maintaining participant independence'
     },
     {
@@ -181,12 +181,12 @@ const Gallery = () => {
     },
     {
       id: 11,
-      title: 'Pet Hair Removal Service',
+      title: 'office and commecial cleaning Service',
       serviceType: 'general',
       beforeImage: '/images/gallery/before-11.jpg',
       afterImage: '/images/gallery/after-11.jpg',
       location: 'Western Sydney, NSW',
-      description: 'Specialized pet hair removal and odor treatment service'
+      description: 'Specialized office and commecial cleaning and odor treatment service'
     },
     {
       id: 12,

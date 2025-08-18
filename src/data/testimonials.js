@@ -44,7 +44,7 @@ export const testimonialsData = [
       id: 5,
       name: 'Lisa K.',
       location: 'Hills District, NSW',
-      service: 'Pet Hair Removal',
+      service: 'office and commecial cleaning',
       rating: 5,
       text: 'Amazing work removing pet hair from our furniture and carpets. Our golden retriever sheds everywhere, but they made our home look and smell fresh again!',
       date: '2024-02-05',
@@ -63,7 +63,7 @@ export const testimonialsData = [
     {
       id: 7,
       name: 'Amanda S.',
-      location: 'Sutherland Shire, NSW',
+      location: 'Greater Western Sydney, NSW',
       service: 'NDIS Cleaning Support',
       rating: 5,
       text: 'The team understands my specific needs as an NDIS participant. They are patient, kind, and always deliver quality cleaning services. The invoicing is perfect for my plan manager.',

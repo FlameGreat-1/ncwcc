@@ -75,13 +75,13 @@ export const servicesData = [
   },
   {
     id: SERVICES.PET_TREATMENT,
-    title: 'Pet Hair Removal & Odour Treatment',
+    title: 'office and commecial cleaning & Odour Treatment',
     description: 'Add-on service for homes with pets.',
     icon: '🐶',
     basePrice: 50,
     duration: '1-2 hours',
     includes: [
-      'Specialized pet hair removal',
+      'Specialized office and commecial cleaning',
       'Odour neutralizing treatment',
       'Pet-safe cleaning products',
       'Furniture and upholstery cleaning',

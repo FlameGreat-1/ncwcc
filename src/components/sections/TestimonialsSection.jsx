@@ -121,7 +121,7 @@ const TestimonialsSection = () => {
       'NDIS Cleaning Support': 'from-[#006da6] to-[#0080c7] text-white',
       'Deep Cleaning': 'from-purple-500 to-purple-600 text-white',
       'General Home Cleaning': 'from-gray-500 to-gray-600 text-white',
-      'Pet Hair Removal': 'from-orange-500 to-orange-600 text-white',
+      'office and commecial cleaning': 'from-orange-500 to-orange-600 text-white',
       'Window & Carpet Cleaning': 'from-indigo-500 to-indigo-600 text-white'
     };
     return serviceColors[service] || 'from-gray-500 to-gray-600 text-white';

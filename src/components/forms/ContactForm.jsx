@@ -269,7 +269,7 @@ const ContactForm = ({
                   <option value={SERVICES.DEEP}>Deep Cleaning</option>
                   <option value={SERVICES.END_OF_LEASE}>End-of-Lease Cleaning</option>
                   <option value={SERVICES.NDIS}>NDIS Cleaning Support</option>
-                  <option value={SERVICES.PET_TREATMENT}>Pet Hair Removal</option>
+                  <option value={SERVICES.PET_TREATMENT}>office and commecial cleaning</option>
                   <option value={SERVICES.WINDOW_CARPET}>Window & Carpet Cleaning</option>
                 </select>
               </div>

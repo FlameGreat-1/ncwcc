@@ -135,7 +135,7 @@ export const COMPANY_INFO = {
     'Inner West',
     'Western Sydney',
     'Northern Beaches',
-    'Sutherland Shire',
+    'Greater Western Sydney',
     'Hills District'
   ];
   

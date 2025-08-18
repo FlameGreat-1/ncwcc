@@ -72,7 +72,7 @@ const Header = () => {
     { name: 'Deep Cleaning', path: '/services#deep', icon: '✨' },
     { name: 'End-of-Lease Cleaning', path: '/services#end-of-lease', icon: '🔑' },
     { name: 'NDIS Cleaning Support', path: '/services#ndis', icon: '🛡️' },
-    { name: 'Pet Hair Removal', path: '/services#pet-treatment', icon: '🐕' },
+    { name: 'office and commecial cleaning', path: '/services#pet-treatment', icon: '🐕' },
     { name: 'Window & Carpet Cleaning', path: '/services#window-carpet', icon: '🪟' }
   ];
 
@@ -121,9 +121,9 @@ const Header = () => {
                 </div>
                 <div className="hidden sm:block">
                   <h1 className="app-text-primary font-black text-xl leading-tight tracking-tight group-hover:text-[#006da6] transition-colors duration-300">
-                    NSWCC
+                    NSW Cleaning Company
                   </h1>
-                  <p className="app-text-secondary text-xs font-semibold">Professional • Reliable • Insured</p>
+                  <p className="app-text-secondary text-xs font-semibold">NDIS APPROVED PROVIDER</p>
                 </div>
               </Link>
             </div>

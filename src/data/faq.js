@@ -3,7 +3,7 @@ export const faqData = [
       id: 1,
       category: 'General',
       question: 'What areas do you service?',
-      answer: 'We service all major areas across NSW including Sydney CBD, North Shore, Eastern Suburbs, Inner West, Western Sydney, Northern Beaches, Sutherland Shire, and Hills District. Contact us to confirm if we service your specific location.'
+      answer: 'We service all major areas across NSW including Sydney CBD, North Shore, Eastern Suburbs, Inner West, Western Sydney, Northern Beaches, Greater Western Sydney, and Hills District. Contact us to confirm if we service your specific location.'
     },
     {
       id: 2,
