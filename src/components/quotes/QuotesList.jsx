@@ -5,7 +5,7 @@ import useQuotes from '../../hooks/useQuotes.js';
 
 const QuotesList = ({ 
   type = 'my', 
-  title = 'My Quotes',
+  title = 'Quotes',
   showFilters = true,
   showSearch = true,
   cardVariant = 'default',

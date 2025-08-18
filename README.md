@@ -184,7 +184,7 @@ const Portal = () => {
       current: currentView === 'dashboard'
     },
     {
-      name: 'My Quotes',
+      name: 'Quotes',
       view: 'quotes',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,7 +251,7 @@ const Portal = () => {
   const getPageTitle = () => {
     switch (currentView) {
       case 'dashboard': return 'Dashboard';
-      case 'quotes': return 'My Quotes';
+      case 'quotes': return 'Quotes';
       case 'create-quote': return 'Create Quote';
       case 'edit-quote': return 'Edit Quote';
       case 'quote-detail': return 'Quote Details';

@@ -104,7 +104,7 @@ const MyQuotes = () => {
   return (
     <>
       <SEO 
-        title="My Quotes" 
+        title="Quotes" 
         description="View and manage all your cleaning service quotes"
       />
       
@@ -112,7 +112,7 @@ const MyQuotes = () => {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-black app-text-primary mb-2">My Quotes</h1>
+              <h1 className="text-3xl font-black app-text-primary mb-2">Quotes</h1>
               <p className="app-text-muted">
                 Manage your cleaning service quotes and track their progress
               </p>
