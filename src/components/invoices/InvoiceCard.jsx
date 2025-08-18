@@ -17,9 +17,8 @@ const InvoiceCard = memo(({
   const summary = invoicesService.getInvoiceSummary(invoice);
 
   const handleCardClick = () => {
-    console.log('🔍 InvoiceCard clicked:', invoice.id); // DEBUG
     if (onInvoiceClick) {
-      onInvoiceClick(invoice.id); // USE SAME AS DASHBOARD
+      onInvoiceClick(invoice.id);
     }
   };
   
