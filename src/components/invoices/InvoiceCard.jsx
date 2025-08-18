@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { Link } from 'react-router-dom';
 import { 
   DocumentArrowDownIcon, 
   CalendarIcon,
@@ -11,10 +10,17 @@ import invoicesService from '../../services/invoicesService';
 
 const InvoiceCard = memo(({ 
   invoice, 
-  onDownload, 
+  onDownload,
+  onInvoiceClick, 
   className = '' 
 }) => {
   const summary = invoicesService.getInvoiceSummary(invoice);
+  
+  const handleCardClick = () => {
+    if (onInvoiceClick) {
+      onInvoiceClick(invoice.id);
+    }
+  };
   
   const handleDownload = async (e) => {
     e.preventDefault();
@@ -30,9 +36,9 @@ const InvoiceCard = memo(({
   };
 
   return (
-    <div className={`card-modern group ${className}`}>
-      <Link 
-        to={`/clients/invoices/${invoice.id}`}
+    <div className={`card-modern group cursor-pointer ${className}`}>
+      <div 
+        onClick={handleCardClick}
         className="block"
       >
         <div className="flex items-start justify-between mb-4">
@@ -100,7 +106,7 @@ const InvoiceCard = memo(({
             </button>
           )}
         </div>
-      </Link>
+      </div>
     </div>
   );
 });
