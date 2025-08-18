@@ -923,7 +923,6 @@ const Portal = () => {
                   loading={invoicesLoading}
                   error={invoicesError}
                   onDownloadInvoice={handleInvoiceDownload}
-                  onInvoiceClick={(invoiceId) => handleNavigation('invoice-detail', invoiceId)}
                 />
               </div>
             )}

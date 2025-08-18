@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { 
   DocumentArrowDownIcon, 
   CalendarIcon,
@@ -10,16 +11,14 @@ import invoicesService from '../../services/invoicesService';
 
 const InvoiceCard = memo(({ 
   invoice, 
-  onDownload,
-  onInvoiceClick, 
+  onDownload, 
   className = '' 
 }) => {
+  const navigate = useNavigate(); 
   const summary = invoicesService.getInvoiceSummary(invoice);
   
   const handleCardClick = () => {
-    if (onInvoiceClick) {
-      onInvoiceClick(invoice.id);
-    }
+    navigate(`/clients/invoices/${invoice.id}`);
   };
   
   const handleDownload = async (e) => {
@@ -38,7 +37,7 @@ const InvoiceCard = memo(({
   return (
     <div className={`card-modern group cursor-pointer ${className}`}>
       <div 
-        onClick={handleCardClick}
+        onClick={handleCardClick} 
         className="block"
       >
         <div className="flex items-start justify-between mb-4">
