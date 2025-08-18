@@ -32,7 +32,6 @@ export const API_ENDPOINTS = {
   QUOTES: {
     BASE: `${API_BASE_URL}/${API_VERSION}/quotes/`,
     MY_QUOTES: `${API_BASE_URL}/${API_VERSION}/quotes/my-quotes/`,
-    MY_QUOTES_DEPOSITS: `${API_BASE_URL}/${API_VERSION}/quotes/my-quotes/deposits/`,
     CALCULATOR: `${API_BASE_URL}/${API_VERSION}/quotes/calculator/`,
     ITEMS: `${API_BASE_URL}/${API_VERSION}/quotes/items/`,
     ATTACHMENTS: `${API_BASE_URL}/${API_VERSION}/quotes/attachments/`,

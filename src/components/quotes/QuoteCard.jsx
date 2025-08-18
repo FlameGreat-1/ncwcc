@@ -125,13 +125,18 @@ const QuoteCard = ({
 
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <h3 className="text-lg font-bold app-text-primary">
               {quote.quote_number}
             </h3>
             {quote.is_ndis_client && (
               <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                 NDIS
+              </span>
+            )}
+            {quote.deposit_required && (
+              <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">
+                Deposit: {formatCurrency(quote.deposit_amount)}
               </span>
             )}
           </div>
@@ -192,6 +197,30 @@ const QuoteCard = ({
             )}
           </div>
         </div>
+
+        {/* Deposit Information Section */}
+        {quote.deposit_required && (
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm font-semibold text-orange-800">
+                  Deposit Required
+                </div>
+                <div className="text-xs text-orange-600">
+                  {quote.deposit_percentage}% of total price
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-orange-800">
+                  {formatCurrency(quote.deposit_amount)}
+                </div>
+                <div className="text-xs text-orange-600">
+                  Due before service
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {quote.special_requirements && (

@@ -50,20 +50,7 @@ class QuotesService {
   async calculateQuote(data) {
     const response = await api.post(API_ENDPOINTS.QUOTES.CALCULATOR, data);
     return response.data;
-  }
-
-  async getMyQuotesRequiringDeposit(params = {}) {
-    const cleanParams = {};
-    
-    Object.keys(params).forEach(key => {
-      if (params[key] !== null && params[key] !== undefined && params[key] !== '') {
-        cleanParams[key] = params[key];
-      }
-    });
-    
-    const response = await api.get(API_ENDPOINTS.QUOTES.MY_QUOTES_DEPOSITS, { params: cleanParams });
-    return response.data;
-  }  
+  } 
 
   async duplicateQuote(id, data = {}) {
     const response = await api.post(`${API_ENDPOINTS.QUOTES.BASE}${id}/duplicate/`, data);

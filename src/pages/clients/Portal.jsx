@@ -914,25 +914,6 @@ const Portal = () => {
                             </p>
                           </div>
                         </button>
-                        {allQuotes?.some(quote => quote.deposit_required && quote.status === 'approved') && (
-                          <button
-                            onClick={() => handleNavigation('quotes')}
-                            className="w-full flex items-center space-x-3 p-3 rounded-lg transition-all hover:app-bg-secondary app-text-primary hover:scale-105 border-l-4 border-orange-500"
-                          >
-                            <div className="p-2 rounded-lg bg-orange-100">
-                              <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                              </svg>
-                            </div>
-                            <div className="flex-1 text-left">
-                              <p className="font-medium">Deposits Required</p>
-                              <p className="text-sm app-text-muted">
-                                {allQuotes?.filter(quote => quote.deposit_required && quote.status === 'approved')?.length} quote{allQuotes?.filter(quote => quote.deposit_required && quote.status === 'approved')?.length !== 1 ? 's' : ''} need deposit payment
-                              </p>
-                            </div>
-                            <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                          </button>
-                        )}
                       </div>
                     </div>
                   </div>

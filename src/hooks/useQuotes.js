@@ -29,8 +29,7 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
     submitted: quotesService.getSubmittedQuotes,
     approved: quotesService.getApprovedQuotes,
     rejected: quotesService.getRejectedQuotes,
-    ndis: quotesService.getNDISQuotes,
-    deposits: quotesService.getMyQuotesRequiringDeposit 
+    ndis: quotesService.getNDISQuotes
   };
 
   const fetchQuotes = useCallback(async (fetchParams = {}) => {
