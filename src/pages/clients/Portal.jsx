@@ -398,7 +398,7 @@ const Portal = () => {
 
   return (
     <div className="min-h-screen app-bg-primary flex">
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 lg:flex lg:flex-col`}>
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:fixed lg:inset-y-0 lg:flex lg:flex-col`}>
         <div className="flex flex-col w-full h-full theme-card border-r app-border">
           <div className="flex items-center justify-between h-16 px-6 border-b app-border flex-shrink-0">
             <button
