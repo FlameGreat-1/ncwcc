@@ -6,7 +6,8 @@ import {
   CurrencyDollarIcon,
   ClockIcon,
   CheckCircleIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  BanknotesIcon
 } from '@heroicons/react/24/outline';
 import { useInvoices } from '../../hooks/useInvoices';
 import { useAuth } from '../../hooks/useAuth';
@@ -26,6 +27,8 @@ const MyInvoices = () => {
     invoiceStats,
     overdueInvoices,
     hasOverdueInvoices,
+    hasPendingDeposits,
+    pendingDepositInvoices,
     updateFilters,
     downloadInvoice,
     refreshInvoices
@@ -53,6 +56,7 @@ const MyInvoices = () => {
   const tabs = [
     { id: 'all', label: 'All Invoices', count: invoiceStats?.total || 0 },
     { id: 'ndis', label: 'NDIS Invoices', count: invoiceStats?.ndis || 0 },
+    { id: 'deposits', label: 'Deposits Required', count: invoiceStats?.depositsRequired || 0 },
     { id: 'overdue', label: 'Overdue', count: invoiceStats?.overdue || 0 }
   ];
 
@@ -61,18 +65,33 @@ const MyInvoices = () => {
     if (tabId === 'ndis') {
       updateFilters({ 
         ...filters, 
-        is_ndis_invoice: true 
+        is_ndis_invoice: true,
+        deposit_required: null,
+        deposit_paid: null,
+        overdue_only: false
+      });
+    } else if (tabId === 'deposits') {
+      updateFilters({ 
+        ...filters, 
+        is_ndis_invoice: null,
+        deposit_required: true,
+        deposit_paid: null,
+        overdue_only: false
       });
     } else if (tabId === 'overdue') {
       updateFilters({ 
         ...filters, 
         is_ndis_invoice: null,
+        deposit_required: null,
+        deposit_paid: null,
         overdue_only: true 
       });
     } else {
       updateFilters({ 
         ...filters, 
         is_ndis_invoice: null,
+        deposit_required: null,
+        deposit_paid: null,
         overdue_only: false 
       });
     }
@@ -96,7 +115,9 @@ const MyInvoices = () => {
       total: invoiceStats?.total || 0,
       totalAmount: invoiceStats?.totalAmount || 0,
       overdueAmount: invoiceStats?.overdueAmount || 0,
-      ndis: invoiceStats?.ndis || 0
+      ndis: invoiceStats?.ndis || 0,
+      depositsRequired: invoiceStats?.depositsRequired || 0,
+      totalDepositAmount: invoiceStats?.totalDepositAmount || 0
     };
   
     return [
@@ -122,6 +143,18 @@ const MyInvoices = () => {
         borderColor: 'border-green-200'
       },
       {
+        title: 'Deposits Required',
+        value: new Intl.NumberFormat('en-AU', {
+          style: 'currency',
+          currency: 'AUD'
+        }).format(safeStats.totalDepositAmount),
+        icon: BanknotesIcon,
+        color: 'orange',
+        bgColor: 'bg-orange-50',
+        textColor: 'text-orange-600',
+        borderColor: 'border-orange-200'
+      },
+      {
         title: 'Overdue Amount',
         value: new Intl.NumberFormat('en-AU', {
           style: 'currency',
@@ -132,15 +165,6 @@ const MyInvoices = () => {
         bgColor: 'bg-red-50',
         textColor: 'text-red-600',
         borderColor: 'border-red-200'
-      },
-      {
-        title: 'NDIS Invoices',
-        value: safeStats.ndis,
-        icon: ShieldCheckIcon,
-        color: 'indigo',
-        bgColor: 'bg-indigo-50',
-        textColor: 'text-indigo-600',
-        borderColor: 'border-indigo-200'
       }
     ];
   }, [invoiceStats]);
@@ -235,6 +259,32 @@ const MyInvoices = () => {
                       className="text-red-800 text-sm font-medium hover:text-red-900 underline"
                     >
                       View overdue invoices →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {hasPendingDeposits && (
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6 animate-fade-in-up">
+                <div className="flex items-start gap-3">
+                  <BanknotesIcon className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-orange-800 mb-1">
+                      Deposits Required
+                    </h3>
+                    <p className="text-orange-700 text-sm mb-2">
+                      You have {pendingDepositInvoices.length} invoice{pendingDepositInvoices.length !== 1 ? 's' : ''} 
+                      requiring deposits totaling {new Intl.NumberFormat('en-AU', {
+                        style: 'currency',
+                        currency: 'AUD'
+                      }).format(invoiceStats.totalDepositAmount)}.
+                    </p>
+                    <button
+                      onClick={() => handleTabChange('deposits')}
+                      className="text-orange-800 text-sm font-medium hover:text-orange-900 underline"
+                    >
+                      View deposit invoices →
                     </button>
                   </div>
                 </div>
@@ -357,6 +407,47 @@ const MyInvoices = () => {
                 <p className="text-blue-800 text-sm">
                   <strong>NDIS Compliance:</strong> All your NDIS invoices include participant details 
                   and service information as required by NDIS guidelines.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {invoiceStats.depositsRequired > 0 && (
+            <div className="mt-8 glass-card">
+              <div className="flex items-center gap-3 mb-4">
+                <BanknotesIcon className="w-6 h-6 text-orange-600" />
+                <h2 className="text-lg font-bold app-text-primary">
+                  Deposit Summary
+                </h2>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="text-center p-4 app-bg-secondary rounded-lg">
+                  <p className="text-2xl font-bold text-orange-600">
+                    {invoiceStats.depositsRequired}
+                  </p>
+                  <p className="text-sm app-text-muted">Deposits Required</p>
+                </div>
+                
+                <div className="text-center p-4 app-bg-secondary rounded-lg">
+                  <p className="text-2xl font-bold text-green-600">
+                    {invoiceStats.depositsPaid}
+                  </p>
+                  <p className="text-sm app-text-muted">Deposits Paid</p>
+                </div>
+                
+                <div className="text-center p-4 app-bg-secondary rounded-lg">
+                  <p className="text-2xl font-bold text-yellow-600">
+                    {invoiceStats.depositsPending}
+                  </p>
+                  <p className="text-sm app-text-muted">Deposits Pending</p>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                <p className="text-orange-800 text-sm">
+                  <strong>Deposit Information:</strong> Deposits are required for high-priority services 
+                  and must be paid before service commencement.
                 </p>
               </div>
             </div>

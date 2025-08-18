@@ -11,6 +11,8 @@ export const useInvoices = (initialFilters = {}) => {
     status: 'all',
     is_ndis_invoice: null,
     email_sent: null,
+    deposit_required: null,
+    deposit_paid: null,
     search: '',
     ordering: '-created_at',
     ...initialFilters
@@ -51,6 +53,8 @@ export const useInvoices = (initialFilters = {}) => {
       status: 'all',
       is_ndis_invoice: null,
       email_sent: null,
+      deposit_required: null,
+      deposit_paid: null,
       search: '',
       ordering: '-created_at'
     });
@@ -113,9 +117,21 @@ export const useInvoices = (initialFilters = {}) => {
     if (filters.email_sent !== null) {
       result = Array.isArray(result) ? result.filter(invoice => invoice.email_sent === filters.email_sent) : [];
     }
+
+    if (filters.deposit_required !== null) {
+      result = Array.isArray(result) ? result.filter(invoice => 
+        invoicesService.requiresDeposit(invoice) === filters.deposit_required
+      ) : [];
+    }
+
+    if (filters.deposit_paid !== null) {
+      result = Array.isArray(result) ? result.filter(invoice => 
+        invoicesService.isDepositPaid(invoice) === filters.deposit_paid
+      ) : [];
+    }
     
     return invoicesService.sortInvoices(Array.isArray(result) ? result : [], filters.ordering);
-  }, [invoices, filters.search, filters.status, filters.is_ndis_invoice, filters.email_sent, filters.ordering]);
+  }, [invoices, filters.search, filters.status, filters.is_ndis_invoice, filters.email_sent, filters.deposit_required, filters.deposit_paid, filters.ordering]);
 
   const invoiceStats = useMemo(() => {
     if (!invoices || !Array.isArray(invoices) || invoices.length === 0) {
@@ -127,7 +143,11 @@ export const useInvoices = (initialFilters = {}) => {
         overdue: 0,
         ndis: 0,
         totalAmount: 0,
-        overdueAmount: 0
+        overdueAmount: 0,
+        depositsRequired: 0,
+        depositsPaid: 0,
+        depositsPending: 0,
+        totalDepositAmount: 0
       };
     }
 
@@ -139,7 +159,11 @@ export const useInvoices = (initialFilters = {}) => {
       overdue: 0,
       ndis: 0,
       totalAmount: 0,
-      overdueAmount: 0
+      overdueAmount: 0,
+      depositsRequired: 0,
+      depositsPaid: 0,
+      depositsPending: 0,
+      totalDepositAmount: 0
     };
     
     invoices.forEach(invoice => {
@@ -152,6 +176,17 @@ export const useInvoices = (initialFilters = {}) => {
       
       if (invoicesService.isInvoiceOverdue(invoice.due_date) && invoice.status !== 'paid') {
         stats.overdueAmount += parseFloat(invoice.total_amount || 0);
+      }
+
+      if (invoicesService.requiresDeposit(invoice)) {
+        stats.depositsRequired += 1;
+        stats.totalDepositAmount += invoicesService.getDepositAmount(invoice);
+        
+        if (invoicesService.isDepositPaid(invoice)) {
+          stats.depositsPaid += 1;
+        } else {
+          stats.depositsPending += 1;
+        }
       }
     });
     
@@ -177,6 +212,19 @@ export const useInvoices = (initialFilters = {}) => {
     return invoices.filter(invoice => invoice.is_ndis_invoice);
   }, [invoices]);
 
+  const depositInvoices = useMemo(() => {
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return [];
+    return invoices.filter(invoice => invoicesService.requiresDeposit(invoice));
+  }, [invoices]);
+
+  const pendingDepositInvoices = useMemo(() => {
+    if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return [];
+    return invoices.filter(invoice => 
+      invoicesService.requiresDeposit(invoice) && 
+      !invoicesService.isDepositPaid(invoice)
+    );
+  }, [invoices]);
+
   const getInvoiceById = useCallback((invoiceId) => {
     if (!invoices || !Array.isArray(invoices) || invoices.length === 0) return null;
     return invoices.find(invoice => invoice.id === invoiceId);
@@ -194,6 +242,14 @@ export const useInvoices = (initialFilters = {}) => {
     return Array.isArray(ndisInvoices) && ndisInvoices.length > 0;
   }, [ndisInvoices]);
 
+  const hasDepositInvoices = useMemo(() => {
+    return Array.isArray(depositInvoices) && depositInvoices.length > 0;
+  }, [depositInvoices]);
+
+  const hasPendingDeposits = useMemo(() => {
+    return Array.isArray(pendingDepositInvoices) && pendingDepositInvoices.length > 0;
+  }, [pendingDepositInvoices]);
+
   useEffect(() => {
     fetchInvoices();
   }, [fetchInvoices]);
@@ -208,9 +264,13 @@ export const useInvoices = (initialFilters = {}) => {
     overdueInvoices,
     recentInvoices,
     ndisInvoices,
+    depositInvoices,
+    pendingDepositInvoices,
     hasInvoices,
     hasOverdueInvoices,
     hasNDISInvoices,
+    hasDepositInvoices,
+    hasPendingDeposits,
     fetchInvoices,
     refreshInvoices,
     updateFilters,
@@ -287,6 +347,10 @@ export const useInvoiceDetail = (invoiceId) => {
     return invoice ? invoicesService.getNDISParticipantInfo(invoice) : null;
   }, [invoice]);
 
+  const depositInfo = useMemo(() => {
+    return invoice ? invoicesService.getDepositInfo(invoice) : null;
+  }, [invoice]);
+
   const servicePeriod = useMemo(() => {
     return invoice ? invoicesService.getServicePeriod(invoice) : null;
   }, [invoice]);
@@ -302,6 +366,7 @@ export const useInvoiceDetail = (invoiceId) => {
     invoiceSummary,
     invoiceItems,
     ndisInfo,
+    depositInfo,
     servicePeriod,
     fetchInvoiceDetail,
     downloadInvoice,

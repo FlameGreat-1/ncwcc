@@ -24,13 +24,17 @@ const MyQuotes = () => {
       submitted: 0, 
       approved: 0, 
       rejected: 0, 
-      totalValue: 0 
+      totalValue: 0,
+      depositsRequired: 0
     };
     
     return allQuotes.reduce((acc, quote) => {
       acc.total += 1;
       acc[quote.status] = (acc[quote.status] || 0) + 1;
       acc.totalValue += parseFloat(quote.final_price || 0);
+      if (quote.deposit_required) {
+        acc.depositsRequired += 1;
+      }
       return acc;
     }, {
       total: 0,
@@ -38,7 +42,8 @@ const MyQuotes = () => {
       submitted: 0,
       approved: 0,
       rejected: 0,
-      totalValue: 0
+      totalValue: 0,
+      depositsRequired: 0
     });
   }, [allQuotes]);
   
@@ -127,7 +132,7 @@ const MyQuotes = () => {
           </div>
 
           {showStats && stats.total > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
               <div className="theme-card text-center">
                 <div className="text-2xl font-black app-text-primary mb-1">
                   {stats.total}
@@ -147,6 +152,13 @@ const MyQuotes = () => {
                   {stats.approved}
                 </div>
                 <div className="text-sm app-text-muted">Approved</div>
+              </div>
+              
+              <div className="theme-card text-center">
+                <div className="text-2xl font-black text-orange-600 mb-1">
+                  {stats.depositsRequired}
+                </div>
+                <div className="text-sm app-text-muted">Require Deposit</div>
               </div>
               
               <div className="theme-card text-center">
@@ -252,14 +264,21 @@ const MyQuotes = () => {
                               {quote.cleaning_type.replace('_', ' ').toUpperCase()}
                             </p>
                           </div>
-                          <span className={`
-                            px-3 py-1 rounded-full text-xs font-medium
-                            ${quote.status === 'approved' ? 'bg-green-100 text-green-800' :
-                              quote.status === 'submitted' ? 'bg-blue-100 text-blue-800' :
-                              'app-bg-secondary app-text-primary'}
-                          `}>
-                            {quote.status.toUpperCase()}
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <span className={`
+                              px-3 py-1 rounded-full text-xs font-medium
+                              ${quote.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                quote.status === 'submitted' ? 'bg-blue-100 text-blue-800' :
+                                'app-bg-secondary app-text-primary'}
+                            `}>
+                              {quote.status.toUpperCase()}
+                            </span>
+                            {quote.deposit_required && (
+                              <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full text-center">
+                                Deposit: {formatCurrency(quote.deposit_amount)}
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         <div className="space-y-2 mb-4">
@@ -305,4 +324,3 @@ const MyQuotes = () => {
 };
 
 export default MyQuotes;
-

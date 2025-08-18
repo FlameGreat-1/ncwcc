@@ -231,11 +231,18 @@ const QuoteDetail = () => {
               <p className="app-text-secondary text-lg font-medium">
                 {quote.cleaning_type.replace('_', ' ').toUpperCase()} Cleaning
               </p>
-              {quote.is_ndis_client && (
-                <span className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full mt-2">
-                  NDIS Client
-                </span>
-              )}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {quote.is_ndis_client && (
+                  <span className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+                    NDIS Client
+                  </span>
+                )}
+                {quote.deposit_required && (
+                  <span className="inline-block bg-orange-100 text-orange-800 text-sm px-3 py-1 rounded-full">
+                    Deposit Required: {formatCurrency(quote.deposit_amount)} ({quote.deposit_percentage}%)
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -321,6 +328,41 @@ const QuoteDetail = () => {
               ))}
             </div>
           </div>
+
+          {quote.deposit_required && quote.status === 'approved' && (
+            <div className="theme-card mb-6 border-l-4 border-orange-500">
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                    <span className="text-orange-600 font-bold">$</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-orange-800">Deposit Required</h3>
+                    <p className="text-sm text-orange-600">Payment required before work begins</p>
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-orange-50 rounded-lg">
+                    <div className="text-2xl font-bold text-orange-800">{formatCurrency(quote.deposit_amount)}</div>
+                    <div className="text-sm text-orange-600">Deposit Amount</div>
+                  </div>
+                  <div className="text-center p-4 bg-orange-50 rounded-lg">
+                    <div className="text-2xl font-bold text-orange-800">{quote.deposit_percentage}%</div>
+                    <div className="text-sm text-orange-600">Of Total Price</div>
+                  </div>
+                  <div className="text-center p-4 bg-orange-50 rounded-lg">
+                    <div className="text-2xl font-bold text-orange-800">{urgencyConfig?.label}</div>
+                    <div className="text-sm text-orange-600">Urgency Level</div>
+                  </div>
+                </div>
+                <div className="mt-4 p-4 bg-orange-50 rounded-lg">
+                  <p className="text-sm text-orange-700">
+                    <strong>Payment Instructions:</strong> Please contact us to arrange deposit payment before your scheduled service date.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div>
         {activeTab === 'details' && (
@@ -529,6 +571,25 @@ const QuoteDetail = () => {
                       <span className="app-text-primary">Total:</span>
                       <span className="app-text-primary">{formatCurrency(quote.final_price)}</span>
                     </div>
+
+                    {quote.deposit_required && (
+                      <>
+                        <hr className="app-border" />
+                        <div className="bg-orange-50 p-4 rounded-lg">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-orange-800 font-semibold">Deposit Required:</span>
+                            <span className="text-orange-800 font-bold text-lg">{formatCurrency(quote.deposit_amount)}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-orange-600">Percentage of total:</span>
+                            <span className="text-orange-600 font-medium">{quote.deposit_percentage}%</span>
+                          </div>
+                          <div className="mt-3 text-xs text-orange-700">
+                            <p><strong>Note:</strong> Deposit payment is required before work begins due to the {urgencyConfig?.label.toLowerCase()} nature of this booking.</p>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -655,4 +716,5 @@ const QuoteDetail = () => {
 
 export default QuoteDetail;
 
+        
 

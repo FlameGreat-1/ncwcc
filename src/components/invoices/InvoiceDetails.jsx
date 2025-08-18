@@ -7,7 +7,8 @@ import {
   UserIcon,
   ShieldCheckIcon,
   ExclamationTriangleIcon,
-  ClockIcon
+  ClockIcon,
+  BanknotesIcon
 } from '@heroicons/react/24/outline';
 import NDISInvoiceBadge from './NDISInvoiceBadge';
 import LoadingSpinner from '../common/LoadingSpinner';
@@ -64,6 +65,7 @@ const InvoiceDetails = memo(({
   const summary = invoicesService.getInvoiceSummary(invoice);
   const items = invoicesService.getInvoiceItems(invoice);
   const ndisInfo = invoicesService.getNDISParticipantInfo(invoice);
+  const depositInfo = invoicesService.getDepositInfo(invoice);
   const servicePeriod = invoicesService.getServicePeriod(invoice);
 
   const handleDownload = async () => {
@@ -214,6 +216,38 @@ const InvoiceDetails = memo(({
             </div>
           </div>
         )}
+
+        {depositInfo && (
+          <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+            <div className="flex items-center gap-2 mb-3">
+              <BanknotesIcon className="w-5 h-5 text-orange-600" />
+              <h3 className="font-semibold text-orange-800">Deposit Information</h3>
+              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                depositInfo.isPaid 
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-yellow-100 text-yellow-800'
+              }`}>
+                {depositInfo.isPaid ? 'Paid' : 'Pending'}
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium text-orange-700">Deposit Required</p>
+                <p className="text-orange-800">{depositInfo.formattedAmount} ({depositInfo.percentage}%)</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-orange-700">Remaining Balance</p>
+                <p className="text-orange-800">{depositInfo.formattedRemainingBalance}</p>
+              </div>
+              {depositInfo.isPaid && depositInfo.paidDate && (
+                <div>
+                  <p className="text-sm font-medium text-orange-700">Deposit Paid Date</p>
+                  <p className="text-orange-800">{formatDate(depositInfo.paidDate)}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="glass-card">
@@ -271,6 +305,22 @@ const InvoiceDetails = memo(({
                   {formatAmount(invoice.total_amount)}
                 </span>
               </div>
+              {depositInfo && (
+                <>
+                  <div className="flex justify-between text-orange-600 border-t app-border pt-2">
+                    <span>Deposit ({depositInfo.percentage}%):</span>
+                    <span className="font-semibold">
+                      {depositInfo.formattedAmount}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-lg font-bold text-orange-700">
+                    <span>Balance Due:</span>
+                    <span>
+                      {depositInfo.formattedRemainingBalance}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -8,6 +8,8 @@ class InvoicesService {
     if (params.search) queryParams.append('search', params.search);
     if (params.ordering) queryParams.append('ordering', params.ordering);
     if (params.is_ndis_invoice !== undefined) queryParams.append('is_ndis_invoice', params.is_ndis_invoice);
+    if (params.deposit_required !== undefined) queryParams.append('deposit_required', params.deposit_required);
+    if (params.deposit_paid !== undefined) queryParams.append('deposit_paid', params.deposit_paid);
     
     const url = queryParams.toString() 
       ? `${API_ENDPOINTS.INVOICES.MY_INVOICES}?${queryParams.toString()}`
@@ -114,6 +116,55 @@ class InvoicesService {
     return invoice.is_ndis_invoice === true;
   }
 
+  requiresDeposit(invoice) {
+    return invoice.requires_deposit === true || invoice.deposit_required === true;
+  }
+
+  isDepositPaid(invoice) {
+    return invoice.deposit_paid === true;
+  }
+
+  getDepositStatus(invoice) {
+    if (!this.requiresDeposit(invoice)) return 'not_required';
+    return invoice.deposit_status || (this.isDepositPaid(invoice) ? 'paid' : 'pending');
+  }
+
+  getDepositAmount(invoice) {
+    return parseFloat(invoice.deposit_amount || 0);
+  }
+
+  getDepositPercentage(invoice) {
+    return parseFloat(invoice.deposit_percentage || 0);
+  }
+
+  getRemainingBalance(invoice) {
+    return parseFloat(invoice.remaining_balance || 0);
+  }
+
+  getFormattedDepositAmount(invoice) {
+    return invoice.formatted_deposit_amount || this.formatInvoiceAmount(this.getDepositAmount(invoice));
+  }
+
+  getFormattedRemainingBalance(invoice) {
+    return invoice.formatted_remaining_balance || this.formatInvoiceAmount(this.getRemainingBalance(invoice));
+  }
+
+  getDepositInfo(invoice) {
+    if (!this.requiresDeposit(invoice)) return null;
+    
+    return {
+      required: true,
+      amount: this.getDepositAmount(invoice),
+      percentage: this.getDepositPercentage(invoice),
+      formattedAmount: this.getFormattedDepositAmount(invoice),
+      status: this.getDepositStatus(invoice),
+      isPaid: this.isDepositPaid(invoice),
+      paidDate: invoice.deposit_paid_date || null,
+      remainingBalance: this.getRemainingBalance(invoice),
+      formattedRemainingBalance: this.getFormattedRemainingBalance(invoice)
+    };
+  }
+
   getNDISParticipantInfo(invoice) {
     if (!this.isNDISInvoice(invoice)) return null;
     
@@ -139,6 +190,8 @@ class InvoicesService {
   getInvoiceSummary(invoice) {
     if (!invoice) return {};
     
+    const depositInfo = this.getDepositInfo(invoice);
+    
     return {
       invoiceNumber: invoice.invoice_number || '',
       clientName: invoice.client_full_name || invoice.client_name || 'Unknown Client',
@@ -155,13 +208,31 @@ class InvoicesService {
       serviceAddress: invoice.service_address || '',
       participantName: invoice.participant_name || '',
       ndisNumber: invoice.ndis_number || '',
-      servicePeriod: this.getServicePeriod(invoice)
+      servicePeriod: this.getServicePeriod(invoice),
+      deposit: depositInfo
     };
   }
 
   filterInvoicesByNDIS(invoices, isNDIS) {
     if (isNDIS === undefined || isNDIS === null || isNDIS === 'null') return invoices;
     return invoices.filter(invoice => invoice.is_ndis_invoice === (isNDIS === 'true' || isNDIS === true));
+  }
+
+  filterInvoicesByDeposit(invoices, depositFilter) {
+    if (!depositFilter || depositFilter === 'all') return invoices;
+    
+    switch (depositFilter) {
+      case 'required':
+        return invoices.filter(invoice => this.requiresDeposit(invoice));
+      case 'paid':
+        return invoices.filter(invoice => this.requiresDeposit(invoice) && this.isDepositPaid(invoice));
+      case 'pending':
+        return invoices.filter(invoice => this.requiresDeposit(invoice) && !this.isDepositPaid(invoice));
+      case 'not_required':
+        return invoices.filter(invoice => !this.requiresDeposit(invoice));
+      default:
+        return invoices;
+    }
   }
 
   sortInvoices(invoices, sortBy = '-created_at') {
@@ -179,7 +250,7 @@ class InvoicesService {
         bValue = new Date(bValue);
       }
       
-      if (field === 'total_amount') {
+      if (field === 'total_amount' || field === 'deposit_amount') {
         aValue = parseFloat(aValue || 0);
         bValue = parseFloat(bValue || 0);
       }
@@ -228,7 +299,18 @@ class InvoicesService {
       items: invoice.items || [],
       itemsCount: invoice.items_count || 0,
       pdfFile: invoice.pdf_file,
-      createdAt: invoice.created_at
+      createdAt: invoice.created_at,
+      depositRequired: invoice.deposit_required,
+      depositAmount: invoice.deposit_amount,
+      depositPercentage: invoice.deposit_percentage,
+      remainingBalance: invoice.remaining_balance,
+      depositPaid: invoice.deposit_paid,
+      depositPaidDate: invoice.deposit_paid_date,
+      requiresDeposit: this.requiresDeposit(invoice),
+      depositStatus: this.getDepositStatus(invoice),
+      formattedDepositAmount: this.getFormattedDepositAmount(invoice),
+      formattedRemainingBalance: this.getFormattedRemainingBalance(invoice),
+      depositInfo: this.getDepositInfo(invoice)
     };
   }
 }

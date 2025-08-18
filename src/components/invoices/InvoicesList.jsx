@@ -54,6 +54,8 @@ const InvoicesList = memo(({
     setLocalSearch('');
     onFiltersChange?.({
       is_ndis_invoice: null,
+      deposit_required: null,
+      deposit_paid: null,
       search: '',
       ordering: '-created_at'
     });
@@ -62,6 +64,8 @@ const InvoicesList = memo(({
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filters.is_ndis_invoice !== null && filters.is_ndis_invoice !== undefined) count++;
+    if (filters.deposit_required !== null && filters.deposit_required !== undefined) count++;
+    if (filters.deposit_paid !== null && filters.deposit_paid !== undefined) count++;
     if (filters.search) count++;
     return count;
   }, [filters]);
@@ -137,7 +141,7 @@ const InvoicesList = memo(({
 
       {showFilters && (
         <div className="glass-card p-4 animate-fade-in-up">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium app-text-secondary mb-2">
                 Invoice Type
@@ -153,6 +157,42 @@ const InvoicesList = memo(({
                 <option value="all">All Types</option>
                 <option value="true">NDIS Only</option>
                 <option value="false">Regular Only</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium app-text-secondary mb-2">
+                Deposit Required
+              </label>
+              <select
+                value={filters.deposit_required === null || filters.deposit_required === undefined ? 'all' : filters.deposit_required.toString()}
+                onChange={(e) => {
+                  const value = e.target.value === 'all' ? null : e.target.value === 'true';
+                  handleFilterChange('deposit_required', value);
+                }}
+                className="theme-input w-full"
+              >
+                <option value="all">All Invoices</option>
+                <option value="true">Deposit Required</option>
+                <option value="false">No Deposit</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium app-text-secondary mb-2">
+                Deposit Status
+              </label>
+              <select
+                value={filters.deposit_paid === null || filters.deposit_paid === undefined ? 'all' : filters.deposit_paid.toString()}
+                onChange={(e) => {
+                  const value = e.target.value === 'all' ? null : e.target.value === 'true';
+                  handleFilterChange('deposit_paid', value);
+                }}
+                className="theme-input w-full"
+              >
+                <option value="all">All Status</option>
+                <option value="true">Deposit Paid</option>
+                <option value="false">Deposit Pending</option>
               </select>
             </div>
 
