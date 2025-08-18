@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 import { initializeAuth } from './services/apiConfig.js';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext.jsx';
@@ -152,10 +152,10 @@ const AppContent = () => {
             <Route path="/clients/messages" element={<ClientRoute><ClientPortal /></ClientRoute>} />
             <Route path="/clients/calculator" element={<ClientRoute><ClientPortal /></ClientRoute>} />
             
-            <Route path="/quotes" element={<ProtectedRoute><MyQuotes /></ProtectedRoute>} />
-            <Route path="/quotes/create" element={<ProtectedRoute><CreateQuote /></ProtectedRoute>} />
-            <Route path="/quotes/:id" element={<ProtectedRoute><QuoteDetail /></ProtectedRoute>} />
-            <Route path="/quotes/:id/edit" element={<ProtectedRoute><EditQuote /></ProtectedRoute>} />
+            <Route path="/quotes" element={<Navigate to="/clients/quotes" replace />} />
+            <Route path="/quotes/create" element={<Navigate to="/clients/quotes/create" replace />} />
+            <Route path="/quotes/:id" element={<Navigate to="/clients/quotes/:id" replace />} />
+            <Route path="/quotes/:id/edit" element={<Navigate to="/clients/quotes/:id/edit" replace />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
