@@ -2,19 +2,16 @@ import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   DocumentArrowDownIcon, 
-  EnvelopeIcon, 
   CalendarIcon,
   CurrencyDollarIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
-import InvoiceStatusBadge from './InvoiceStatusBadge';
 import NDISInvoiceBadge from './NDISInvoiceBadge';
 import invoicesService from '../../services/invoicesService';
 
 const InvoiceCard = memo(({ 
   invoice, 
   onDownload, 
-  onResendEmail, 
   className = '' 
 }) => {
   const summary = invoicesService.getInvoiceSummary(invoice);
@@ -24,14 +21,6 @@ const InvoiceCard = memo(({
     e.stopPropagation();
     if (onDownload && summary.canDownload) {
       await onDownload(invoice.id);
-    }
-  };
-
-  const handleResendEmail = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onResendEmail && summary.canResend) {
-      await onResendEmail(invoice.id);
     }
   };
 
@@ -52,7 +41,6 @@ const InvoiceCard = memo(({
               <h3 className="text-lg font-bold app-text-primary">
                 {invoice.invoice_number}
               </h3>
-              <InvoiceStatusBadge status={invoice.status} />
               {summary.isNDIS && <NDISInvoiceBadge />}
             </div>
             
@@ -101,42 +89,16 @@ const InvoiceCard = memo(({
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-4 border-t app-border">
-          <div className="flex items-center gap-2">
-            {summary.emailSent ? (
-              <div className="flex items-center gap-1 text-green-600 text-xs">
-                <EnvelopeIcon className="w-3 h-3" />
-                <span>Email sent</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1 app-text-muted text-xs">
-                <EnvelopeIcon className="w-3 h-3" />
-                <span>Not sent</span>
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            {summary.canDownload && (
-              <button
-                onClick={handleDownload}
-                className="btn-xs btn-modern-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                title="Download PDF"
-              >
-                <DocumentArrowDownIcon className="w-4 h-4" />
-              </button>
-            )}
-            
-            {summary.canResend && (
-              <button
-                onClick={handleResendEmail}
-                className="btn-xs btn-modern-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                title="Resend Email"
-              >
-                <EnvelopeIcon className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+        <div className="flex items-center justify-end pt-4 border-t app-border">
+          {summary.canDownload && (
+            <button
+              onClick={handleDownload}
+              className="btn-xs btn-modern-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              title="Download PDF"
+            >
+              <DocumentArrowDownIcon className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </Link>
     </div>

@@ -28,10 +28,8 @@ const MyInvoices = () => {
     hasOverdueInvoices,
     updateFilters,
     downloadInvoice,
-    resendInvoiceEmail,
     refreshInvoices
   } = useInvoices({
-    status: 'all',
     ordering: '-created_at'
   });
   
@@ -54,18 +52,30 @@ const MyInvoices = () => {
 
   const tabs = [
     { id: 'all', label: 'All Invoices', count: invoiceStats?.total || 0 },
-    { id: 'draft', label: 'Draft', count: invoiceStats?.draft || 0 },
-    { id: 'sent', label: 'Sent', count: invoiceStats?.sent || 0 },
-    { id: 'paid', label: 'Paid', count: invoiceStats?.paid || 0 },
+    { id: 'ndis', label: 'NDIS Invoices', count: invoiceStats?.ndis || 0 },
     { id: 'overdue', label: 'Overdue', count: invoiceStats?.overdue || 0 }
   ];
 
   const handleTabChange = (tabId) => {
     setSelectedTab(tabId);
-    updateFilters({ 
-      ...filters, 
-      status: tabId === 'all' ? 'all' : tabId 
-    });
+    if (tabId === 'ndis') {
+      updateFilters({ 
+        ...filters, 
+        is_ndis_invoice: true 
+      });
+    } else if (tabId === 'overdue') {
+      updateFilters({ 
+        ...filters, 
+        is_ndis_invoice: null,
+        overdue_only: true 
+      });
+    } else {
+      updateFilters({ 
+        ...filters, 
+        is_ndis_invoice: null,
+        overdue_only: false 
+      });
+    }
   };
 
   const handleDownloadInvoice = async (invoiceId) => {
@@ -74,15 +84,6 @@ const MyInvoices = () => {
       toast.success('Invoice downloaded successfully');
     } else {
       toast.error(result.error || 'Failed to download invoice');
-    }
-  };
-
-  const handleResendEmail = async (invoiceId) => {
-    const result = await resendInvoiceEmail(invoiceId);
-    if (result.success) {
-      toast.success(result.message || 'Invoice email sent successfully');
-    } else {
-      toast.error(result.error || 'Failed to send invoice email');
     }
   };
 
@@ -213,6 +214,7 @@ const MyInvoices = () => {
                 </div>
               ))}
             </div>
+
             {hasOverdueInvoices && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 animate-fade-in-up">
                 <div className="flex items-start gap-3">
@@ -294,7 +296,6 @@ const MyInvoices = () => {
             filters={filters}
             onFiltersChange={handleFiltersChange}
             onDownloadInvoice={handleDownloadInvoice}
-            onResendEmail={handleResendEmail}
             className="animate-fade-in-up delay-300"
           />
 
@@ -367,4 +368,3 @@ const MyInvoices = () => {
 };
 
 export default MyInvoices;
-

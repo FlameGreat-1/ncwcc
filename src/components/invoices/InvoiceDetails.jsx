@@ -1,18 +1,14 @@
 import { memo, useState, useEffect } from 'react';
 import { 
   DocumentArrowDownIcon,
-  EnvelopeIcon,
   CalendarIcon,
   CurrencyDollarIcon,
   BuildingOfficeIcon,
   UserIcon,
   ShieldCheckIcon,
   ExclamationTriangleIcon,
-  CheckCircleIcon,
-  ClockIcon,
-  PrinterIcon
+  ClockIcon
 } from '@heroicons/react/24/outline';
-import InvoiceStatusBadge from './InvoiceStatusBadge';
 import NDISInvoiceBadge from './NDISInvoiceBadge';
 import LoadingSpinner from '../common/LoadingSpinner';
 import invoicesService from '../../services/invoicesService';
@@ -22,12 +18,10 @@ const InvoiceDetails = memo(({
   loading = false, 
   error = null,
   onDownload,
-  onResendEmail,
   className = ''
 }) => {
   const [actionLoading, setActionLoading] = useState({
-    download: false,
-    email: false
+    download: false
   });
   const [isMounted, setIsMounted] = useState(true);
 
@@ -85,19 +79,6 @@ const InvoiceDetails = memo(({
     }
   };
 
-  const handleResendEmail = async () => {
-    if (!summary.canResend || actionLoading.email) return;
-    
-    setActionLoading(prev => ({ ...prev, email: true }));
-    try {
-      await onResendEmail?.(invoice.id);
-    } finally {
-      if (isMounted) {
-        setActionLoading(prev => ({ ...prev, email: false }));
-      }
-    }
-  };
-
   const formatDate = (dateString) => {
     return invoicesService.formatInvoiceDate(dateString);
   };
@@ -115,7 +96,6 @@ const InvoiceDetails = memo(({
               <h1 className="text-2xl font-black text-gradient">
                 {invoice.invoice_number}
               </h1>
-              <InvoiceStatusBadge status={invoice.status} size="md" />
               {summary.isNDIS && <NDISInvoiceBadge size="md" />}
             </div>
             
@@ -124,7 +104,7 @@ const InvoiceDetails = memo(({
                 <UserIcon className="w-5 h-5 app-text-muted" />
                 <div>
                   <p className="font-semibold app-text-primary">{summary.clientName}</p>
-                  <p className="text-sm app-text-muted">{invoice.client?.email}</p>
+                  <p className="text-sm app-text-muted">{invoice.client_email}</p>
                 </div>
               </div>
               
@@ -168,26 +148,11 @@ const InvoiceDetails = memo(({
                   <span>Download PDF</span>
                 </button>
               )}
-              
-              {summary.canResend && (
-                <button
-                  onClick={handleResendEmail}
-                  disabled={actionLoading.email}
-                  className="btn-md btn-modern-secondary"
-                >
-                  {actionLoading.email ? (
-                    <LoadingSpinner size="sm" />
-                  ) : (
-                    <EnvelopeIcon className="w-4 h-4" />
-                  )}
-                  <span>Resend Email</span>
-                </button>
-              )}
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <div className="flex items-center gap-3 p-3 app-bg-secondary rounded-lg">
             <CalendarIcon className="w-5 h-5 app-blue" />
             <div>
@@ -215,26 +180,6 @@ const InvoiceDetails = memo(({
               <p className="font-semibold app-text-primary">
                 {servicePeriod}
               </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 p-3 app-bg-secondary rounded-lg">
-            <EnvelopeIcon className="w-5 h-5 app-blue" />
-            <div>
-              <p className="text-xs app-text-muted">Email Status</p>
-              <div className="flex items-center gap-1">
-                {summary.emailSent ? (
-                  <>
-                    <CheckCircleIcon className="w-3 h-3 text-green-600" />
-                    <span className="text-sm font-semibold text-green-600">Sent</span>
-                  </>
-                ) : (
-                  <>
-                    <ClockIcon className="w-3 h-3 app-text-muted" />
-                    <span className="text-sm font-semibold app-text-muted">Not Sent</span>
-                  </>
-                )}
-              </div>
             </div>
           </div>
         </div>

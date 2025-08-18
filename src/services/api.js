@@ -1,7 +1,6 @@
 import apiClient from './apiConfig';
 
-class ApiService {
-  // STANDARD HTTP METHODS
+class ApiService { 
   async get(url, config = {}) {
     const response = await apiClient.get(url, config);
     return response;
@@ -27,7 +26,6 @@ class ApiService {
     return response;
   }
 
-  // SAFE METHODS WITH ERROR HANDLING (Perfect for React components)
   async getSafe(url, config = {}) {
     try {
       const response = await apiClient.get(url, config);
@@ -80,7 +78,6 @@ class ApiService {
     }
   }
 
-  // CLIENT-SPECIFIC FILE UPLOAD METHOD
   async uploadFile(url, file, additionalData = {}, onProgress = null) {
     try {
       const formData = new FormData();
@@ -116,7 +113,6 @@ class ApiService {
     }
   }
 
-  // CLIENT-SPECIFIC FILE DOWNLOAD METHOD
   async downloadFile(url, filename = null) {
     try {
       const response = await apiClient.get(url, {
@@ -142,7 +138,6 @@ class ApiService {
     }
   }
 
-  // INVOICE-SPECIFIC METHODS
   async downloadInvoicePDF(url, invoiceNumber = null) {
     try {
       const response = await apiClient.get(url, {
@@ -178,39 +173,56 @@ class ApiService {
     return this.getSafe(`/invoices/${invoiceId}/`);
   }
 
-  async resendInvoiceEmail(invoiceId) {
-    return this.postSafe(`/invoices/${invoiceId}/resend-email/`);
+  async downloadInvoice(invoiceId) {
+    try {
+      const response = await apiClient.get(`/invoices/${invoiceId}/download_pdf/`, {
+        responseType: 'blob'
+      });
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `invoice-${invoiceId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      return {
+        success: true,
+        message: 'Invoice downloaded successfully',
+      };
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   async getNDISInvoices(params = {}) {
     const queryString = new URLSearchParams(params).toString();
-    const url = queryString ? `/ndis-invoices/?${queryString}` : '/ndis-invoices/';
+    const url = queryString ? `/invoices/ndis_invoices/?${queryString}` : '/invoices/ndis_invoices/';
     return this.getSafe(url);
   }
 
   async checkNDISCompliance(invoiceId) {
-    return this.getSafe(`/ndis-invoices/${invoiceId}/compliance-check/`);
+    return this.getSafe(`/invoices/ndis/${invoiceId}/compliance_check/`);
   }
 
-async getQuoteTemplate(id) {
-  const response = await api.get(`${API_ENDPOINTS.QUOTES.TEMPLATES}${id}/`);
-  return response.data;
-}
+  async getQuoteTemplate(id) {
+    return this.getSafe(`/quotes/templates/${id}/`);
+  }
 
-async createQuoteTemplate(data) {
-  const response = await api.post(API_ENDPOINTS.QUOTES.TEMPLATES, data);
-  return response.data;
-}
+  async createQuoteTemplate(data) {
+    return this.postSafe('/quotes/templates/', data);
+  }
 
-async updateQuoteTemplate(id, data) {
-  const response = await api.patch(`${API_ENDPOINTS.QUOTES.TEMPLATES}${id}/`, data);
-  return response.data;
-}
+  async updateQuoteTemplate(id, data) {
+    return this.patchSafe(`/quotes/templates/${id}/`, data);
+  }
 
-async deleteQuoteTemplate(id) {
-  const response = await api.delete(`${API_ENDPOINTS.QUOTES.TEMPLATES}${id}/`);
-  return response.data;
-}
+  async deleteQuoteTemplate(id) {
+    return this.deleteSafe(`/quotes/templates/${id}/`);
+  }
 
   handleError(error) {
     const errorResponse = {
@@ -464,4 +476,3 @@ async deleteQuoteTemplate(id) {
 }
 
 export default new ApiService();
-

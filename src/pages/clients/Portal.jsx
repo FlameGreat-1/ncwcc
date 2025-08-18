@@ -47,10 +47,8 @@ const Portal = () => {
     overdueInvoices,
     hasOverdueInvoices,
     downloadInvoice,
-    resendInvoiceEmail,
     refreshInvoices
   } = useInvoices({
-    status: 'all',
     ordering: '-created_at'
   });
 
@@ -142,15 +140,6 @@ const Portal = () => {
       toast.success('Invoice downloaded successfully');
     } else {
       toast.error(result.error || 'Failed to download invoice');
-    }
-  };
-
-  const handleInvoiceResendEmail = async (invoiceId) => {
-    const result = await resendInvoiceEmail(invoiceId);
-    if (result.success) {
-      toast.success(result.message || 'Invoice email sent successfully');
-    } else {
-      toast.error(result.error || 'Failed to send invoice email');
     }
   };
 
@@ -637,36 +626,36 @@ const Portal = () => {
                               className="w-full block p-4 rounded-lg app-bg-secondary hover:opacity-80 transition-opacity text-left"
                             >
                               <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <p className="font-medium app-text-primary">
-                                      Quote {quote.quote_number}
-                                    </p>
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                      quote.status === 'approved' ? 'bg-green-100 text-green-800' :
-                                      quote.status === 'submitted' ? 'bg-blue-100 text-blue-800' :
-                                      quote.status === 'draft' ? 'app-bg-primary app-text-muted' :
-                                      'bg-yellow-100 text-yellow-800'
-                                    }`}>
-                                      {(quote.status || 'unknown').replace('_', ' ').toUpperCase()}
-                                    </span>
-                                  </div>
-                                  <p className="text-sm app-text-muted">
-                                    {quote.cleaning_type?.replace('_', ' ') || 'N/A'} • {(quote.property_address || 'No address').substring(0, 30)}...
+                               <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <p className="font-medium app-text-primary">
+                                    Quote {quote.quote_number}
                                   </p>
-                                  <p className="text-xs app-text-muted mt-1">
-                                    {quote.created_at ? new Date(quote.created_at).toLocaleDateString('en-AU') : 'N/A'}
-                                  </p>
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    quote.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                    quote.status === 'submitted' ? 'bg-blue-100 text-blue-800' :
+                                    quote.status === 'draft' ? 'app-bg-primary app-text-muted' :
+                                    'bg-yellow-100 text-yellow-800'
+                                  }`}>
+                                    {(quote.status || 'unknown').replace('_', ' ').toUpperCase()}
+                                  </span>
                                 </div>
-                                <div className="text-right">
-                                  <p className="font-bold app-text-primary">
-                                    {formatCurrency(quote?.final_price ?? 0)}
-                                  </p>
-                                </div>
+                                <p className="text-sm app-text-muted">
+                                  {quote.cleaning_type?.replace('_', ' ') || 'N/A'} • {(quote.property_address || 'No address').substring(0, 30)}...
+                                </p>
+                                <p className="text-xs app-text-muted mt-1">
+                                  {quote.created_at ? new Date(quote.created_at).toLocaleDateString('en-AU') : 'N/A'}
+                                </p>
                               </div>
-                            </button>
-                          ))
-                        ) : (
+                              <div className="text-right">
+                               <p className="font-bold app-text-primary">
+                                 {formatCurrency(quote?.final_price ?? 0)}
+                               </p>
+                             </div>
+                            </div>
+                         </button>
+                       ))
+                     ) : (
                           <div className="text-center py-8">
                             <div className="w-16 h-16 mx-auto mb-4 app-bg-secondary rounded-full flex items-center justify-center">
                               <svg className="w-8 h-8 app-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -741,18 +730,14 @@ const Portal = () => {
                                       <p className="font-medium app-text-primary">
                                         Invoice {invoice.invoice_number}
                                       </p>
-                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                        invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
-                                        invoice.status === 'sent' ? 'bg-blue-100 text-blue-800' :
-                                        invoice.status === 'overdue' ? 'bg-red-100 text-red-800' :
-                                        invoice.status === 'draft' ? 'app-bg-primary app-text-muted' :
-                                        'bg-yellow-100 text-yellow-800'
-                                      }`}>
-                                        {(invoice?.status ?? 'unknown').replace('_', ' ').toUpperCase()}
-                                      </span>
                                       {invoice.is_ndis_invoice && (
-                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                                          NDIS
+                                       <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                         NDIS
+                                       </span>
+                                      )}
+                                      {invoice.is_overdue && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                         {invoice.days_overdue} days overdue
                                         </span>
                                       )}
                                     </div>
@@ -760,18 +745,20 @@ const Portal = () => {
                                       Due: {new Date(invoice.due_date).toLocaleDateString('en-AU')}
                                     </p>
                                     <p className="text-xs app-text-muted mt-1">
-                                      Created: {new Date(invoice.created_at).toLocaleDateString('en-AU')}
+                                      {new Date(invoice.invoice_date).toLocaleDateString('en-AU')}
                                     </p>
                                   </div>
                                   <div className="text-right">
                                     <p className="font-bold app-text-primary">
                                       {formatCurrency(invoice.total_amount)}
                                     </p>
-                                    {new Date(invoice.due_date) < new Date() && invoice.status !== 'paid' && (
+                                    {/* COMMENTED OUT - DUPLICATE OVERDUE DISPLAY
+                                    {invoice.is_overdue && (
                                       <p className="text-xs text-red-600 mt-1">
-                                        Overdue
+                                        {invoice.days_overdue} days overdue
                                       </p>
                                     )}
+                                    */}
                                   </div>
                                 </div>
                               </button>
@@ -930,7 +917,6 @@ const Portal = () => {
                   loading={invoicesLoading}
                   error={invoicesError}
                   onDownloadInvoice={handleInvoiceDownload}
-                  onResendEmail={handleInvoiceResendEmail}
                 />
               </div>
             )}
@@ -942,12 +928,11 @@ const Portal = () => {
                   loading={invoicesLoading}
                   error={invoicesError}
                   onDownload={() => handleInvoiceDownload(selectedInvoiceId)}
-                  onResendEmail={() => handleInvoiceResendEmail(selectedInvoiceId)}
                 />
               </div>
             )}
 
-{currentView === 'calculator' && (
+            {currentView === 'calculator' && (
               <div className="theme-card text-center py-12">
                 <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
                   <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

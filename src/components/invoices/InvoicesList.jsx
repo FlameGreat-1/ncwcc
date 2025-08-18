@@ -16,21 +16,11 @@ const InvoicesList = memo(({
   filters = {},
   onFiltersChange,
   onDownloadInvoice,
-  onResendEmail,
   className = ''
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [localSearch, setLocalSearch] = useState(filters.search || '');
   const searchTimeoutRef = useRef(null);
-
-  const statusOptions = [
-    { value: 'all', label: 'All Status' },
-    { value: 'draft', label: 'Draft' },
-    { value: 'sent', label: 'Sent' },
-    { value: 'paid', label: 'Paid' },
-    { value: 'overdue', label: 'Overdue' },
-    { value: 'cancelled', label: 'Cancelled' }
-  ];
 
   const sortOptions = [
     { value: '-created_at', label: 'Newest First' },
@@ -62,9 +52,7 @@ const InvoicesList = memo(({
   const clearFilters = () => {
     setLocalSearch('');
     onFiltersChange?.({
-      status: 'all',
       is_ndis_invoice: null,
-      email_sent: null,
       search: '',
       ordering: '-created_at'
     });
@@ -72,19 +60,13 @@ const InvoicesList = memo(({
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (filters.status && filters.status !== 'all') count++;
-    if (filters.is_ndis_invoice !== null) count++;
-    if (filters.email_sent !== null) count++;
+    if (filters.is_ndis_invoice !== null && filters.is_ndis_invoice !== undefined) count++;
     if (filters.search) count++;
     return count;
   }, [filters]);
 
   const overdueInvoices = useMemo(() => {
-    return invoices.filter(invoice => 
-      new Date(invoice.due_date) < new Date() && 
-      invoice.status !== 'paid' && 
-      invoice.status !== 'cancelled'
-    );
+    return invoices.filter(invoice => invoice.is_overdue === true);
   }, [invoices]);
 
   if (loading) {
@@ -154,30 +136,13 @@ const InvoicesList = memo(({
 
       {showFilters && (
         <div className="glass-card p-4 animate-fade-in-up">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium app-text-secondary mb-2">
-                Status
-              </label>
-              <select
-                value={filters.status || 'all'}
-                onChange={(e) => handleFilterChange('status', e.target.value)}
-                className="theme-input w-full"
-              >
-                {statusOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium app-text-secondary mb-2">
                 Invoice Type
               </label>
               <select
-                value={filters.is_ndis_invoice === null ? 'all' : filters.is_ndis_invoice.toString()}
+                value={filters.is_ndis_invoice === null || filters.is_ndis_invoice === undefined ? 'all' : filters.is_ndis_invoice.toString()}
                 onChange={(e) => {
                   const value = e.target.value === 'all' ? null : e.target.value === 'true';
                   handleFilterChange('is_ndis_invoice', value);
@@ -187,24 +152,6 @@ const InvoicesList = memo(({
                 <option value="all">All Types</option>
                 <option value="true">NDIS Only</option>
                 <option value="false">Regular Only</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium app-text-secondary mb-2">
-                Email Status
-              </label>
-              <select
-                value={filters.email_sent === null ? 'all' : filters.email_sent.toString()}
-                onChange={(e) => {
-                  const value = e.target.value === 'all' ? null : e.target.value === 'true';
-                  handleFilterChange('email_sent', value);
-                }}
-                className="theme-input w-full"
-              >
-                <option value="all">All</option>
-                <option value="true">Email Sent</option>
-                <option value="false">Email Not Sent</option>
               </select>
             </div>
 
@@ -237,7 +184,7 @@ const InvoicesList = memo(({
             </h3>
           </div>
           <p className="text-red-700 text-sm">
-            You have invoices that are past their due date. Please follow up with clients.
+            You have invoices that are past their due date. Please contact us for payment arrangements.
           </p>
         </div>
       )}
@@ -262,7 +209,6 @@ const InvoicesList = memo(({
               key={invoice.id}
               invoice={invoice}
               onDownload={onDownloadInvoice}
-              onResendEmail={onResendEmail}
               className={`animate-fade-in-up delay-${Math.min(index * 100, 500)}`}
             />
           ))}

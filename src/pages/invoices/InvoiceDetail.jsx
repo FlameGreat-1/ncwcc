@@ -27,11 +27,10 @@ const InvoiceDetail = () => {
     loading,
     error,
     invoiceSummary,
-    downloadInvoice,
-    resendEmail
+    downloadInvoice
   } = useInvoiceDetail(id);
 
-  if (!downloadInvoice || !resendEmail) {
+  if (!downloadInvoice) {
     return (
       <div className="min-h-screen app-bg-primary">
         <div className="container section-padding">
@@ -61,15 +60,6 @@ const InvoiceDetail = () => {
       toast.success('Invoice downloaded successfully');
     } else {
       toast.error(result.error || 'Failed to download invoice');
-    }
-  };
-
-  const handleResendEmail = async () => {
-    const result = await resendEmail();
-    if (result.success) {
-      toast.success(result.message || 'Invoice email sent successfully');
-    } else {
-      toast.error(result.error || 'Failed to send invoice email');
     }
   };
 
@@ -231,11 +221,11 @@ const InvoiceDetail = () => {
               </nav>
             </div>
 
-            {invoiceSummary?.isOverdue && (
+            {invoice.is_overdue && (
               <div className="flex items-center gap-2 px-3 py-2 bg-red-50 border border-red-200 rounded-lg">
                 <ExclamationTriangleIcon className="w-4 h-4 text-red-600" />
                 <span className="text-red-800 text-sm font-medium">
-                  {invoiceSummary.daysOverdue} days overdue
+                  {invoice.days_overdue} days overdue
                 </span>
               </div>
             )}
@@ -247,7 +237,6 @@ const InvoiceDetail = () => {
               loading={false}
               error={null}
               onDownload={handleDownloadInvoice}
-              onResendEmail={handleResendEmail}
             />
           </div>
 
