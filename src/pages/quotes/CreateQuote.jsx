@@ -338,8 +338,8 @@ const CreateQuote = () => {
             </div>
           )}
         </div>
-
-        <div className="max-w-4xl mx-auto">
+         
+        <div className="max-w-6xl mx-auto">
           <QuoteForm
             mode="create"
             initialData={initialFormData}
