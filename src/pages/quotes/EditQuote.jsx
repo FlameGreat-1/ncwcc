@@ -6,7 +6,9 @@ import SEO from '../../components/common/SEO.jsx';
 import quotesService from '../../services/quotesService.js';
 
 const EditQuote = ({ quoteId }) => {
+  console.log('🔍 EditQuote component loaded with quoteId:', quoteId);
   const id = quoteId;
+  
   const navigate = useNavigate();
   const { user } = useAuth();
   
@@ -16,15 +18,21 @@ const EditQuote = ({ quoteId }) => {
   const [canEdit, setCanEdit] = useState(false);
 
   useEffect(() => {
+    console.log('🔍 EditQuote useEffect triggered with id:', id);
+    console.log('🔍 About to call fetchQuote');
     fetchQuote();
   }, [id]);
+  
 
   const fetchQuote = async () => {
+    console.log('🔍 fetchQuote function called with id:', id);
     setLoading(true);
     setError(null);
     
     try {
+      console.log('🔍 About to call quotesService.getQuote with id:', id);
       const response = await quotesService.getQuote(id);
+      console.log('🔍 Got response from API:', response);
       setQuote(response);
       
       // Add debug logging
@@ -51,6 +59,7 @@ const EditQuote = ({ quoteId }) => {
         setError('You do not have permission to edit this quote or it cannot be edited in its current status.');
       }
     } catch (err) {
+      console.log('🔍 Error in fetchQuote:', err);
       setError(err.response?.data?.message || 'Failed to load quote for editing');
     } finally {
       setLoading(false);
