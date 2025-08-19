@@ -55,11 +55,12 @@ const EditQuote = ({ quoteId }) => {
   };
 
   const handleUpdateSuccess = (updatedQuote) => {
-    navigate(`/clients/quotes/${updatedQuote.id}`, {
+    const quoteId = updatedQuote?.id || quote?.id || id;
+    navigate(`/clients/quotes/${quoteId}`, {
       state: { message: 'Quote updated successfully!' }
     });
   };
-
+  
   const handleCancel = () => {
     navigate(`/clients/quotes/${id}`);
   };
