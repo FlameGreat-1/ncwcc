@@ -27,9 +27,23 @@ const EditQuote = ({ quoteId }) => {
       const response = await quotesService.getQuote(id);
       setQuote(response);
       
+      // Add debug logging
+      console.log('🔍 EDIT QUOTE DEBUG:');
+      console.log('🔍 User:', user);
+      console.log('🔍 User ID:', user?.id);
+      console.log('🔍 User ID type:', typeof user?.id);
+      console.log('🔍 Quote client:', response.client);
+      console.log('🔍 Quote client type:', typeof response.client);
+      console.log('🔍 Quote status:', response.status);
+      console.log('🔍 User is staff:', user?.is_staff);
+      console.log('🔍 ID comparison:', user?.id === response.client);
+      console.log('🔍 Status check:', ['draft', 'rejected'].includes(response.status));
+      
       const editableStatuses = ['draft', 'rejected'];
       const userCanEdit = editableStatuses.includes(response.status) && 
                          (user?.id === response.client || user?.is_staff);
+      
+      console.log('🔍 Final userCanEdit result:', userCanEdit);
       
       setCanEdit(userCanEdit);
       
@@ -41,7 +55,7 @@ const EditQuote = ({ quoteId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   const handleUpdateSuccess = (updatedQuote) => {
     navigate(`/clients/quotes/${updatedQuote.id}`, {
