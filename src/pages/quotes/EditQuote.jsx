@@ -6,52 +6,41 @@ import SEO from '../../components/common/SEO.jsx';
 import quotesService from '../../services/quotesService.js';
 
 const EditQuote = ({ quoteId }) => {
-  console.log('🔍 EditQuote component loaded with quoteId:', quoteId);
   const id = quoteId;
-  
   const navigate = useNavigate();
   const { user } = useAuth();
   
   const [quote, setQuote] = useState(null);
+  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
 
   useEffect(() => {
-    console.log('🔍 EditQuote useEffect triggered with id:', id);
-    console.log('🔍 About to call fetchQuote');
+    loadServices();
     fetchQuote();
   }, [id]);
-  
+
+  const loadServices = async () => {
+    try {
+      const response = await quotesService.getServices(); 
+      setServices(response.results || response);
+    } catch (err) {
+      console.error('Failed to load services:', err);
+    }
+  };
 
   const fetchQuote = async () => {
-    console.log('🔍 fetchQuote function called with id:', id);
     setLoading(true);
     setError(null);
     
     try {
-      console.log('🔍 About to call quotesService.getQuote with id:', id);
       const response = await quotesService.getQuote(id);
-      console.log('🔍 Got response from API:', response);
       setQuote(response);
-      
-      // Add debug logging
-      console.log('🔍 EDIT QUOTE DEBUG:');
-      console.log('🔍 User:', user);
-      console.log('🔍 User ID:', user?.id);
-      console.log('🔍 User ID type:', typeof user?.id);
-      console.log('🔍 Quote client:', response.client);
-      console.log('🔍 Quote client type:', typeof response.client);
-      console.log('🔍 Quote status:', response.status);
-      console.log('🔍 User is staff:', user?.is_staff);
-      console.log('🔍 ID comparison:', user?.id === response.client);
-      console.log('🔍 Status check:', ['draft', 'rejected'].includes(response.status));
       
       const editableStatuses = ['draft', 'rejected'];
       const userCanEdit = editableStatuses.includes(response.status) && 
-                   (user?.id === response.client.id || user?.is_staff);
-      
-      console.log('🔍 Final userCanEdit result:', userCanEdit);
+                         (user?.id === response.client.id || user?.is_staff);
       
       setCanEdit(userCanEdit);
       
@@ -59,12 +48,11 @@ const EditQuote = ({ quoteId }) => {
         setError('You do not have permission to edit this quote or it cannot be edited in its current status.');
       }
     } catch (err) {
-      console.log('🔍 Error in fetchQuote:', err);
       setError(err.response?.data?.message || 'Failed to load quote for editing');
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   const handleUpdateSuccess = (updatedQuote) => {
     navigate(`/clients/quotes/${updatedQuote.id}`, {
@@ -78,7 +66,7 @@ const EditQuote = ({ quoteId }) => {
 
   const prepareFormData = (quote) => {
     return {
-      service: quote.service?.toString() || '',
+      service_type: quote.service?.toString() || '',
       cleaning_type: quote.cleaning_type || 'general',
       property_address: quote.property_address || '',
       suburb: quote.suburb || '',
@@ -178,25 +166,16 @@ const EditQuote = ({ quoteId }) => {
       
       <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <div className="flex items-center gap-4 mb-6">
-            <button 
-              onClick={handleCancel}
-              className="app-blue hover:text-blue-800 transition-colors"
-            >
-              ← Back to Quote
-            </button>
-          </div>
-
           <div className="text-center mb-8">
             <h1 className="text-4xl font-black app-text-primary mb-4">
               Edit Quote {quote.quote_number}
             </h1>
-            <p className="text-lg app-text-muted max-w-2xl mx-auto">
+            <p className="text-lg app-text-muted max-w-3xl mx-auto">
               Update your quote details below. Changes will be saved as a new revision.
             </p>
           </div>
 
-          <div className="app-bg-secondary app-border rounded-lg p-4 max-w-2xl mx-auto mb-8">
+          <div className="app-bg-secondary app-border rounded-lg p-4 max-w-3xl mx-auto mb-8">
             <div className="flex items-start gap-3">
               <div className="app-blue text-xl">ℹ️</div>
               <div>
@@ -213,7 +192,7 @@ const EditQuote = ({ quoteId }) => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-8">
             <div className="theme-card text-center">
               <h3 className="font-semibold app-text-primary mb-2">Current Status</h3>
               <span className={`
@@ -243,16 +222,17 @@ const EditQuote = ({ quoteId }) => {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <QuoteForm
             mode="edit"
             initialData={prepareFormData(quote)}
+            services={services}
             onSuccess={handleUpdateSuccess}
             onCancel={handleCancel}
           />
         </div>
 
-        <div className="max-w-4xl mx-auto mt-8">
+        <div className="max-w-6xl mx-auto mt-8">
           <div className="app-bg-secondary rounded-lg p-6 text-center">
             <h3 className="text-lg font-semibold app-text-primary mb-2">
               Need to Start Over?
