@@ -66,6 +66,7 @@ const EditQuote = ({ quoteId }) => {
 
   const prepareFormData = (quote) => {
     return {
+      id: quote.id,
       service_type: quote.service?.toString() || '',
       cleaning_type: quote.cleaning_type || 'general',
       property_address: quote.property_address || '',
