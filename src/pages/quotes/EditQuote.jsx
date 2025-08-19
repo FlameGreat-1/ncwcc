@@ -55,8 +55,7 @@ const EditQuote = ({ quoteId }) => {
   };
 
   const handleUpdateSuccess = (updatedQuote) => {
-    const quoteId = updatedQuote?.id || quote?.id || id;
-    navigate(`/clients/quotes/${quoteId}`, {
+    navigate(`/clients/quotes/${id}`, {
       state: { message: 'Quote updated successfully!' }
     });
   };
