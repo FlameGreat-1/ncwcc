@@ -55,18 +55,13 @@ const EditQuote = ({ quoteId }) => {
   };
 
   const handleUpdateSuccess = (updatedQuote) => {
-    console.log('🔍 handleUpdateSuccess called with:', updatedQuote);
-    console.log('🔍 Available IDs - id:', id, 'quoteId:', quoteId, 'quote.id:', quote?.id);
-    
     const targetId = id || quoteId || quote?.id;
-    console.log('🔍 Using targetId for navigation:', targetId);
     
     if (targetId) {
       navigate(`/clients/quotes/${targetId}`, {
         state: { message: 'Quote updated successfully!' }
       });
     } else {
-      console.error('🚨 No valid quote ID found for navigation');
       navigate('/clients/quotes', {
         state: { message: 'Quote updated successfully! Please find your quote in the list.' }
       });

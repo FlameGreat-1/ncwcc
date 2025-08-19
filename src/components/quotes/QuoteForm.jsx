@@ -185,7 +185,6 @@ const QuoteForm = ({
         const updateId = quoteId || initialData.id;
         result = await updateQuote(updateId, submitData);
         
-        // Ensure result has the ID for navigation
         if (!result?.id) {
           result = { ...result, id: updateId };
         }
