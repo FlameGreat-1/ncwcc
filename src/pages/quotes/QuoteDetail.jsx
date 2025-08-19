@@ -238,7 +238,7 @@ const QuoteDetail = () => {
             <div className="flex flex-wrap gap-3">
               {canEdit() && (
                 <Link
-                  to={`/quotes/${quote.id}/edit`}
+                  to={`/clients/quotes/${quote.id}/edit`}
                   className="px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
                 >
                   Edit Quote
