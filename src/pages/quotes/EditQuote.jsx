@@ -49,7 +49,7 @@ const EditQuote = ({ quoteId }) => {
       
       const editableStatuses = ['draft', 'rejected'];
       const userCanEdit = editableStatuses.includes(response.status) && 
-                         (user?.id === response.client || user?.is_staff);
+                   (user?.id === response.client.id || user?.is_staff);
       
       console.log('🔍 Final userCanEdit result:', userCanEdit);
       
