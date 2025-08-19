@@ -184,11 +184,14 @@ const QuoteForm = ({
       } else {
         result = await updateQuote(quoteId || initialData.id, submitData);
       }
+      
       if (onSuccess) {
-        onSuccess(result);
+        // Ensure we pass the result with the correct ID
+        const successData = result || { id: quoteId || initialData?.id };
+        onSuccess(successData);
       } else {
         setTimeout(() => {
-          navigate(`/quotes/${result.id}`);
+          navigate(`/quotes/${result?.id || quoteId || initialData?.id}`);
         }, 1000);
       }
     } catch (err) {
@@ -196,7 +199,7 @@ const QuoteForm = ({
       console.error('Full error:', err);
     }
   };
-
+  
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-AU', {
       style: 'currency',
