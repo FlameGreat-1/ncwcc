@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import QuoteForm from '../../components/quotes/QuoteForm.jsx';
 import SEO from '../../components/common/SEO.jsx';
 import quotesService from '../../services/quotesService.js';
 
-const EditQuote = () => {
-  const { id } = useParams();
+const EditQuote = ({ quoteId }) => {
+  const id = quoteId;
   const navigate = useNavigate();
   const { user } = useAuth();
   
