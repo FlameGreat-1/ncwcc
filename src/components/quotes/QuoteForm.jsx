@@ -182,16 +182,20 @@ const QuoteForm = ({
       if (mode === 'create') {
         result = await createQuote(submitData);
       } else {
-        result = await updateQuote(quoteId || initialData.id, submitData);
+        const updateId = quoteId || initialData.id;
+        result = await updateQuote(updateId, submitData);
+        
+        // Ensure result has the ID for navigation
+        if (!result?.id) {
+          result = { ...result, id: updateId };
+        }
       }
       
       if (onSuccess) {
-        // Ensure we pass the result with the correct ID
-        const successData = result || { id: quoteId || initialData?.id };
-        onSuccess(successData);
+        onSuccess(result);
       } else {
         setTimeout(() => {
-          navigate(`/quotes/${result?.id || quoteId || initialData?.id}`);
+          navigate(`/quotes/${result.id}`);
         }, 1000);
       }
     } catch (err) {
