@@ -5,6 +5,7 @@ import useQuoteActions from '../../hooks/useQuoteActions.js';
 const QuoteForm = ({ 
   initialData = null, 
   mode = 'create',
+  quoteId = null,
   services = [],
   onSuccess,
   onCancel,
@@ -181,7 +182,7 @@ const QuoteForm = ({
       if (mode === 'create') {
         result = await createQuote(submitData);
       } else {
-        result = await updateQuote(initialData.id, submitData);
+        result = await updateQuote(quoteId || initialData.id, submitData);
       }
       if (onSuccess) {
         onSuccess(result);

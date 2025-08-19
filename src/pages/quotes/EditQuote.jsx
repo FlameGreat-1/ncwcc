@@ -226,6 +226,7 @@ const EditQuote = ({ quoteId }) => {
         <div className="max-w-6xl mx-auto">
           <QuoteForm
             mode="edit"
+            quoteId={quote.id} 
             initialData={prepareFormData(quote)}
             services={services}
             onSuccess={handleUpdateSuccess}
