@@ -100,6 +100,9 @@ const CreateQuote = () => {
 
   const handleQuoteSuccess = (newQuote) => {
     if (newQuote?.id) {
+
+      localStorage.setItem('refreshQuotes', 'true');
+      
       setTimeout(() => {
         navigate(`/clients/quotes/${newQuote.id}`, {
           state: { message: 'Quote created successfully!' }
@@ -107,6 +110,9 @@ const CreateQuote = () => {
       }, 1000);
     } else {
       setError('Quote created but unable to redirect. Please check your quotes list.');
+
+      localStorage.setItem('refreshQuotes', 'true');
+      
       setTimeout(() => {
         navigate('/clients/quotes', {
           state: { message: 'Quote created successfully! Check your quotes list.' }

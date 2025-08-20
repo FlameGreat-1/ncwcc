@@ -36,7 +36,8 @@ const Portal = () => {
     quotes: allQuotes, 
     loading: quotesLoading, 
     error: quotesError,
-    totalCount 
+    totalCount,
+    refetch: refreshQuotes
   } = useQuotes('my', emptyParams, true);
 
   const {
@@ -54,14 +55,9 @@ const Portal = () => {
     ordering: '-created_at'
   });
 
-  // Keep only essential debug logs
-  console.log('🔍 Final Quote Stats:', quoteStats);
-  console.log('🔍 User ID:', user?.id);
 
   useEffect(() => {
     const path = location.pathname;
-    console.log('🔍 Current path:', path);
-    console.log('🔍 Path segments:', path.split('/'));
     
     if (path === '/clients/portal') {
       setCurrentView('dashboard');
@@ -72,20 +68,16 @@ const Portal = () => {
     } else if (path.includes('/clients/quotes/') && path.includes('/edit')) {
       setCurrentView('edit-quote');
       const quoteId = path.split('/')[3];
-      console.log('🔍 Edit Quote ID extracted:', quoteId);
       setSelectedQuoteId(quoteId);
     } else if (path.includes('/clients/quotes/')) {
       setCurrentView('quote-detail');
       const quoteId = path.split('/')[3];
-      console.log('🔍 Quote Detail ID extracted:', quoteId);
-      console.log('🔍 Setting selectedQuoteId to:', quoteId);
       setSelectedQuoteId(quoteId);
     } else if (path === '/clients/invoices') {
       setCurrentView('invoices');
     } else if (path.includes('/clients/invoices/')) {
       setCurrentView('invoice-detail');
       const invoiceId = path.split('/')[3];
-      console.log('🔍 Invoice ID extracted:', invoiceId);
       setSelectedInvoiceId(invoiceId);
     } else if (path.startsWith('/clients/appointments')) {
       setCurrentView('appointments');
@@ -125,6 +117,15 @@ const Portal = () => {
     }
   }, [allQuotes, totalCount]); 
 
+  useEffect(() => {
+    const shouldRefresh = localStorage.getItem('refreshQuotes') === 'true';
+    if (shouldRefresh) {
+      console.log('🔄 Refresh flag detected, refreshing quotes list');
+      localStorage.removeItem('refreshQuotes');
+      refreshQuotes();
+    }
+  }, [location.pathname, refreshQuotes]);
+  
   const handleNavigation = (view, itemId = null) => {
     console.log('🔍 Navigation called:', view, itemId);
     setCurrentView(view);

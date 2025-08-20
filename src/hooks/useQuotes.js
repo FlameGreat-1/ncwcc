@@ -155,12 +155,32 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
   }, [fetchQuotes]);
 
   useEffect(() => {
-    if (autoFetch && !hasInitialized.current) {
+    if (autoFetch) {
       console.log('🔍 Initial fetch triggered');
       hasInitialized.current = true;
       fetchQuotes();
+
+      const refreshInterval = setInterval(() => {
+        if (document.visibilityState === 'visible') {
+          console.log('🔄 Refreshing quotes list (visibility change)');
+          fetchQuotes();
+        }
+      }, 30000);
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === 'visible') {
+          console.log('🔄 Refreshing quotes on tab focus');
+          fetchQuotes();
+        }
+      };
+      
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      
+      return () => {
+        clearInterval(refreshInterval);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchQuotes]);
 
   return {
     quotes,
