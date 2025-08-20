@@ -155,10 +155,6 @@ class QuotesService {
     return this.getQuotesByStatus('rejected', params);
   }
 
-  async getNDISQuotes(params = {}) {
-    return this.getMyQuotes({ is_ndis_client: true, ...params });
-  }
-
   createDownloadUrl(blob, filename) {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
