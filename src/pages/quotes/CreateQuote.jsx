@@ -101,14 +101,14 @@ const CreateQuote = () => {
   const handleQuoteSuccess = (newQuote) => {
     if (newQuote?.id) {
       setTimeout(() => {
-        navigate(`/quotes/${newQuote.id}`, {
+        navigate(`/clients/quotes/${newQuote.id}`, {
           state: { message: 'Quote created successfully!' }
         });
       }, 1000);
     } else {
       setError('Quote created but unable to redirect. Please check your quotes list.');
       setTimeout(() => {
-        navigate('/quotes', {
+        navigate('/clients/quotes', {
           state: { message: 'Quote created successfully! Check your quotes list.' }
         });
       }, 1000);
