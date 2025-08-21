@@ -322,12 +322,12 @@ const Contact = () => {
             </div>
           </div>
         </section>
-        <section className="relative z-10 section-padding bg-white">
+        <section className="relative z-10 section-padding bg-white dark:bg-gray-900">
           <div className="container mx-auto">
             <div className="max-w-4xl mx-auto text-center">
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] rounded-3xl blur opacity-0 group-hover:opacity-30 transition-all duration-700"></div>
-                <div className="relative bg-white/90 backdrop-blur-xl border-2 border-white/40 rounded-3xl p-12 shadow-2xl hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
+                <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border-2 border-white/40 dark:border-gray-700/40 rounded-3xl p-12 shadow-2xl hover:shadow-[0_0_60px_rgba(0,109,166,0.15)] transition-all duration-700 hover:-translate-y-2 hover:scale-105 transform-gpu overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#006da6]/5 via-transparent to-[#005a8a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
                   <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#006da6] via-[#0080c7] to-[#005a8a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 rounded-t-3xl"></div>
                   
@@ -337,10 +337,10 @@ const Contact = () => {
                       <div className="relative text-6xl group-hover/cta-icon:animate-bounce group-hover/cta-icon:scale-110 transition-transform duration-500"></div>
                     </div>
                     
-                    <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6 group-hover:text-[#006da6] transition-colors duration-500">
+                    <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-6 group-hover:text-[#006da6] transition-colors duration-500">
                       Ready to Get Started?
                     </h2>
-                    <p className="text-lg text-gray-600 mb-10 font-medium group-hover:text-gray-800 transition-colors duration-500">
+                    <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 font-medium group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-colors duration-500">
                       Don't wait - contact us today for your free cleaning quote and experience the difference professional cleaning makes.
                     </p>
                     
@@ -369,26 +369,26 @@ const Contact = () => {
                     </div>
                     
                     <div className="mt-10 pt-8 border-t border-[#006da6]/20">
-                      <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600">
+                      <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600 dark:text-gray-300">
                         <div className="relative group/feature flex items-center gap-2">
                           <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
                           <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">✅</span>
-                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">Free Quotes</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] dark:group-hover/feature:text-[#3b9edb] transition-colors duration-500">Free Quotes</span>
                         </div>
                         <div className="relative group/feature flex items-center gap-2">
                           <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
                           <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">⚡</span>
-                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">Fast Response</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] dark:group-hover/feature:text-[#3b9edb] transition-colors duration-500">Fast Response</span>
                         </div>
                         <div className="relative group/feature flex items-center gap-2">
                           <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
                           <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">🛡️</span>
-                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">Fully Insured</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] dark:group-hover/feature:text-[#3b9edb] transition-colors duration-500">Fully Insured</span>
                         </div>
                         <div className="relative group/feature flex items-center gap-2">
                           <div className="absolute -inset-2 bg-gradient-to-r from-[#006da6]/10 to-transparent opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500 rounded-lg"></div>
                           <span className="relative text-[#006da6] text-lg group-hover/feature:animate-bounce">⭐</span>
-                          <span className="relative font-medium group-hover/feature:text-[#006da6] transition-colors duration-500">5-Star Service</span>
+                          <span className="relative font-medium group-hover/feature:text-[#006da6] dark:group-hover/feature:text-[#3b9edb] transition-colors duration-500">5-Star Service</span>
                         </div>
                       </div>
                     </div>
