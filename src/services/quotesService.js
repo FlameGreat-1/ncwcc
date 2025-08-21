@@ -123,9 +123,14 @@ class QuotesService {
   }
 
   async getServiceAddons(serviceId, params = {}) {
-    const response = await api.get(`${API_ENDPOINTS.SERVICES.BASE}${serviceId}/addons/`, { params });
+    const response = await api.get(API_ENDPOINTS.SERVICES.ADDONS, { 
+      params: { 
+        service: serviceId,
+        ...params 
+      } 
+    });
     return response.data;
-  }
+  }  
 
   async searchQuotes(searchTerm, filters = {}) {
     const params = {
