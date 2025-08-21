@@ -9,7 +9,8 @@ const QuoteForm = ({
   services = [],
   onSuccess,
   onCancel,
-  className = ''
+  className = '',
+  buttonText = null
 }) => {
   const navigate = useNavigate();
   const { createQuote, updateQuote, calculateQuote, loading, error, clearError } = useQuoteActions();
