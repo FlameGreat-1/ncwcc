@@ -349,6 +349,7 @@ const CreateQuote = () => {
                 services={services}
                 onSuccess={handleQuoteFormComplete}
                 onCancel={handleCancel}
+                buttonText="Next"
               />
             ) : (
               <QuoteAddonsAttachments

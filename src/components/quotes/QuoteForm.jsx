@@ -563,8 +563,8 @@ const QuoteForm = ({
               type="submit"
               disabled={loading}
               className="flex-1 theme-button disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Processing...' : mode === 'create' ? 'Create Quote' : 'Update Quote'}
+            > 
+              {loading ? 'Processing...' : buttonText || (mode === 'create' ? 'Create Quote' : 'Update Quote')}
             </button>
           </div>
         </div>
