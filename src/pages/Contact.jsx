@@ -334,7 +334,7 @@ const Contact = () => {
                   <div className="relative z-10">
                     <div className="relative group/cta-icon mb-8">
                       <div className="absolute -inset-4 bg-gradient-to-r from-[#006da6] to-[#005a8a] rounded-full blur opacity-0 group-hover/cta-icon:opacity-40 transition-all duration-500"></div>
-                      <div className="relative text-6xl group-hover/cta-icon:animate-bounce group-hover/cta-icon:scale-110 transition-transform duration-500">🎯</div>
+                      <div className="relative text-6xl group-hover/cta-icon:animate-bounce group-hover/cta-icon:scale-110 transition-transform duration-500"></div>
                     </div>
                     
                     <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6 group-hover:text-[#006da6] transition-colors duration-500">
