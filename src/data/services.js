@@ -3,18 +3,21 @@ import { SERVICES } from '../utils/constants.js';
 export const servicesData = [
   {
     id: SERVICES.GENERAL,
-    title: 'General Home Cleaning',
+    title: 'Regular / General House Cleaning',
     description: 'Routine cleaning to keep your home fresh and tidy.',
     icon: '🏠',
     basePrice: 120,
     duration: '2-3 hours',
     includes: [
-      'Dusting all surfaces',
-      'Vacuuming carpets and mopping floors',
-      'Bathroom cleaning and sanitizing',
-      'Kitchen cleaning including benchtops',
-      'Emptying bins and replacing liners',
-      'Making beds and tidying rooms'
+      'Dusting surfaces, furniture & décor',
+      'Vacuum carpets & rugs',
+      'Mop hard floors',
+      'Wipe kitchen benches & splashbacks',
+      'Clean stovetop (external)',
+      'Empty bins & replace liners',
+      'Wipe bathroom surfaces (sink, toilet, mirror)',
+      'Spot clean marks on walls/doors',
+      'Make beds (optional)'
     ],
     popular: false
   },
@@ -22,17 +25,18 @@ export const servicesData = [
     id: SERVICES.DEEP,
     title: 'Deep Cleaning',
     description: 'In-depth, detailed cleaning including skirtings, tiles, and hard-to-reach areas.',
-    icon: '🧼',
+    icon: '🧹',
     basePrice: 180,
     duration: '4-6 hours',
     includes: [
-      'Everything in General Cleaning',
-      'Deep scrubbing of bathrooms and tiles',
-      'Cleaning inside appliances',
-      'Detailed skirting board cleaning',
-      'Light fixture and fan cleaning',
-      'Window sill and frame cleaning',
-      'Cupboard exterior cleaning'
+      'Scrub shower tiles & grout',
+      'Clean inside oven',
+      'Clean inside rangehood filters',
+      'Clean skirting boards',
+      'Dust light fittings',
+      'Clean behind/under furniture (if accessible)',
+      'Window sills & tracks',
+      'Ceiling fans'
     ],
     popular: true
   },
@@ -40,72 +44,184 @@ export const servicesData = [
     id: SERVICES.END_OF_LEASE,
     title: 'End-of-Lease Cleaning',
     description: 'Bond-back guaranteed cleaning for tenants and agents.',
-    icon: '📦',
+    icon: '🛋',
     basePrice: 250,
     duration: '6-8 hours',
     includes: [
-      'Complete property deep clean',
-      'Oven and rangehood deep clean',
-      'Carpet steam cleaning',
-      'Window cleaning inside and out',
-      'Wall washing and mark removal',
-      'Cupboard cleaning inside and out',
-      'Bond-back guarantee'
+      'All rooms top-to-bottom cleaning',
+      'Inside & outside cupboards',
+      'Inside oven, rangehood, and stovetop',
+      'Windows (internal & external upon request)',
+      'Walls spot cleaned or full wipe down',
+      'Carpet steam cleaning (optional/add-on)',
+      'Bathrooms: descaling tiles, scrubbing grout',
+      'Full kitchen detail incl. appliances',
+      'Blinds dusted or wiped'
     ],
     popular: false,
     guarantee: 'Bond-back guarantee included'
   },
   {
     id: SERVICES.NDIS,
-    title: 'NDIS Cleaning Support',
+    title: 'NDIS Cleaning Services',
     description: 'Reliable, respectful cleaning for participants with invoices tailored to your plan manager.',
-    icon: '♿',
+    icon: '🧽',
     basePrice: 140,
     duration: '2-4 hours',
     includes: [
-      'Participant-focused cleaning approach',
-      'Flexible scheduling around your needs',
-      'NDIS compliant invoicing',
-      'Respectful and understanding staff',
-      'Regular or one-off services',
-      'Clear service documentation'
+      'Tailored to participant\'s needs & support plan',
+      'General cleaning of kitchen, bathroom, living areas',
+      'Safety-focused cleaning (non-toxic products)',
+      'Optional linen change or laundry support',
+      'Flexible frequency (weekly, fortnightly, etc.)'
     ],
     popular: false,
     ndisCompliant: true
   },
   {
     id: SERVICES.PET_TREATMENT,
-    title: 'office and commecial cleaning & Odour Treatment',
-    description: 'Add-on service for homes with pets.',
+    title: 'Office & Commercial Cleaning',
+    description: 'Professional cleaning for office spaces and commercial properties.',
     icon: '🏢',
     basePrice: 50,
     duration: '1-2 hours',
     includes: [
-      'Specialized office and commecial cleaning',
-      'Odour neutralizing treatment',
-      'Pet-safe cleaning products',
-      'Furniture and upholstery cleaning',
-      'Air freshening service'
+      'Dust desks, chairs, and equipment',
+      'Sanitise shared surfaces (phones, keyboards)',
+      'Kitchenette wipe-down',
+      'Rubbish bin emptying',
+      'Bathroom sanitisation',
+      'Vacuum and mop all floors',
+      'Supply restocking (toilet paper, hand soap, etc.)'
     ],
     popular: false,
     addon: true
   },
   {
     id: SERVICES.WINDOW_CARPET,
-    title: 'Window & Carpet Cleaning',
-    description: 'Add optional window wiping or steam cleaning to any package.',
-    icon: '🧽',
+    title: 'Add-on Services',
+    description: 'Additional cleaning services that can be added to any package.',
+    icon: '🪟',
     basePrice: 80,
     duration: '2-3 hours',
     includes: [
-      'Interior and exterior window cleaning',
-      'Professional carpet steam cleaning',
-      'Spot stain treatment',
-      'Window frame and sill cleaning',
-      'Screen cleaning where applicable'
+      'Carpet steam cleaning',
+      'Window cleaning (internal/external)',
+      'Fridge cleaning (inside)',
+      'Oven deep cleaning',
+      'Balcony sweep & mop',
+      'Pressure washing (driveway, walls)',
+      'Mould treatment',
+      'Post-construction cleaning',
+      'After-party/event clean-up'
     ],
     popular: false,
     addon: true
+  },
+  {
+    id: 'airbnb',
+    title: 'Airbnb Turnover Cleaning',
+    description: 'Quick and thorough cleaning between guest stays.',
+    icon: '🏨',
+    basePrice: 150,
+    duration: '2-4 hours',
+    includes: [
+      'Complete linen change',
+      'Bathroom sanitization',
+      'Kitchen deep clean',
+      'Dust and vacuum all areas',
+      'Restock essentials',
+      'Trash removal',
+      'Property inspection'
+    ],
+    popular: false
+  },
+  {
+    id: 'post_renovation',
+    title: 'Post-Renovation Cleaning',
+    description: 'Thorough cleaning after construction or renovation work.',
+    icon: '🔨',
+    basePrice: 280,
+    duration: '6-8 hours',
+    includes: [
+      'Construction dust removal',
+      'Paint splatter cleaning',
+      'Debris removal',
+      'Window and frame cleaning',
+      'Floor deep cleaning',
+      'Surface sanitization',
+      'Final inspection'
+    ],
+    popular: false
+  },
+  {
+    id: 'pressure_washing',
+    title: 'Pressure Washing',
+    description: 'High-pressure cleaning for outdoor surfaces.',
+    icon: '💦',
+    basePrice: 120,
+    duration: '2-3 hours',
+    includes: [
+      'Driveway cleaning',
+      'Patio/deck washing',
+      'Exterior wall cleaning',
+      'Fence cleaning',
+      'Removal of mold and mildew',
+      'Gutter exterior cleaning'
+    ],
+    popular: false,
+    addon: true
+  },
+  {
+    id: 'mould_removal',
+    title: 'Mould Removal',
+    description: 'Specialized cleaning to remove mould and prevent regrowth.',
+    icon: '🧫',
+    basePrice: 150,
+    duration: '3-4 hours',
+    includes: [
+      'Mould identification',
+      'Safe removal treatment',
+      'Surface sanitization',
+      'Preventative treatment',
+      'Humidity control recommendations'
+    ],
+    popular: false,
+    addon: true
+  },
+  {
+    id: 'after_builders',
+    title: 'After Builders Clean',
+    description: 'Comprehensive cleaning after construction work is completed.',
+    icon: '🏗️',
+    basePrice: 300,
+    duration: '8-10 hours',
+    includes: [
+      'Removal of construction debris',
+      'Dust elimination from all surfaces',
+      'Window and frame cleaning',
+      'Floor scrubbing and polishing',
+      'Fixture and fitting cleaning',
+      'Paint and adhesive residue removal',
+      'Final inspection'
+    ],
+    popular: false
+  },
+  {
+    id: 'custom',
+    title: 'Custom One-off Cleans',
+    description: 'Tailored cleaning services for specific needs.',
+    icon: '✨',
+    basePrice: 160,
+    duration: 'Varies',
+    includes: [
+      'Consultation to determine needs',
+      'Customized cleaning plan',
+      'Specialized equipment as needed',
+      'Flexible scheduling',
+      'Detailed follow-up'
+    ],
+    popular: false
   }
 ];
 

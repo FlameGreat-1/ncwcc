@@ -23,10 +23,10 @@ export const COMPANY_INFO = {
   };
   
   export const CLEANING_TYPES = [
-    { id: SERVICES.GENERAL, name: 'General Home Cleaning', basePrice: 120 },
+    { id: SERVICES.GENERAL, name: 'Regular / General House Cleaning', basePrice: 120 },
     { id: SERVICES.DEEP, name: 'Deep Cleaning', basePrice: 180 },
     { id: SERVICES.END_OF_LEASE, name: 'End-of-Lease Cleaning', basePrice: 250 },
-    { id: SERVICES.NDIS, name: 'NDIS Cleaning Support', basePrice: 140 }
+    { id: SERVICES.NDIS, name: 'NDIS Cleaning Services', basePrice: 140 }
   ];
   
   export const ROOM_TYPES = {
@@ -85,7 +85,7 @@ export const COMPANY_INFO = {
   ];
   
   export const SOCIAL_LINKS = {
-    facebook: 'https://facebook.com/nswcc',
+    facebook: 'https://www.facebook.com/NSWCleaningCompanyOfficial?mibextid=wwXIfr&mibextid=wwXIfr',
     instagram: 'https://instagram.com/nswcc'
   };
   

@@ -96,7 +96,7 @@ const Gallery = () => {
       beforeImage: '/images/gallery/before-1.jpg',
       afterImage: '/images/gallery/after-1.jpg',
       location: 'Box Hill, NSW',
-      description: 'Complete bond cleaning transformation with full kitchen and bathroom restoration'
+      description: 'Complete bond cleaning transformation with full house and building restoration'
     },
     {
       id: 2,

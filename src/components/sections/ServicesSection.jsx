@@ -60,9 +60,19 @@ const ServicesSection = () => {
 
   const getVisibleServices = () => {
     if (showFourthCard) {
-      return [mainServices[1], mainServices[2], mainServices[3]];
+      
+      return [
+        mainServices.find(s => s.id === 'ndis') || mainServices[3],
+        mainServices.find(s => s.title.includes('Office')) || mainServices[4],
+        mainServices.find(s => s.title.includes('Airbnb')) || mainServices[5]
+      ];
     } else {
-      return [mainServices[0], mainServices[1], mainServices[2]];
+      
+      return [
+        mainServices.find(s => s.title.includes('Regular')) || mainServices[0],
+        mainServices.find(s => s.title.includes('Deep')) || mainServices[1],
+        mainServices.find(s => s.title.includes('End-of-Lease')) || mainServices[2]
+      ];
     }
   };
 
@@ -269,4 +279,8 @@ const ServicesSection = () => {
 };
 
 export default ServicesSection;
+
+
+
+
 
