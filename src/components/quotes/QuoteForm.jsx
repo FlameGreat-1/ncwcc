@@ -167,17 +167,23 @@ const QuoteForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+    
+    const submitData = {
+      ...formData,
+      number_of_rooms: parseInt(formData.number_of_rooms),
+      urgency_level: parseInt(formData.urgency_level),
+      square_meters: formData.square_meters ? parseFloat(formData.square_meters) : null,
+      preferred_time: formData.preferred_time ? `${formData.preferred_time}:00` : null,
+    };
+    
+    console.log('🚀 Submitting data:', JSON.stringify(submitData, null, 2));
+    
+    if (mode === 'create' && onSuccess) {
+      onSuccess(submitData);
+      return;
+    }
+    
     try {
-      const submitData = {
-        ...formData,
-        number_of_rooms: parseInt(formData.number_of_rooms),
-        urgency_level: parseInt(formData.urgency_level),
-        square_meters: formData.square_meters ? parseFloat(formData.square_meters) : null,
-        preferred_time: formData.preferred_time ? `${formData.preferred_time}:00` : null,
-      };
-      
-      console.log('🚀 Submitting data:', JSON.stringify(submitData, null, 2));
-      
       let result;
       if (mode === 'create') {
         result = await createQuote(submitData);

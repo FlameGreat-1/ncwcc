@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import QuoteForm from '../../components/quotes/QuoteForm.jsx';
+import QuoteAddonsAttachments from '../../components/quotes/QuoteAddonsAttachments.jsx';
 import SEO from '../../components/common/SEO.jsx';
 import quotesService from '../../services/quotesService.js';
 
@@ -17,6 +18,8 @@ const CreateQuote = () => {
   const [showTemplates, setShowTemplates] = useState(false);
   const [services, setServices] = useState([]);
   const [initialFormData, setInitialFormData] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [quoteData, setQuoteData] = useState(null);
 
   useEffect(() => {
     initializePage();
@@ -98,9 +101,13 @@ const CreateQuote = () => {
     setShowTemplates(false);
   };
 
+  const handleQuoteFormComplete = (formData) => {
+    setQuoteData(formData);
+    setCurrentStep(2);
+  };
+
   const handleQuoteSuccess = (newQuote) => {
     if (newQuote?.id) {
-
       localStorage.setItem('refreshQuotes', 'true');
       
       setTimeout(() => {
@@ -110,7 +117,6 @@ const CreateQuote = () => {
       }, 1000);
     } else {
       setError('Quote created but unable to redirect. Please check your quotes list.');
-
       localStorage.setItem('refreshQuotes', 'true');
       
       setTimeout(() => {
@@ -203,13 +209,12 @@ const CreateQuote = () => {
       
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Create New Quote</h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Create a new cleaning service quote with our easy-to-use form
             </p>
-            {templates.length > 0 && !selectedTemplate && !showTemplates && (
+            {templates.length > 0 && !selectedTemplate && !showTemplates && currentStep === 1 && (
               <div className="mt-6">
                 <button
                   onClick={handleShowTemplates}
@@ -228,7 +233,7 @@ const CreateQuote = () => {
             </div>
           )}
 
-          {showTemplates && templates.length > 0 && !selectedTemplate && (
+          {currentStep === 1 && showTemplates && templates.length > 0 && !selectedTemplate && (
             <div className="mb-8">
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 max-w-4xl mx-auto">
                 <div className="flex justify-between items-center mb-6">
@@ -313,7 +318,7 @@ const CreateQuote = () => {
             </div>
           )}
 
-          {selectedTemplate && (
+          {currentStep === 1 && selectedTemplate && (
             <div className="mb-6">
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 max-w-2xl mx-auto">
                 <div className="flex justify-between items-start">
@@ -335,16 +340,25 @@ const CreateQuote = () => {
               </div>
             </div>
           )}
-        </div>
-         
-        <div className="max-w-6xl mx-auto">
-          <QuoteForm
-            mode="create"
-            initialData={initialFormData}
-            services={services}
-            onSuccess={handleQuoteSuccess}
-            onCancel={handleCancel}
-          />
+          
+          <div className="max-w-6xl mx-auto">
+            {currentStep === 1 ? (
+              <QuoteForm
+                mode="create"
+                initialData={initialFormData}
+                services={services}
+                onSuccess={handleQuoteFormComplete}
+                onCancel={handleCancel}
+              />
+            ) : (
+              <QuoteAddonsAttachments
+                quoteData={quoteData}
+                serviceId={quoteData?.service_type}
+                onComplete={handleQuoteSuccess}
+                onBack={() => setCurrentStep(1)}
+              />
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -352,3 +366,4 @@ const CreateQuote = () => {
 };
 
 export default CreateQuote;
+
