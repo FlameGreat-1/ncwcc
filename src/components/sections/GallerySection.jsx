@@ -92,8 +92,8 @@ const GallerySection = () => {
       id: 4,
       title: 'Bathroom Deep Clean',
       serviceType: 'deep',
-      beforeImage: '/images/gallery/before-4.jpg',
-      afterImage: '/images/gallery/after-4.jpg',
+      beforeImage: '/images/gallery/before-4.jpeg',
+      afterImage: '/images/gallery/after-4.jpeg',
       location: 'North Shore, NSW',
       description: 'Complete bathroom sanitization'
     },

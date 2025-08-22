@@ -120,8 +120,8 @@ const Gallery = () => {
       id: 4,
       title: 'Bathroom Deep Clean',
       serviceType: 'deep',
-      beforeImage: '/images/gallery/before-4.jpg',
-      afterImage: '/images/gallery/after-4.jpg',
+      beforeImage: '/images/gallery/before-4.jpeg',
+      afterImage: '/images/gallery/after-4.jpeg',
       location: 'North Shore, NSW',
       description: 'Complete bathroom sanitization with tile and grout restoration'
     },
@@ -183,8 +183,8 @@ const Gallery = () => {
       id: 11,
       title: 'office and commecial cleaning Service',
       serviceType: 'general',
-      beforeImage: '/images/gallery/before-11.jpg',
-      afterImage: '/images/gallery/after-11.jpg',
+      beforeImage: '/images/gallery/before-11.jpeg',
+      afterImage: '/images/gallery/after-11.jpeg',
       location: 'Western Sydney, NSW',
       description: 'Specialized office and commecial cleaning and odor treatment service'
     },
