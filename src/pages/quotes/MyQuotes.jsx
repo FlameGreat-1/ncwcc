@@ -16,7 +16,7 @@ const MyQuotes = () => {
     loading: allLoading, 
     error: allError,
     refetch: refetchAll
-  } = useQuotes('my', {}, true);
+  } = useQuotes('my', { limit: 100 }, true);
 
   const stats = useMemo(() => {
     if (!allQuotes || allQuotes.length === 0) return { 
@@ -200,8 +200,8 @@ const MyQuotes = () => {
                 </button>
               ))}
             </div>
-            <div className="text-sm text-gray-500 mt-2">
-              Debug: {allQuotes?.length || 0} quotes loaded from API
+            <div className="bg-red-200 p-4 text-red-800 font-bold mb-4"></div>
+              DEBUG: {allQuotes?.length || 0} quotes loaded from API
           </div>
         </div>
         </div>
