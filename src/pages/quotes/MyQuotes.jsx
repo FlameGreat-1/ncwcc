@@ -200,8 +200,6 @@ const MyQuotes = () => {
                 </button>
               ))}
             </div>
-            <div className="bg-red-200 p-4 text-red-800 font-bold mb-4"></div>
-              DEBUG: {allQuotes?.length || 0} quotes loaded from API
           </div>
         </div>
 
