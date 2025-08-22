@@ -51,9 +51,10 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
       return response;
     },
     enabled: autoFetch,
+    refetchOnMount: true,
     refetchInterval: 30000,
     refetchOnWindowFocus: true,
-    staleTime: 10000,
+    staleTime: 0,
     retry: 3,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });

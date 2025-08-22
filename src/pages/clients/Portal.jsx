@@ -31,7 +31,7 @@ const Portal = () => {
     totalValue: 0
   });
 
-  const emptyParams = {};
+  const emptyParams = useMemo(() => ({}), []);
   const { 
     quotes: allQuotes, 
     loading: quotesLoading, 
@@ -91,6 +91,12 @@ const Portal = () => {
   }, [location.pathname]);
 
   useEffect(() => {
+    if (currentView === 'quotes' || currentView === 'dashboard') {
+      refreshQuotes();
+    }
+  }, [currentView, refreshQuotes]);  
+
+  useEffect(() => {
     if (Array.isArray(allQuotes) && allQuotes.length > 0) {
       const stats = allQuotes.reduce((acc, quote) => {
         acc[quote.status] = (acc[quote.status] || 0) + 1;
@@ -116,15 +122,6 @@ const Portal = () => {
       });
     }
   }, [allQuotes, totalCount]); 
-
-  useEffect(() => {
-    const shouldRefresh = localStorage.getItem('refreshQuotes') === 'true';
-    if (shouldRefresh) {
-      console.log('🔄 Refresh flag detected, refreshing quotes list');
-      localStorage.removeItem('refreshQuotes');
-      refreshQuotes();
-    }
-  }, [location.pathname, refreshQuotes]);
   
   const handleNavigation = (view, itemId = null) => {
     console.log('🔍 Navigation called:', view, itemId);

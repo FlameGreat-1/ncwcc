@@ -16,10 +16,17 @@ const useQuoteActions = () => {
       const errorMessage = err.response?.data?.message || err.message || 'Failed to create quote';
       setError(errorMessage);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['quotes'] });
+    onSuccess: (data) => {
+
+      queryClient.invalidateQueries({ 
+        predicate: (query) => query.queryKey[0] === 'quotes' 
+      });
+      
+      if (data?.id) {
+        queryClient.invalidateQueries({ queryKey: ['quote', data.id] });
+      }
     }
-  });
+  });  
 
   const updateQuoteMutation = useMutation({
     mutationFn: ({ quoteId, updateData }) => quotesService.updateQuote(quoteId, updateData),
