@@ -204,8 +204,6 @@ const MyQuotes = () => {
               DEBUG: {allQuotes?.length || 0} quotes loaded from API
           </div>
         </div>
-        </div>
-
 
         {allError ? (
           <div className="theme-card text-center py-12">
