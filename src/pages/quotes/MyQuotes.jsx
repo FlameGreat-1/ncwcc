@@ -200,8 +200,12 @@ const MyQuotes = () => {
                 </button>
               ))}
             </div>
+            <div className="text-sm text-gray-500 mt-2">
+              Debug: {allQuotes?.length || 0} quotes loaded from API
           </div>
         </div>
+        </div>
+
 
         {allError ? (
           <div className="theme-card text-center py-12">
