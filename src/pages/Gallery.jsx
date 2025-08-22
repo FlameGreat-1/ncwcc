@@ -129,8 +129,8 @@ const Gallery = () => {
       id: 5,
       title: 'General Home Maintenance',
       serviceType: 'general',
-      beforeImage: '/images/gallery/before-5.jpg',
-      afterImage: '/images/gallery/after-5.jpg',
+      beforeImage: '/images/gallery/before-5.jpeg',
+      afterImage: '/images/gallery/after-5.jpeg',
       location: 'Eastern Suburbs, NSW',
       description: 'Regular home cleaning service maintaining cleanliness and hygiene'
     },
@@ -138,8 +138,8 @@ const Gallery = () => {
       id: 6,
       title: 'Carpet Steam Cleaning',
       serviceType: 'general',
-      beforeImage: '/images/gallery/before-6.jpg',
-      afterImage: '/images/gallery/after-6.jpg',
+      beforeImage: '/images/gallery/before-6.jpeg',
+      afterImage: '/images/gallery/after-6.jpeg',
       location: 'Inner West, NSW',
       description: 'Professional carpet restoration removing stains and odors'
     },
@@ -147,8 +147,8 @@ const Gallery = () => {
       id: 7,
       title: 'Post-Construction Clean',
       serviceType: 'deep',
-      beforeImage: '/images/gallery/before-7.jpg',
-      afterImage: '/images/gallery/after-7.jpg',
+      beforeImage: '/images/gallery/before-7.jpeg',
+      afterImage: '/images/gallery/after-7.jpeg',
       location: 'Hills District, NSW',
       description: 'Complete post-renovation cleaning including dust and debris removal'
     },
