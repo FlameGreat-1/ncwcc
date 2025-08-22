@@ -101,8 +101,8 @@ const GallerySection = () => {
       id: 5,
       title: 'General Home Maintenance',
       serviceType: 'general',
-      beforeImage: '/images/gallery/before-5.jpg',
-      afterImage: '/images/gallery/after-5.jpg',
+      beforeImage: '/images/gallery/before-5.jpeg',
+      afterImage: '/images/gallery/after-5.jpeg',
       location: 'Eastern Suburbs, NSW',
       description: 'Regular home cleaning service'
     },
@@ -110,8 +110,8 @@ const GallerySection = () => {
       id: 6,
       title: 'Carpet Steam Cleaning',
       serviceType: 'general',
-      beforeImage: '/images/gallery/before-6.jpg',
-      afterImage: '/images/gallery/after-6.jpg',
+      beforeImage: '/images/gallery/before-6.jpeg',
+      afterImage: '/images/gallery/after-6.jpeg',
       location: 'Inner West, NSW',
       description: 'Professional carpet restoration'
     }
