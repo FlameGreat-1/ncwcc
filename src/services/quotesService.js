@@ -130,6 +130,13 @@ class QuotesService {
       } 
     });
     return response.data;
+  } 
+
+  async getQuoteAddons(quoteId, params = {}) {
+    const response = await api.get(`${API_ENDPOINTS.QUOTES.BASE}${quoteId}/addons/`, { 
+      params: { ...params } 
+    });
+    return response.data;
   }  
 
   async searchQuotes(searchTerm, filters = {}) {

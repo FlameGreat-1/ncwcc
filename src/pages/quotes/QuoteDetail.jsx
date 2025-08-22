@@ -19,6 +19,7 @@ const QuoteDetail = () => {
   const [quoteItems, setQuoteItems] = useState([]);
   const [quoteAttachments, setQuoteAttachments] = useState([]);
   const [quoteRevisions, setQuoteRevisions] = useState([]);
+  const [quoteAddons, setQuoteAddons] = useState([]);
 
   const {
     submitQuote,
@@ -32,6 +33,7 @@ const QuoteDetail = () => {
   const tabs = [
     { key: 'details', label: 'Quote Details' },
     { key: 'items', label: 'Items' },
+    { key: 'addons', label: 'Add-ons' },
     { key: 'attachments', label: 'Attachments' },
     { key: 'history', label: 'History' }
   ];
@@ -61,12 +63,16 @@ const QuoteDetail = () => {
 
   const fetchTabData = async () => {
     if (!quote) return;
-
+  
     try {
       switch (activeTab) {
         case 'items':
           const itemsResponse = await quotesService.getQuoteItems(quote.id);
           setQuoteItems(itemsResponse.results || itemsResponse);
+          break;
+        case 'addons':
+          const addonsResponse = await quotesService.getQuoteAddons(quote.id);
+          setQuoteAddons(addonsResponse.results || addonsResponse);
           break;
         case 'attachments':
           const attachmentsResponse = await quotesService.getQuoteAttachments(quote.id);
@@ -650,6 +656,45 @@ const QuoteDetail = () => {
             </div>
           )}
 
+          {activeTab === 'addons' && (
+            <div className="theme-card">
+              <h3 className="text-xl font-bold app-text-primary mb-4">Quote Add-ons</h3>
+              {quoteAddons.length === 0 ? (
+                <p className="app-text-muted text-center py-8">No add-ons found for this quote.</p>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {quoteAddons.map((addon, index) => (
+                    <div key={addon.id || index} className="border app-border rounded-lg p-4">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="font-semibold app-text-primary">{addon.name}</h4>
+                          <p className="app-text-muted text-sm">{addon.description}</p>
+                          {addon.addon_name && (
+                            <p className="app-text-secondary text-sm mt-2">
+                              <span className="font-medium">Add-on:</span> {addon.addon_name}
+                            </p>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <p className="font-medium">{formatCurrency(addon.unit_price)}</p>
+                          <p className="text-sm app-text-muted">
+                            Quantity: {addon.quantity}
+                          </p>
+                          <p className="text-sm font-medium app-text-primary mt-1">
+                            Total: {formatCurrency(addon.total_price)}
+                          </p>
+                          <p className="text-xs app-text-muted">
+                            {addon.is_optional ? 'Optional' : 'Required'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+  
           {activeTab === 'attachments' && (
             <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Attachments</h3>
