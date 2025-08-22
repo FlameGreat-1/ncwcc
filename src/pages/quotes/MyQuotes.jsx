@@ -8,13 +8,14 @@ const MyQuotes = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
-  const [showStats, setShowStats] = useState(true);
+  const [showStats, _setShowStats] = useState(true);
+
   
   const { 
     quotes: allQuotes, 
     loading: allLoading, 
     error: allError,
-    refetch: refetchAll 
+    refetch: refetchAll
   } = useQuotes('my', {}, true);
 
   const stats = useMemo(() => {

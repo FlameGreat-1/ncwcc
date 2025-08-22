@@ -123,16 +123,6 @@ const QuotesList = ({
     return Object.values(filters).filter(value => value && value !== '').length;
   };
 
-  useEffect(() => {
-    const cleanFilters = {};
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value && value.toString().trim() !== '') {
-        cleanFilters[key] = value;
-      }
-    });
-    refetch(cleanFilters);
-  }, [filters]);
-
   if (error) {
     return (
       <div className="app-bg-card app-border border rounded-xl p-6 text-center">

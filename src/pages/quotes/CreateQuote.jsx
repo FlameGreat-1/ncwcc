@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import QuoteForm from '../../components/quotes/QuoteForm.jsx';
 import QuoteAddonsAttachments from '../../components/quotes/QuoteAddonsAttachments.jsx';
@@ -10,6 +11,7 @@ const CreateQuote = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -108,7 +110,8 @@ const CreateQuote = () => {
 
   const handleQuoteSuccess = (newQuote) => {
     if (newQuote?.id) {
-      localStorage.setItem('refreshQuotes', 'true');
+      // Invalidate quotes queries to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ['quotes'] });
       
       setTimeout(() => {
         navigate(`/clients/quotes/${newQuote.id}`, {
@@ -117,7 +120,8 @@ const CreateQuote = () => {
       }, 1000);
     } else {
       setError('Quote created but unable to redirect. Please check your quotes list.');
-      localStorage.setItem('refreshQuotes', 'true');
+      // Still invalidate queries even if we don't have the ID
+      queryClient.invalidateQueries({ queryKey: ['quotes'] });
       
       setTimeout(() => {
         navigate('/clients/quotes', {
@@ -367,4 +371,3 @@ const CreateQuote = () => {
 };
 
 export default CreateQuote;
-

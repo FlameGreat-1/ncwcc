@@ -1,10 +1,9 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import quotesService from '../services/quotesService.js';
 
 const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
-  const [quotes, setQuotes] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const queryClient = useQueryClient();
   const [pagination, setPagination] = useState({
     count: 0,
     next: null,
@@ -13,8 +12,6 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
     totalPages: 1
   });
 
-  const isRequestInProgress = useRef(false);
-  const hasInitialized = useRef(false);
   const stableParams = useRef(params);
   const stableType = useRef(type);
   
@@ -31,162 +28,207 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
     rejected: quotesService.getRejectedQuotes
   };
 
-  const fetchQuotes = useCallback(async (fetchParams = {}) => {
-    const currentType = stableType.current;
-    
-    if (!serviceMap[currentType]) {
-      setError('Invalid quote type');
-      return;
-    }
+  const queryKey = ['quotes', stableType.current, JSON.stringify(stableParams.current)];
 
-    if (isRequestInProgress.current) {
-      console.log('🔍 Request already in progress, skipping...');
-      return;
-    }
-
-    isRequestInProgress.current = true;
-    setLoading(true);
-    setError(null);
-
-    try {
-      const mergedParams = { ...stableParams.current, ...fetchParams };
-      console.log('🔍 Making API request with params:', mergedParams);
+  const {
+    data: quotesData,
+    isLoading,
+    isError,
+    error: queryError,
+    refetch: queryRefetch
+  } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      if (!serviceMap[stableType.current]) {
+        throw new Error(`Invalid quote type: ${stableType.current}`);
+      }
       
-      const response = await serviceMap[currentType](mergedParams);
+      const response = await serviceMap[stableType.current]({
+        ...stableParams.current,
+        timestamp: Date.now()
+      });
       
-      if (response.results) {
-        setQuotes(response.results);
+      return response;
+    },
+    enabled: autoFetch,
+    refetchInterval: 30000,
+    refetchOnWindowFocus: true,
+    staleTime: 10000,
+    retry: 3,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
+
+  const quotes = quotesData?.results || quotesData || [];
+  const error = queryError ? (queryError.response?.data?.message || queryError.message || 'Failed to fetch quotes') : null;
+
+  useEffect(() => {
+    if (quotesData) {
+      if (quotesData.results) {
         setPagination({
-          count: response.count,
-          next: response.next,
-          previous: response.previous,
-          page: Math.ceil((mergedParams.offset || 0) / (mergedParams.limit || 20)) + 1,
-          totalPages: Math.ceil(response.count / (mergedParams.limit || 20))
+          count: quotesData.count,
+          next: quotesData.next,
+          previous: quotesData.previous,
+          page: Math.ceil((stableParams.current.offset || 0) / (stableParams.current.limit || 20)) + 1,
+          totalPages: Math.ceil(quotesData.count / (stableParams.current.limit || 20))
         });
       } else {
-        setQuotes(Array.isArray(response) ? response : []);
         setPagination({
-          count: Array.isArray(response) ? response.length : 0,
+          count: Array.isArray(quotesData) ? quotesData.length : 0,
           next: null,
           previous: null,
           page: 1,
           totalPages: 1
         });
       }
-    } catch (err) {
-      console.error('🔍 API request failed:', err);
-      setError(err.response?.data?.message || err.message || 'Failed to fetch quotes');
-      setQuotes([]);
-    } finally {
-      setLoading(false);
-      isRequestInProgress.current = false;
     }
-  }, []); 
+  }, [quotesData]);
 
   const refetch = useCallback((newParams = {}) => {
-    return fetchQuotes(newParams);
-  }, [fetchQuotes]);
+    const updatedParams = { ...stableParams.current, ...newParams };
+    stableParams.current = updatedParams;
+    return queryRefetch();
+  }, [queryRefetch]);
+
+  const forceRefetch = useCallback(() => {
+    return queryRefetch();
+  }, [queryRefetch]);
 
   const loadMore = useCallback(() => {
-    if (pagination.next && !loading && !isRequestInProgress.current) {
+    if (pagination.next && !isLoading) {
       const currentOffset = (pagination.page - 1) * (stableParams.current.limit || 20);
       const nextOffset = currentOffset + (stableParams.current.limit || 20);
-      return fetchQuotes({ ...stableParams.current, offset: nextOffset });
+      return refetch({ offset: nextOffset });
     }
-  }, [pagination, loading, fetchQuotes]);
+  }, [pagination, isLoading, refetch]);
 
   const goToPage = useCallback((page) => {
-    if (!isRequestInProgress.current) {
-      const offset = (page - 1) * (stableParams.current.limit || 20);
-      return fetchQuotes({ ...stableParams.current, offset });
-    }
-  }, [fetchQuotes]);
+    const offset = (page - 1) * (stableParams.current.limit || 20);
+    return refetch({ offset });
+  }, [refetch]);
 
   const updateQuoteInList = useCallback((updatedQuote) => {
-    setQuotes(prevQuotes => 
-      prevQuotes.map(quote => 
+    queryClient.setQueryData(queryKey, (oldData) => {
+      if (!oldData) return oldData;
+      
+      const results = oldData.results || oldData;
+      const updatedResults = Array.isArray(results) ? results.map(quote => 
         quote.id === updatedQuote.id ? { ...quote, ...updatedQuote } : quote
-      )
-    );
-  }, []);
+      ) : [updatedQuote];
+      
+      if (oldData.results) {
+        return { ...oldData, results: updatedResults };
+      }
+      return updatedResults;
+    });
+  }, [queryClient, queryKey]);
 
   const removeQuoteFromList = useCallback((quoteId) => {
-    setQuotes(prevQuotes => prevQuotes.filter(quote => quote.id !== quoteId));
-    setPagination(prev => ({ ...prev, count: prev.count - 1 }));
-  }, []);
+    queryClient.setQueryData(queryKey, (oldData) => {
+      if (!oldData) return oldData;
+      
+      const results = oldData.results || oldData;
+      const filteredResults = Array.isArray(results) ? results.filter(quote => quote.id !== quoteId) : [];
+      
+      if (oldData.results) {
+        return { 
+          ...oldData, 
+          results: filteredResults,
+          count: Math.max(0, oldData.count - 1)
+        };
+      }
+      return filteredResults;
+    });
+  }, [queryClient, queryKey]);
 
   const addQuoteToList = useCallback((newQuote) => {
-    setQuotes(prevQuotes => [newQuote, ...prevQuotes]);
-    setPagination(prev => ({ ...prev, count: prev.count + 1 }));
-  }, []);
+    queryClient.setQueryData(queryKey, (oldData) => {
+      if (!oldData) return { results: [newQuote], count: 1 };
+      
+      const results = oldData.results || oldData;
+      const quoteExists = Array.isArray(results) && results.some(quote => quote.id === newQuote.id);
+      
+      let updatedResults;
+      if (quoteExists) {
+        updatedResults = Array.isArray(results) ? results.map(quote => 
+          quote.id === newQuote.id ? { ...quote, ...newQuote } : quote
+        ) : [newQuote];
+      } else {
+        updatedResults = Array.isArray(results) ? [newQuote, ...results] : [newQuote];
+      }
+      
+      if (oldData.results) {
+        return { 
+          ...oldData, 
+          results: updatedResults,
+          count: quoteExists ? oldData.count : oldData.count + 1
+        };
+      }
+      return updatedResults;
+    });
+  }, [queryClient, queryKey]);
 
   const searchQuotes = useCallback(async (searchTerm, filters = {}) => {
-    if (isRequestInProgress.current) return;
-    
-    setLoading(true);
-    setError(null);
-    isRequestInProgress.current = true;
-    
     try {
-      const response = await quotesService.searchQuotes(searchTerm, filters);
-      setQuotes(Array.isArray(response) ? response : response.results || []);
+      const response = await quotesService.searchQuotes(searchTerm, { ...filters, timestamp: Date.now() });
+      const searchResults = Array.isArray(response) ? response : response.results || [];
+      
+      queryClient.setQueryData(['quotes', 'search', searchTerm, JSON.stringify(filters)], searchResults);
+      
+      return searchResults;
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Search failed');
-    } finally {
-      setLoading(false);
-      isRequestInProgress.current = false;
+      console.error('Search failed:', err);
+      throw err;
     }
-  }, []);
+  }, [queryClient]);
 
   const filterByStatus = useCallback((status) => {
-    return fetchQuotes({ status });
-  }, [fetchQuotes]);
+    return refetch({ status });
+  }, [refetch]);
 
   const filterByCleaningType = useCallback((cleaningType) => {
-    return fetchQuotes({ cleaning_type: cleaningType });
-  }, [fetchQuotes]);
+    return refetch({ cleaning_type: cleaningType });
+  }, [refetch]);
 
   const filterByDateRange = useCallback((startDate, endDate) => {
-    return fetchQuotes({ 
+    return refetch({ 
       created_at__gte: startDate,
       created_at__lte: endDate 
     });
-  }, [fetchQuotes]);
+  }, [refetch]);
 
   useEffect(() => {
     if (autoFetch) {
-      console.log('🔍 Initial fetch triggered');
-      hasInitialized.current = true;
-      fetchQuotes();
-
-      const refreshInterval = setInterval(() => {
-        if (document.visibilityState === 'visible') {
-          console.log('🔄 Refreshing quotes list (visibility change)');
-          fetchQuotes();
-        }
-      }, 30000);
       const handleVisibilityChange = () => {
         if (document.visibilityState === 'visible') {
-          console.log('🔄 Refreshing quotes on tab focus');
-          fetchQuotes();
+          forceRefetch();
         }
       };
       
       document.addEventListener('visibilitychange', handleVisibilityChange);
       
+      window.quotesRefreshInterval = window.setInterval(() => {
+        if (document.visibilityState === 'visible') {
+          forceRefetch();
+        }
+      }, 30000);
+      
       return () => {
-        clearInterval(refreshInterval);
         document.removeEventListener('visibilitychange', handleVisibilityChange);
+        if (window.quotesRefreshInterval) {
+          clearInterval(window.quotesRefreshInterval);
+          window.quotesRefreshInterval = null;
+        }
       };
     }
-  }, [autoFetch, fetchQuotes]);
+  }, [autoFetch, forceRefetch]);
 
   return {
     quotes,
-    loading,
+    loading: isLoading,
     error,
     pagination,
     refetch,
+    forceRefetch,
     loadMore,
     goToPage,
     updateQuoteInList,
@@ -197,7 +239,7 @@ const useQuotes = (type = 'my', params = {}, autoFetch = true) => {
     filterByCleaningType,
     filterByDateRange,
     hasMore: !!pagination.next,
-    isEmpty: quotes.length === 0 && !loading,
+    isEmpty: quotes.length === 0 && !isLoading,
     totalCount: pagination.count
   };
 };

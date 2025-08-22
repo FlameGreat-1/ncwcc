@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import quotesService from '../../services/quotesService.js';
 import useQuoteActions from '../../hooks/useQuoteActions.js';
@@ -11,15 +12,8 @@ const QuoteDetail = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  const [quote, setQuote] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [showFullAddress, setShowFullAddress] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
-  const [quoteItems, setQuoteItems] = useState([]);
-  const [quoteAttachments, setQuoteAttachments] = useState([]);
-  const [quoteRevisions, setQuoteRevisions] = useState([]);
-  const [quoteAddons, setQuoteAddons] = useState([]);
 
   const {
     submitQuote,
@@ -30,6 +24,57 @@ const QuoteDetail = () => {
     error: actionError
   } = useQuoteActions();
 
+  const { 
+    data: quote, 
+    isLoading: quoteLoading, 
+    error: quoteError,
+    refetch: refetchQuote
+  } = useQuery({
+    queryKey: ['quote', id],
+    queryFn: () => quotesService.getQuote(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const { 
+    data: quoteItems = [],
+    isLoading: itemsLoading
+  } = useQuery({
+    queryKey: ['quote-items', id],
+    queryFn: () => quotesService.getQuoteItems(id).then(res => res.results || res),
+    enabled: activeTab === 'items' && !!quote,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { 
+    data: quoteAddons = [],
+    isLoading: addonsLoading
+  } = useQuery({
+    queryKey: ['quote-addons', id],
+    queryFn: () => quotesService.getQuoteAddons(id).then(res => res.results || res),
+    enabled: activeTab === 'addons' && !!quote,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { 
+    data: quoteAttachments = [],
+    isLoading: attachmentsLoading
+  } = useQuery({
+    queryKey: ['quote-attachments', id],
+    queryFn: () => quotesService.getQuoteAttachments(id).then(res => res.results || res),
+    enabled: activeTab === 'attachments' && !!quote,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { 
+    data: quoteRevisions = [],
+    isLoading: revisionsLoading
+  } = useQuery({
+    queryKey: ['quote-revisions', id],
+    queryFn: () => quotesService.getQuoteRevisions(id).then(res => res.results || res),
+    enabled: activeTab === 'history' && !!quote,
+    staleTime: 5 * 60 * 1000,
+  });
+
   const tabs = [
     { key: 'details', label: 'Quote Details' },
     { key: 'items', label: 'Items' },
@@ -38,60 +83,10 @@ const QuoteDetail = () => {
     { key: 'history', label: 'History' }
   ];
 
-  useEffect(() => {
-    fetchQuoteDetails();
-  }, [id]);
-
-  useEffect(() => {
-    if (quote && activeTab !== 'details') {
-      fetchTabData();
-    }
-  }, [activeTab, quote]);
-
-  const fetchQuoteDetails = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await quotesService.getQuote(id);
-      setQuote(response);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load quote details');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTabData = async () => {
-    if (!quote) return;
-  
-    try {
-      switch (activeTab) {
-        case 'items':
-          const itemsResponse = await quotesService.getQuoteItems(quote.id);
-          setQuoteItems(itemsResponse.results || itemsResponse);
-          break;
-        case 'addons':
-          const addonsResponse = await quotesService.getQuoteAddons(quote.id);
-          setQuoteAddons(addonsResponse.results || addonsResponse);
-          break;
-        case 'attachments':
-          const attachmentsResponse = await quotesService.getQuoteAttachments(quote.id);
-          setQuoteAttachments(attachmentsResponse.results || attachmentsResponse);
-          break;
-        case 'history':
-          const revisionsResponse = await quotesService.getQuoteRevisions(quote.id);
-          setQuoteRevisions(revisionsResponse.results || revisionsResponse);
-          break;
-      }
-    } catch (err) {
-      console.error(`Failed to fetch ${activeTab} data:`, err);
-    }
-  };
-
   const handleAction = async (actionFn, successMessage) => {
     try {
       await actionFn(quote.id);
-      await fetchQuoteDetails();
+      refetchQuote();
       console.log(successMessage);
     } catch (err) {
       console.error('Action failed:', err.message);
@@ -177,24 +172,26 @@ const QuoteDetail = () => {
   const isExpired = quote?.expires_at && new Date(quote.expires_at) < new Date();
   const urgencyConfig = quote ? getUrgencyConfig(quote.urgency_level) : null;
 
-  if (loading) {
+  if (quoteLoading) {
     return (
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="flex justify-center items-center min-h-96">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-center items-center min-h-96">
           <div className="w-8 h-8 border-4 app-border rounded-full border-t-transparent animate-spin"></div>
         </div>
       </div>
     );
   }
 
-  if (error || !quote) {
+  if (quoteError || !quote) {
     return (
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="theme-card text-center py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div className="theme-card text-center py-12">
           <div className="text-red-600 mb-4">
             <h3 className="text-lg font-semibold mb-2">Quote Not Found</h3>
-            <p className="app-text-muted">{error || 'The requested quote could not be found.'}</p>
+            <p className="app-text-muted">{quoteError?.message || 'The requested quote could not be found.'}</p>
           </div>
           <div className="flex gap-4 justify-center">
-            <button onClick={fetchQuoteDetails} className="theme-button">
+            <button onClick={refetchQuote} className="theme-button">
               Try Again
             </button>
           </div>
@@ -210,7 +207,8 @@ const QuoteDetail = () => {
         description={`Quote details for ${quote.cleaning_type} cleaning service`}
       />
       
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">        <div className="mb-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
             <div>
               <div className="flex items-center gap-4 mb-2">
@@ -361,7 +359,7 @@ const QuoteDetail = () => {
           )}
         </div>
         <div>
-        {activeTab === 'details' && (
+          {activeTab === 'details' && (
             <div className="grid lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-6">
                 <div className="theme-card">
@@ -629,11 +627,14 @@ const QuoteDetail = () => {
               </div>
             </div>
           )}
-
-          {activeTab === 'items' && (
+                    {activeTab === 'items' && (
             <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Quote Items</h3>
-              {quoteItems.length === 0 ? (
+              {itemsLoading ? (
+                <div className="flex justify-center py-8">
+                  <div className="w-6 h-6 border-2 app-border rounded-full border-t-transparent animate-spin"></div>
+                </div>
+              ) : quoteItems.length === 0 ? (
                 <p className="app-text-muted text-center py-8">No items found for this quote.</p>
               ) : (
                 <div className="space-y-4">
@@ -659,7 +660,11 @@ const QuoteDetail = () => {
           {activeTab === 'addons' && (
             <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Quote Add-ons</h3>
-              {quoteAddons.length === 0 ? (
+              {addonsLoading ? (
+                <div className="flex justify-center py-8">
+                  <div className="w-6 h-6 border-2 app-border rounded-full border-t-transparent animate-spin"></div>
+                </div>
+              ) : quoteAddons.length === 0 ? (
                 <p className="app-text-muted text-center py-8">No add-ons found for this quote.</p>
               ) : (
                 <div className="grid md:grid-cols-2 gap-4">
@@ -698,7 +703,11 @@ const QuoteDetail = () => {
           {activeTab === 'attachments' && (
             <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Attachments</h3>
-              {quoteAttachments.length === 0 ? (
+              {attachmentsLoading ? (
+                <div className="flex justify-center py-8">
+                  <div className="w-6 h-6 border-2 app-border rounded-full border-t-transparent animate-spin"></div>
+                </div>
+              ) : quoteAttachments.length === 0 ? (
                 <p className="app-text-muted text-center py-8">No attachments found for this quote.</p>
               ) : (
                 <div className="grid md:grid-cols-2 gap-4">
@@ -726,7 +735,11 @@ const QuoteDetail = () => {
           {activeTab === 'history' && (
             <div className="theme-card">
               <h3 className="text-xl font-bold app-text-primary mb-4">Quote History</h3>
-              {quoteRevisions.length === 0 ? (
+              {revisionsLoading ? (
+                <div className="flex justify-center py-8">
+                  <div className="w-6 h-6 border-2 app-border rounded-full border-t-transparent animate-spin"></div>
+                </div>
+              ) : quoteRevisions.length === 0 ? (
                 <p className="app-text-muted text-center py-8">No revision history found for this quote.</p>
               ) : (
                 <div className="space-y-4">
@@ -751,5 +764,4 @@ const QuoteDetail = () => {
 
 export default QuoteDetail;
 
-        
 
