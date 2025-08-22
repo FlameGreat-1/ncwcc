@@ -74,8 +74,8 @@ const GallerySection = () => {
       id: 2,
       title: 'Deep Kitchen Clean',
       serviceType: 'deep',
-      beforeImage: '/images/gallery/before-2.jpg',
-      afterImage: '/images/gallery/after-2.jpg',
+      beforeImage: '/images/gallery/before-6.jpg',
+      afterImage: '/images/gallery/after-6.jpg',
       location: 'Sydney CBD, NSW',
       description: 'Professional deep kitchen restoration'
     },
@@ -108,12 +108,12 @@ const GallerySection = () => {
     },
     {
       id: 6,
-      title: 'Carpet Steam Cleaning',
+      title: 'Rug Steam Cleaning',
       serviceType: 'general',
-      beforeImage: '/images/gallery/before-6.jpeg',
-      afterImage: '/images/gallery/after-6.jpeg',
+      beforeImage: '/images/gallery/before-7.jpeg',
+      afterImage: '/images/gallery/after-7.jpeg',
       location: 'Inner West, NSW',
-      description: 'Professional carpet restoration'
+      description: 'Professional rug restoration'
     }
   ];
 
