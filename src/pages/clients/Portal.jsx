@@ -22,6 +22,7 @@ const Portal = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedQuoteId, setSelectedQuoteId] = useState(null);
   const [selectedInvoiceId, setSelectedInvoiceId] = useState(null);
+  const [activeQuotesTab, setActiveQuotesTab] = useState('all');
   const [quoteStats, setQuoteStats] = useState({
     total: 0,
     draft: 0,
@@ -135,6 +136,11 @@ const Portal = () => {
     
     navigate(getUrlForView(view, itemId));
   };
+
+  const handleQuoteTabNavigation = (tab) => {
+    setActiveQuotesTab(tab);
+    handleNavigation('quotes');
+  };  
 
   const handleInvoiceDownload = async (invoiceId) => {
     const result = await downloadInvoice(invoiceId);
@@ -287,7 +293,7 @@ const Portal = () => {
         bgColor: 'app-bg-secondary',
         iconBg: 'app-bg-primary',
         iconColor: 'app-blue',
-        onClick: () => handleNavigation('quotes')
+        onClick: () => handleQuoteTabNavigation('all')
       },
       {
         title: 'Total Invoices',
@@ -314,7 +320,7 @@ const Portal = () => {
         bgColor: 'app-bg-secondary',
         iconBg: 'bg-green-100',
         iconColor: 'text-green-600',
-        onClick: () => handleNavigation('quotes')
+        onClick: () => handleQuoteTabNavigation('approved')
       },
       {
         title: hasOverdueInvoices ? 'Overdue Amount' : 'Invoice Value',
@@ -923,7 +929,10 @@ const Portal = () => {
             )}
             {currentView === 'quotes' && (
               <div>
-                <MyQuotes />
+                <MyQuotes 
+                  activeTab={activeQuotesTab} 
+                  onTabChange={setActiveQuotesTab}
+                />
               </div>
             )}
 
