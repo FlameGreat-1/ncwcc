@@ -102,8 +102,8 @@ const Gallery = () => {
       id: 2,
       title: 'Deep Kitchen Clean',
       serviceType: 'deep',
-      beforeImage: '/images/gallery/before-2.jpg',
-      afterImage: '/images/gallery/after-2.jpg',
+      beforeImage: '/images/gallery/before-6.jpg',
+      afterImage: '/images/gallery/after-6.jpg',
       location: 'Sydney CBD, NSW',
       description: 'Professional deep kitchen restoration including oven, rangehood, and appliances'
     },
@@ -136,19 +136,19 @@ const Gallery = () => {
     },
     {
       id: 6,
-      title: 'Carpet Steam Cleaning',
+      title: 'Rug Steam Cleaning',
       serviceType: 'general',
-      beforeImage: '/images/gallery/before-6.jpeg',
-      afterImage: '/images/gallery/after-6.jpeg',
+      beforeImage: '/images/gallery/before-7.jpg',
+      afterImage: '/images/gallery/after-7.jpg',
       location: 'Inner West, NSW',
-      description: 'Professional carpet restoration removing stains and odors'
+      description: 'Professional rug restoration removing stains and odors'
     },
     {
       id: 7,
       title: 'Post-Construction Clean',
       serviceType: 'deep',
-      beforeImage: '/images/gallery/before-7.jpeg',
-      afterImage: '/images/gallery/after-7.jpeg',
+      beforeImage: '/images/gallery/before-2.jpg',
+      afterImage: '/images/gallery/after-2.jpg',
       location: 'Hills District, NSW',
       description: 'Complete post-renovation cleaning including dust and debris removal'
     },
