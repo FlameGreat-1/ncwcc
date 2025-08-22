@@ -74,8 +74,8 @@ const GallerySection = () => {
       id: 2,
       title: 'Deep Kitchen Clean',
       serviceType: 'deep',
-      beforeImage: '/images/gallery/before-6.jpg',
-      afterImage: '/images/gallery/after-6.jpg',
+      beforeImage: '/images/gallery/before-6.jpeg',
+      afterImage: '/images/gallery/after-6.jpeg',
       location: 'Sydney CBD, NSW',
       description: 'Professional deep kitchen restoration'
     },
