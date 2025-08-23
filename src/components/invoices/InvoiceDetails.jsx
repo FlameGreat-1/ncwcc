@@ -41,7 +41,7 @@ const InvoiceDetails = memo(({
   if (error) {
     return (
       <div className="text-center py-12">
-        <ExclamationTriangleIcon className="w-12 h-12 app-text-danger mx-auto mb-4" />
+        <ExclamationTriangleIcon className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <h3 className="text-lg font-semibold app-text-primary mb-2">
           Error Loading Invoice
         </h3>
@@ -128,7 +128,7 @@ const InvoiceDetails = memo(({
                 {summary.totalAmount}
               </p>
               {summary.isOverdue && (
-                <div className="flex items-center gap-2 app-text-danger text-sm">
+                <div className="flex items-center gap-2 text-red-600 text-sm">
                   <ExclamationTriangleIcon className="w-4 h-4" />
                   <span>{summary.daysOverdue} days overdue</span>
                 </div>
@@ -187,30 +187,30 @@ const InvoiceDetails = memo(({
         </div>
 
         {ndisInfo && (
-          <div className="mb-6 p-4 app-bg-info-light app-border-info rounded-lg">
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <div className="flex items-center gap-2 mb-3">
-              <ShieldCheckIcon className="w-5 h-5 app-text-info" />
-              <h3 className="font-semibold app-text-info">NDIS Information</h3>
+              <ShieldCheckIcon className="w-5 h-5 text-blue-600" />
+              <h3 className="font-semibold text-blue-800">NDIS Information</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm font-medium app-text-info">Participant Name</p>
-                <p className="app-text-info">{ndisInfo.participantName || 'N/A'}</p>
+                <p className="text-sm font-medium text-blue-700">Participant Name</p>
+                <p className="text-blue-800">{ndisInfo.participantName || 'N/A'}</p>
               </div>
               <div>
-                <p className="text-sm font-medium app-text-info">NDIS Number</p>
-                <p className="app-text-info">{ndisInfo.ndisNumber || 'N/A'}</p>
+                <p className="text-sm font-medium text-blue-700">NDIS Number</p>
+                <p className="text-blue-800">{ndisInfo.ndisNumber || 'N/A'}</p>
               </div>
               {ndisInfo.serviceStartDate && (
                 <div>
-                  <p className="text-sm font-medium app-text-info">Service Start</p>
-                  <p className="app-text-info">{formatDate(ndisInfo.serviceStartDate)}</p>
+                  <p className="text-sm font-medium text-blue-700">Service Start</p>
+                  <p className="text-blue-800">{formatDate(ndisInfo.serviceStartDate)}</p>
                 </div>
               )}
               {ndisInfo.serviceEndDate && (
                 <div>
-                  <p className="text-sm font-medium app-text-info">Service End</p>
-                  <p className="app-text-info">{formatDate(ndisInfo.serviceEndDate)}</p>
+                  <p className="text-sm font-medium text-blue-700">Service End</p>
+                  <p className="text-blue-800">{formatDate(ndisInfo.serviceEndDate)}</p>
                 </div>
               )}
             </div>
@@ -218,31 +218,31 @@ const InvoiceDetails = memo(({
         )}
 
         {depositInfo && (
-          <div className="mb-6 p-4 app-bg-warning-light app-border-warning rounded-lg">
+          <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
             <div className="flex items-center gap-2 mb-3">
-              <BanknotesIcon className="w-5 h-5 app-text-warning" />
-              <h3 className="font-semibold app-text-warning">Deposit Information</h3>
+              <BanknotesIcon className="w-5 h-5 text-orange-600" />
+              <h3 className="font-semibold text-orange-800">Deposit Information</h3>
               <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                 depositInfo.isPaid 
-                  ? 'app-bg-success-light app-text-success' 
-                  : 'app-bg-warning-light app-text-warning'
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-yellow-100 text-yellow-800'
               }`}>
                 {depositInfo.isPaid ? 'Paid' : 'Pending'}
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm font-medium app-text-warning">Deposit Required</p>
-                <p className="app-text-warning">{depositInfo.formattedAmount} ({depositInfo.percentage}%)</p>
+                <p className="text-sm font-medium text-orange-700">Deposit Required</p>
+                <p className="text-orange-800">{depositInfo.formattedAmount} ({depositInfo.percentage}%)</p>
               </div>
               <div>
-                <p className="text-sm font-medium app-text-warning">Remaining Balance</p>
-                <p className="app-text-warning">{depositInfo.formattedRemainingBalance}</p>
+                <p className="text-sm font-medium text-orange-700">Remaining Balance</p>
+                <p className="text-orange-800">{depositInfo.formattedRemainingBalance}</p>
               </div>
               {depositInfo.isPaid && depositInfo.paidDate && (
                 <div>
-                  <p className="text-sm font-medium app-text-warning">Deposit Paid Date</p>
-                  <p className="app-text-warning">{formatDate(depositInfo.paidDate)}</p>
+                  <p className="text-sm font-medium text-orange-700">Deposit Paid Date</p>
+                  <p className="text-orange-800">{formatDate(depositInfo.paidDate)}</p>
                 </div>
               )}
             </div>
@@ -307,13 +307,13 @@ const InvoiceDetails = memo(({
               </div>
               {depositInfo && (
                 <>
-                  <div className="flex justify-between app-text-warning border-t app-border pt-2">
+                  <div className="flex justify-between text-orange-600 border-t app-border pt-2">
                     <span>Deposit ({depositInfo.percentage}%):</span>
                     <span className="font-semibold">
                       {depositInfo.formattedAmount}
                     </span>
                   </div>
-                  <div className="flex justify-between text-lg font-bold app-text-warning">
+                  <div className="flex justify-between text-lg font-bold text-orange-700">
                     <span>Balance Due:</span>
                     <span>
                       {depositInfo.formattedRemainingBalance}
