@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useQuoteActions from '../../hooks/useQuoteActions.js';
 
 const QuoteCard = ({ 
@@ -8,6 +9,7 @@ const QuoteCard = ({
   variant = 'default',
   className = '' 
 }) => {
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const { 
     loading, 
@@ -16,6 +18,16 @@ const QuoteCard = ({
     downloadPDF, 
     duplicateQuote 
   } = useQuoteActions();
+
+  const handleCardClick = (e) => {
+    if (e.target.closest('button') || e.target.closest('.expandable-content')) {
+      return;
+    }
+    
+    const isInPortal = window.location.pathname.includes('/clients/');
+    const prefix = isInPortal ? '/clients' : '';
+    navigate(`${prefix}/quotes/${quote.id}`);
+  };
 
   const getStatusConfig = (status) => {
     const configs = {
@@ -70,7 +82,8 @@ const QuoteCard = ({
     }
   };
 
-  const handleDownloadPDF = async () => {
+  const handleDownloadPDF = async (e) => {
+    e.stopPropagation();
     try {
       await downloadPDF(quote.id, `quote-${quote.quote_number}.pdf`);
     } catch (error) {
@@ -78,7 +91,8 @@ const QuoteCard = ({
     }
   };
 
-  const handleDuplicate = async () => {
+  const handleDuplicate = async (e) => {
+    e.stopPropagation();
     try {
       const newQuote = await duplicateQuote(quote.id, {
         status: 'draft'
@@ -116,7 +130,7 @@ const QuoteCard = ({
   };
 
   return (
-    <div className={`${cardVariants[variant]} ${className} ${isExpired ? 'opacity-75' : ''} relative`}>
+    <div className={`${cardVariants[variant]} ${className} ${isExpired ? 'opacity-75' : ''} relative cursor-pointer`} onClick={handleCardClick}>
       {isExpired && (
         <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
           Expired
@@ -198,7 +212,6 @@ const QuoteCard = ({
           </div>
         </div>
 
-        {/* Deposit Information Section */}
         {quote.deposit_required && (
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
             <div className="flex items-center justify-between">
@@ -224,9 +237,12 @@ const QuoteCard = ({
       </div>
 
       {quote.special_requirements && (
-        <div className="mb-4">
+        <div className="mb-4 expandable-content">
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsExpanded(!isExpanded);
+            }}
             className="text-xs app-text-muted hover:app-text-primary font-medium transition-colors"
           >
             {isExpanded ? '▼' : '▶'} Special Requirements
@@ -240,10 +256,13 @@ const QuoteCard = ({
       )}
 
       {showActions && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 expandable-content">
           {quote.status === 'draft' && (
             <button
-              onClick={() => handleAction(submitQuote, 'Quote submitted successfully')}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction(submitQuote, 'Quote submitted successfully');
+              }}
               disabled={loading}
               className="px-3 py-1 theme-button text-xs disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -263,7 +282,10 @@ const QuoteCard = ({
 
           {['draft', 'submitted'].includes(quote.status) && (
             <button
-              onClick={() => handleAction(cancelQuote, 'Quote cancelled successfully')}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction(cancelQuote, 'Quote cancelled successfully');
+              }}
               disabled={loading}
               className="px-3 py-1 bg-red-100 text-red-800 hover:bg-red-200 rounded-full text-xs font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
