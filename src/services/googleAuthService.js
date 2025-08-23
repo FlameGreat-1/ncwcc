@@ -46,35 +46,41 @@ class GoogleAuthService {
 
   async handleCredentialResponse(response) {
     try {
-      const credential = response.credential;
-      const payload = this.parseJWT(credential);
+      console.log("handleCredentialResponse called with response:", response ? "yes" : "no");
       
-      return {
-        success: true,
-        user: payload,
-        credential: credential,
-      };
+      if (!response || !response.credential) {
+        console.error("No credential in response");
+        return {
+          success: false,
+          error: 'No credential received from Google',
+        };
+      }
+      
+      const credential = response.credential;
+      console.log("Credential received, length:", credential.length);
+      
+      try {
+        const payload = this.parseJWT(credential);
+        console.log("JWT payload parsed successfully:", payload.email);
+        
+        return {
+          success: true,
+          user: payload,
+          credential: credential,
+        };
+      } catch (parseError) {
+        console.error("Error parsing JWT:", parseError);
+        return {
+          success: false,
+          error: 'Failed to parse Google credential: ' + parseError.message,
+        };
+      }
     } catch (error) {
+      console.error("General error in handleCredentialResponse:", error);
       return {
         success: false,
-        error: 'Failed to process Google credential',
+        error: 'Failed to process Google credential: ' + error.message,
       };
-    }
-  }
-
-  parseJWT(token) {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
-      );
-      return JSON.parse(jsonPayload);
-    } catch (error) {
-      throw new Error('Invalid JWT token');
     }
   }
 
@@ -103,6 +109,8 @@ class GoogleAuthService {
           console.log("Google credential received:", response ? "yes" : "no");
           if (response && response.credential) {
             console.log("Credential length:", response.credential.length);
+            
+            console.log("Credential preview:", response.credential.substring(0, 20) + "...");
           }
           
           const credentialResponse = await this.handleCredentialResponse(response);
@@ -114,15 +122,22 @@ class GoogleAuthService {
             return;
           }
   
-          console.log("Calling authService.googleAuth with credential");
-          const authResponse = await authService.googleAuth(
-            response.credential,
-            userType,
-            clientType
-          );
-          console.log("Auth response received:", authResponse);
-  
-          resolve(authResponse);
+          console.log("About to call authService.googleAuth with credential");
+          try {
+            const authResponse = await authService.googleAuth(
+              response.credential,
+              userType,
+              clientType
+            );
+            console.log("Auth response received:", authResponse);
+            resolve(authResponse);
+          } catch (authError) {
+            console.error("Error in authService.googleAuth:", authError);
+            resolve({
+              success: false,
+              error: 'Error calling backend: ' + (authError.message || 'Unknown error'),
+            });
+          }
         } catch (error) {
           console.error("Error in Google auth flow:", error);
           resolve({
