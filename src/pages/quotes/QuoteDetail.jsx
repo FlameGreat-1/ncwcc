@@ -104,7 +104,10 @@ const QuoteDetail = () => {
   const handleDuplicate = async () => {
     try {
       const newQuote = await duplicateQuote(quote.id, { status: 'draft' });
-      navigate(`/quotes/${newQuote.id}`);
+   
+      const isInPortal = window.location.pathname.includes('/clients/');
+      const prefix = isInPortal ? '/clients' : '';
+      navigate(`${prefix}/quotes/${newQuote.id}`);
     } catch (err) {
       console.error('Duplicate failed:', err.message);
     }
