@@ -18,7 +18,11 @@ const InvoiceCard = memo(({
   const navigate = useNavigate();
   const summary = invoicesService.getInvoiceSummary(invoice);
 
-  const handleCardClick = () => {
+  const handleCardClick = (e) => {
+    if (e.target.closest('button')) {
+      return;
+    }
+    
     if (onInvoiceClick) {
       onInvoiceClick(invoice.id);
     } else {
@@ -42,11 +46,11 @@ const InvoiceCard = memo(({
   };
 
   return (
-    <div className={`card-modern group cursor-pointer ${className}`}>
-      <div 
-        onClick={handleCardClick} 
-        className="block"
-      >
+    <div 
+      className={`card-modern group cursor-pointer ${className}`}
+      onClick={handleCardClick}
+    >
+      <div className="block">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
