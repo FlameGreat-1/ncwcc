@@ -70,7 +70,7 @@ const InvoiceCard = memo(({
               {summary.totalAmount}
             </p>
             {summary.isOverdue && (
-              <div className="flex items-center gap-1 text-red-500 dark:text-red-400 text-xs mt-1">
+              <div className="flex items-center gap-1 text-red-600 text-xs mt-1">
                 <ExclamationTriangleIcon className="w-3 h-3" />
                 <span>{summary.daysOverdue} days overdue</span>
               </div>
