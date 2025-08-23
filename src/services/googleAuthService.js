@@ -10,12 +10,11 @@ class GoogleAuthService {
     if (this.isInitialized || !this.clientId) {
       return this.isInitialized;
     }
-
+  
     try {
       await this.loadGoogleScript();
       await window.google.accounts.id.initialize({
         client_id: this.clientId,
-        callback: this.handleCredentialResponse.bind(this),
         auto_select: false,
         cancel_on_tap_outside: true,
       });
@@ -26,14 +25,14 @@ class GoogleAuthService {
       return false;
     }
   }
-
+  
   loadGoogleScript() {
     return new Promise((resolve, reject) => {
       if (window.google) {
         resolve();
         return;
       }
-
+  
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.async = true;
@@ -112,24 +111,13 @@ class GoogleAuthService {
     }
   
     return new Promise((resolve) => {
-      window.google.accounts.id.prompt((notification) => {
-        console.log("Google prompt notification:", notification);
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          console.log("Google Sign-In was cancelled or not displayed");
-          resolve({
-            success: false,
-            error: 'Google Sign-In was cancelled or not displayed',
-          });
-        }
-      });
-  
+
       const originalCallback = window.google.accounts.id.callback;
       window.google.accounts.id.callback = async (response) => {
         try {
           console.log("Google credential received:", response ? "yes" : "no");
           if (response && response.credential) {
             console.log("Credential length:", response.credential.length);
-            
             console.log("Credential preview:", response.credential.substring(0, 20) + "...");
           }
           
@@ -168,6 +156,17 @@ class GoogleAuthService {
           window.google.accounts.id.callback = originalCallback;
         }
       };
+
+      window.google.accounts.id.prompt((notification) => {
+        console.log("Google prompt notification:", notification);
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          console.log("Google Sign-In was cancelled or not displayed");
+          resolve({
+            success: false,
+            error: 'Google Sign-In was cancelled or not displayed',
+          });
+        }
+      });
     });
   }
   
