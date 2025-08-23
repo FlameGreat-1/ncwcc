@@ -70,15 +70,17 @@ class AuthService {
     }
   }
 
-  async googleAuth(accessToken, userType = 'client', clientType = 'general') {
+  async googleAuth(token, userType = 'client', clientType = 'general') {
     try {
+      console.log("Sending Google auth request with token length:", token?.length);
       const response = await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_AUTH, {
-        access_token: accessToken,
+        credential: token,
         user_type: userType,
         client_type: clientType,
       });
       
       const data = response.data;
+      console.log("Google auth response received:", data?.success);
       
       if (data.success && data.data.token) {
         this.setAuthData(data.data.token, data.data);
@@ -86,6 +88,7 @@ class AuthService {
       
       return data;
     } catch (error) {
+      console.error("Google auth error:", error.message);
       if (error.response && error.response.data) {
         return {
           success: false,
@@ -102,16 +105,18 @@ class AuthService {
     }
   }
 
-  async googleRegister(accessToken, userType = 'client', clientType = 'general', phoneNumber = '') {
+  async googleRegister(token, userType = 'client', clientType = 'general', phoneNumber = '') {
     try {
+      console.log("Sending Google register request with token length:", token?.length);
       const response = await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_REGISTER, {
-        access_token: accessToken,
+        credential: token,
         user_type: userType,
         client_type: clientType,
         phone_number: phoneNumber,
       });
       
       const data = response.data;
+      console.log("Google register response received:", data?.success);
       
       if (data.success && data.data.token) {
         this.setAuthData(data.data.token, data.data);
@@ -119,6 +124,7 @@ class AuthService {
       
       return data;
     } catch (error) {
+      console.error("Google register error:", error.message);
       if (error.response && error.response.data) {
         return {
           success: false,
@@ -293,11 +299,12 @@ class AuthService {
     }
   }
 
-  async linkSocialAccount(provider, accessToken) {
+  async linkSocialAccount(provider, token) {
     try {
+      console.log("Linking social account:", provider);
       const response = await apiService.post(API_ENDPOINTS.PROFILE.LINK, {
         provider,
-        access_token: accessToken,
+        credential: token,
       });
       return response.data;
     } catch (error) {

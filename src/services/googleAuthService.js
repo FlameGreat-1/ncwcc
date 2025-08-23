@@ -79,41 +79,55 @@ class GoogleAuthService {
   }
 
   async signInWithGoogle(userType = 'client', clientType = 'general') {
+    console.log("Starting Google Sign-In process...");
     if (!this.isInitialized) {
       await this.initializeGoogleAuth();
+      console.log("Google Auth initialized:", this.isInitialized);
     }
-
+  
     return new Promise((resolve) => {
       window.google.accounts.id.prompt((notification) => {
+        console.log("Google prompt notification:", notification);
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          console.log("Google Sign-In was cancelled or not displayed");
           resolve({
             success: false,
             error: 'Google Sign-In was cancelled or not displayed',
           });
         }
       });
-
+  
       const originalCallback = window.google.accounts.id.callback;
       window.google.accounts.id.callback = async (response) => {
         try {
+          console.log("Google credential received:", response ? "yes" : "no");
+          if (response && response.credential) {
+            console.log("Credential length:", response.credential.length);
+          }
+          
           const credentialResponse = await this.handleCredentialResponse(response);
+          console.log("Credential processed:", credentialResponse);
           
           if (!credentialResponse.success) {
+            console.log("Credential processing failed:", credentialResponse.error);
             resolve(credentialResponse);
             return;
           }
-
+  
+          console.log("Calling authService.googleAuth with credential");
           const authResponse = await authService.googleAuth(
             response.credential,
             userType,
             clientType
           );
-
+          console.log("Auth response received:", authResponse);
+  
           resolve(authResponse);
         } catch (error) {
+          console.error("Error in Google auth flow:", error);
           resolve({
             success: false,
-            error: 'Google authentication failed',
+            error: 'Google authentication failed: ' + (error.message || 'Unknown error'),
           });
         } finally {
           window.google.accounts.id.callback = originalCallback;
@@ -121,7 +135,7 @@ class GoogleAuthService {
       };
     });
   }
-
+  
   async registerWithGoogle(userType = 'client', clientType = 'general', phoneNumber = '') {
     if (!this.isInitialized) {
       await this.initializeGoogleAuth();
