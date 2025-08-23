@@ -74,7 +74,7 @@ class AuthService {
     try {
       console.log("Sending Google auth request with token length:", token?.length);
       const response = await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_AUTH, {
-        credential: token,
+        access_token: token,
         user_type: userType,
         client_type: clientType,
       });
@@ -109,7 +109,7 @@ class AuthService {
     try {
       console.log("Sending Google register request with token length:", token?.length);
       const response = await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_REGISTER, {
-        credential: token,
+        access_token: token,
         user_type: userType,
         client_type: clientType,
         phone_number: phoneNumber,
@@ -304,7 +304,7 @@ class AuthService {
       console.log("Linking social account:", provider);
       const response = await apiService.post(API_ENDPOINTS.PROFILE.LINK, {
         provider,
-        credential: token,
+        access_token: token,
       });
       return response.data;
     } catch (error) {
