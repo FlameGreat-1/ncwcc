@@ -84,6 +84,26 @@ class GoogleAuthService {
     }
   }
 
+  parseJWT(token) {
+    try {
+      console.log("Parsing JWT token...");
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      const payload = JSON.parse(jsonPayload);
+      console.log("JWT parsed successfully, email:", payload.email);
+      return payload;
+    } catch (error) {
+      console.error("Error parsing JWT:", error);
+      throw new Error('Invalid JWT token: ' + error.message);
+    }
+  }
+
   async signInWithGoogle(userType = 'client', clientType = 'general') {
     console.log("Starting Google Sign-In process...");
     if (!this.isInitialized) {
