@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   DocumentArrowDownIcon, 
   CalendarIcon,
@@ -14,11 +15,16 @@ const InvoiceCard = memo(({
   onInvoiceClick,
   className = '' 
 }) => {
+  const navigate = useNavigate();
   const summary = invoicesService.getInvoiceSummary(invoice);
 
   const handleCardClick = () => {
     if (onInvoiceClick) {
       onInvoiceClick(invoice.id);
+    } else {
+      const isInPortal = window.location.pathname.includes('/clients/');
+      const prefix = isInPortal ? '/clients' : '';
+      navigate(`${prefix}/invoices/${invoice.id}`);
     }
   };
   
