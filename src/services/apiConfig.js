@@ -36,6 +36,7 @@ export const API_ENDPOINTS = {
     ITEMS: `${API_BASE_URL}/${API_VERSION}/quotes/items/`,
     ATTACHMENTS: `${API_BASE_URL}/${API_VERSION}/quotes/attachments/`,
     TEMPLATES: `${API_BASE_URL}/${API_VERSION}/quotes/templates/`,
+    REVISIONS: `${API_BASE_URL}/${API_VERSION}/quotes/revisions/`,
   },
 
   SERVICES: {

@@ -201,7 +201,9 @@ class QuotesService {
   }
 
   async getQuoteRevisions(quoteId, params = {}) {
-    const response = await api.get(`${API_ENDPOINTS.QUOTES.BASE}${quoteId}/revisions/`, { params });
+    const response = await api.get(API_ENDPOINTS.QUOTES.REVISIONS, { 
+      params: { quote_id: quoteId, ...params } 
+    });
     return response.data;
   }
 
