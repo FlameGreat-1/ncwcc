@@ -15,43 +15,13 @@ const Avatar = React.forwardRef(({ className, children, ...props }, ref) => {
   );
 });
 
-const AvatarImage = React.forwardRef(({ className, src, alt, onError, onLoad, ...props }, ref) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [imgError, setImgError] = useState(false);
-
-  const getHumanAvatar = (name) => {
-    const avatarStyles = [
-      'avataaars',
-      'personas', 
-      'big-smile',
-      'adventurer',
-      'miniavs'
-    ];
-    const style = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
-    const seed = name || Math.random().toString(36).substring(7);
-    return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&backgroundColor=1e40af,3b82f6,06b6d4&radius=50`;
-  };
-
-  const finalSrc = src && !imgError ? src : getHumanAvatar(alt);
-
-  const handleError = (e) => {
-    setImgError(true);
-    if (onError) onError(e);
-  };
-
-  const handleLoad = (e) => {
-    setIsLoaded(true);
-    if (onLoad) onLoad(e);
-  };
-
+const AvatarImage = React.forwardRef(({ className, src, alt, ...props }, ref) => {
   return (
     <img
       ref={ref}
-      src={finalSrc}
+      src="https://api.dicebear.com/7.x/personas/svg?seed=professional&backgroundColor=1e40af&radius=50"
       alt={alt || "Avatar"}
-      className={`aspect-square h-full w-full object-cover transition-opacity duration-300 ease-in-out ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
-      onError={handleError}
-      onLoad={handleLoad}
+      className={`aspect-square h-full w-full object-cover ${className || ''}`}
       {...props}
     />
   );
@@ -68,23 +38,10 @@ const AvatarFallback = React.forwardRef(({ className, children, status, ...props
     }
   };
 
-  const getGradientColor = (initials) => {
-    const gradients = [
-      'bg-gradient-to-br from-blue-600 to-blue-700',
-      'bg-gradient-to-br from-indigo-600 to-indigo-700', 
-      'bg-gradient-to-br from-purple-600 to-purple-700',
-      'bg-gradient-to-br from-cyan-600 to-cyan-700',
-      'bg-gradient-to-br from-teal-600 to-teal-700',
-      'bg-gradient-to-br from-emerald-600 to-emerald-700'
-    ];
-    const index = (initials?.charCodeAt(0) || 0) % gradients.length;
-    return gradients[index];
-  };
-
   return (
     <div
       ref={ref}
-      className={`flex h-full w-full items-center justify-center rounded-full ${getGradientColor(children)} text-white font-bold text-sm shadow-inner animate-in fade-in-0 zoom-in-0 duration-300 ${className || ''}`}
+      className={`flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-white font-bold text-sm shadow-inner ${className || ''}`}
       {...props}
     >
       {children}
@@ -151,7 +108,7 @@ const ProfileAvatar = () => {
   return (
     <div className="relative" ref={dropdownRef}>
       <Avatar className="cursor-pointer" onClick={toggleDropdown}>
-        <AvatarImage src={user.profile_image} alt={`${user.first_name} ${user.last_name}`} />
+        <AvatarImage alt={`${user.first_name} ${user.last_name}`} />
         <AvatarFallback status={getStatusIndicator()}>
           {getInitials()}
         </AvatarFallback>
@@ -162,7 +119,7 @@ const ProfileAvatar = () => {
           <div className="p-4">
             <div className="flex items-center space-x-3 mb-4">
               <Avatar className="h-12 w-12">
-                <AvatarImage src={user.profile_image} alt={`${user.first_name} ${user.last_name}`} />
+                <AvatarImage alt={`${user.first_name} ${user.last_name}`} />
                 <AvatarFallback status={getStatusIndicator()}>
                   {getInitials()}
                 </AvatarFallback>
@@ -213,39 +170,29 @@ const ProfileAvatar = () => {
 
             <div className={`border-t pt-3 mt-3 ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
               <div className="space-y-1">
-                <Link
-                  to="/accounts/profile"
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700 text-gray-300 hover:text-white' : 'hover:bg-gray-100 text-gray-700 hover:text-gray-900'}`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  <span className="text-sm font-medium">Profile Settings</span>
-                </Link>
-
-                <Link
-                  to="/accounts/password-change"
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700 text-gray-300 hover:text-white' : 'hover:bg-gray-100 text-gray-700 hover:text-gray-900'}`}
-                  onClick={() => setIsOpen(false)}
+                <div
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${isDark ? 'text-gray-500 cursor-not-allowed' : 'text-gray-400 cursor-not-allowed'}`}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2m0 0V7a2 2 0 012-2m0 0V5a2 2 0 012-2h4a2 2 0 012 2v2M9 7h6" />
                   </svg>
                   <span className="text-sm font-medium">Change Password</span>
-                </Link>
+                </div>
 
-                <Link
-                  to="/accounts/settings"
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700 text-gray-300 hover:text-white' : 'hover:bg-gray-100 text-gray-700 hover:text-gray-900'}`}
-                  onClick={() => setIsOpen(false)}
+                <div
+                  className={`flex items-center justify-between px-3 py-2 rounded-lg ${isDark ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <span className="text-sm font-medium">Account Settings</span>
-                </Link>
+                  <div className="flex items-center space-x-3">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span className="text-sm font-medium">Account Settings</span>
+                  </div>
+                  <span className={`text-xs px-2 py-1 rounded-full ${isDark ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
+                    Coming Soon
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -268,4 +215,3 @@ const ProfileAvatar = () => {
 };
 
 export default ProfileAvatar;
-
