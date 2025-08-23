@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import { 
   DocumentTextIcon,
   ExclamationTriangleIcon,
@@ -13,11 +15,11 @@ import { useInvoices } from '../../hooks/useInvoices';
 import { useAuth } from '../../hooks/useAuth';
 import InvoicesList from '../../components/invoices/InvoicesList';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
-import { toast } from 'react-hot-toast';
 
 const MyInvoices = () => {
   const { user } = useAuth();
   const [selectedTab, setSelectedTab] = useState('all');
+  const navigate = useNavigate();
 
   const {
     invoices,
@@ -109,6 +111,12 @@ const MyInvoices = () => {
   const handleFiltersChange = (newFilters) => {
     updateFilters(newFilters);
   };
+
+  const handleInvoiceClick = (invoiceId) => {
+    const isInPortal = window.location.pathname.includes('/clients/');
+    const prefix = isInPortal ? '/clients' : '';
+    navigate(`${prefix}/invoices/${invoiceId}`);
+  };  
 
   const statsCards = useMemo(() => {
     const safeStats = {
@@ -346,6 +354,7 @@ const MyInvoices = () => {
             filters={filters}
             onFiltersChange={handleFiltersChange}
             onDownloadInvoice={handleDownloadInvoice}
+            onInvoiceClick={handleInvoiceClick}
             className="animate-fade-in-up delay-300"
           />
 
