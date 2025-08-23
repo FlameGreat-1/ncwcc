@@ -104,10 +104,16 @@ const QuoteDetail = () => {
   const handleDuplicate = async () => {
     try {
       const newQuote = await duplicateQuote(quote.id, { status: 'draft' });
-   
+      console.log('New quote:', newQuote); 
+      
       const isInPortal = window.location.pathname.includes('/clients/');
       const prefix = isInPortal ? '/clients' : '';
-      navigate(`${prefix}/quotes/${newQuote.id}`);
+      
+      if (newQuote && newQuote.id) {
+        navigate(`${prefix}/quotes/${newQuote.id}`);
+      } else {
+        console.error('Invalid response from duplicate quote:', newQuote);
+      }
     } catch (err) {
       console.error('Duplicate failed:', err.message);
     }

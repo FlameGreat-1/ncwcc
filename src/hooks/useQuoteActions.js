@@ -76,11 +76,12 @@ const useQuoteActions = () => {
       const errorMessage = err.response?.data?.message || err.message || 'Failed to duplicate quote';
       setError(errorMessage);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['quotes'] });
+      return data; 
     }
   });
-
+  
   const calculateQuoteMutation = useMutation({
     mutationFn: (calculationData) => quotesService.calculateQuote(calculationData),
     onError: (err) => {
