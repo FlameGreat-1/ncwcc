@@ -239,7 +239,9 @@ const useQuoteActions = () => {
   const duplicateQuote = async (quoteId, modifications = {}) => {
     clearError();
     try {
-      return await duplicateQuoteMutation.mutateAsync({ quoteId, modifications });
+      const result = await duplicateQuoteMutation.mutateAsync({ quoteId, modifications });
+      console.log("Duplicate quote result:", result); 
+      return result; 
     } catch (err) {
       throw err;
     }

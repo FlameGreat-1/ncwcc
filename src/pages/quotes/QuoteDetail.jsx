@@ -113,6 +113,7 @@ const QuoteDetail = () => {
         navigate(`${prefix}/quotes/${newQuote.id}`);
       } else {
         console.error('Invalid response from duplicate quote:', newQuote);
+        navigate(`${prefix}/quotes`);
       }
     } catch (err) {
       console.error('Duplicate failed:', err.message);
