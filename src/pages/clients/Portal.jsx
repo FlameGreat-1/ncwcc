@@ -56,14 +56,18 @@ const Portal = () => {
     ordering: '-created_at'
   });
 
-
   useEffect(() => {
     const path = location.pathname;
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
     
     if (path === '/clients/portal') {
       setCurrentView('dashboard');
     } else if (path === '/clients/quotes') {
       setCurrentView('quotes');
+      if (tabParam) {
+        setActiveQuotesTab(tabParam);
+      }
     } else if (path === '/clients/quotes/create') {
       setCurrentView('create-quote');
     } else if (path.includes('/clients/quotes/') && path.includes('/edit')) {
@@ -89,7 +93,7 @@ const Portal = () => {
     } else if (path.startsWith('/clients/calculator')) {
       setCurrentView('calculator');
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     if (currentView === 'quotes' || currentView === 'dashboard') {
@@ -139,8 +143,9 @@ const Portal = () => {
 
   const handleQuoteTabNavigation = (tab) => {
     setActiveQuotesTab(tab);
-    handleNavigation('quotes');
-  };  
+    navigate(`/clients/quotes?tab=${tab}`);
+  };
+  
 
   const handleInvoiceDownload = async (invoiceId) => {
     const result = await downloadInvoice(invoiceId);

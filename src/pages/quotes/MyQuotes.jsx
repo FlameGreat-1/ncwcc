@@ -4,11 +4,13 @@ import QuotesList from '../../components/quotes/QuotesList.jsx';
 import SEO from '../../components/common/SEO.jsx';
 import useQuotes from '../../hooks/useQuotes.js';
 
-const MyQuotes = () => {
+const MyQuotes = ({ activeTab: propActiveTab, onTabChange }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('all');
+  const [internalActiveTab, setInternalActiveTab] = useState('all');
   const [showStats, _setShowStats] = useState(true);
+  
+  const activeTab = propActiveTab || internalActiveTab;
 
   
   const { 
@@ -57,8 +59,10 @@ const MyQuotes = () => {
 
   useEffect(() => {
     const initialTab = searchParams.get('tab') || 'all';
-    setActiveTab(initialTab);
-  }, [searchParams]);
+    if (!propActiveTab) {
+      setInternalActiveTab(initialTab);
+    }
+  }, [searchParams, propActiveTab]);
 
   const getCurrentQuotes = () => {
     if (activeTab === 'all') {
@@ -69,11 +73,19 @@ const MyQuotes = () => {
   };
 
   const handleTabChange = (tabKey) => {
-    setActiveTab(tabKey);
-    if (tabKey === 'all') {
-      navigate('/quotes', { replace: true });
+    if (onTabChange) {
+      onTabChange(tabKey);
     } else {
-      navigate(`/quotes?tab=${tabKey}`, { replace: true });
+      setInternalActiveTab(tabKey);
+    }
+    
+    const isInPortal = window.location.pathname.includes('/clients/');
+    const basePath = isInPortal ? '/clients/quotes' : '/quotes';
+    
+    if (tabKey === 'all') {
+      navigate(basePath, { replace: true });
+    } else {
+      navigate(`${basePath}?tab=${tabKey}`, { replace: true });
     }
   };
 
