@@ -85,7 +85,7 @@ export const isVerified = () => {
 
 export const isGoogleUser = () => {
   const user = getUser();
-  return user?.is_google_user || user?.auth_provider === 'google';
+  return user?.auth_provider === 'google';
 };
 
 export const hasPermission = (permission) => {
