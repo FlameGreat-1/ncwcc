@@ -96,19 +96,24 @@ const MyQuotes = ({ activeTab: propActiveTab, onTabChange }) => {
     }).format(amount);
   };
 
-  const getQuickActions = () => [
-    {
-      label: 'Create Quote',
-      href: '/quotes/create',
-      className: 'theme-button',
-      primary: true
-    },
-    {
-      label: 'Calculator',
-      href: '/calculator',
-      className: 'px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-bold transition-all hover:app-bg-blue hover:text-white'
-    }
-  ];
+  const getQuickActions = () => {
+    const isInPortal = window.location.pathname.includes('/clients/');
+    const prefix = isInPortal ? '/clients' : '';
+    
+    return [
+      {
+        label: 'Create Quote',
+        href: `${prefix}/quotes/create`,
+        className: 'theme-button',
+        primary: true
+      },
+      {
+        label: 'Calculator',
+        href: `${prefix}/calculator`,
+        className: 'px-6 py-3 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-bold transition-all hover:app-bg-blue hover:text-white'
+      }
+    ];
+  };
 
   const handlePDFDownload = (quoteId) => {
     window.open(`/api/quotes/${quoteId}/pdf/`, '_blank');
@@ -258,7 +263,7 @@ const MyQuotes = ({ activeTab: propActiveTab, onTabChange }) => {
                       }
                     </p>
                     <Link
-                      to="/quotes/create"
+                      to={`${window.location.pathname.includes('/clients/') ? '/clients' : ''}/quotes/create`}
                       className="theme-button"
                     >
                       Create New Quote
@@ -309,7 +314,7 @@ const MyQuotes = ({ activeTab: propActiveTab, onTabChange }) => {
 
                         <div className="flex gap-2">
                           <Link
-                            to={`/quotes/${quote.id}`}
+                            to={`${window.location.pathname.includes('/clients/') ? '/clients' : ''}/quotes/${quote.id}`}
                             className="flex-1 text-center px-4 py-2 bg-transparent border-2 app-border-blue app-text-primary rounded-full font-medium transition-all hover:app-bg-blue hover:text-white"
                           >
                             View Details
