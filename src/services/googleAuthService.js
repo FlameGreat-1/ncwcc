@@ -111,7 +111,6 @@ class GoogleAuthService {
     }
   
     return new Promise((resolve) => {
-
       const originalCallback = window.google.accounts.id.callback;
       window.google.accounts.id.callback = async (response) => {
         try {
@@ -171,47 +170,69 @@ class GoogleAuthService {
   }
   
   async registerWithGoogle(userType = 'client', clientType = 'general', phoneNumber = '') {
+    console.log("Starting Google Registration process...");
     if (!this.isInitialized) {
       await this.initializeGoogleAuth();
+      console.log("Google Auth initialized for registration:", this.isInitialized);
     }
 
     return new Promise((resolve) => {
+      const originalCallback = window.google.accounts.id.callback;
+      window.google.accounts.id.callback = async (response) => {
+        try {
+          console.log("Google credential received for registration:", response ? "yes" : "no");
+          if (response && response.credential) {
+            console.log("Registration credential length:", response.credential.length);
+            console.log("Registration credential preview:", response.credential.substring(0, 20) + "...");
+          }
+          
+          const credentialResponse = await this.handleCredentialResponse(response);
+          console.log("Registration credential processed:", credentialResponse);
+          
+          if (!credentialResponse.success) {
+            console.log("Registration credential processing failed:", credentialResponse.error);
+            resolve(credentialResponse);
+            return;
+          }
+
+          console.log("About to call authService.googleRegister with credential");
+          try {
+            const authResponse = await authService.googleRegister(
+              response.credential,
+              userType,
+              clientType,
+              phoneNumber
+            );
+            console.log("Registration response received:", authResponse);
+            resolve(authResponse);
+          } catch (authError) {
+            console.error("Error in authService.googleRegister:", authError);
+            resolve({
+              success: false,
+              error: 'Error calling backend for registration: ' + (authError.message || 'Unknown error'),
+            });
+          }
+        } catch (error) {
+          console.error("Error in Google registration flow:", error);
+          resolve({
+            success: false,
+            error: 'Google registration failed: ' + (error.message || 'Unknown error'),
+          });
+        } finally {
+          window.google.accounts.id.callback = originalCallback;
+        }
+      };
+
       window.google.accounts.id.prompt((notification) => {
+        console.log("Google prompt notification for registration:", notification);
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          console.log("Google Sign-In for registration was cancelled or not displayed");
           resolve({
             success: false,
             error: 'Google Sign-In was cancelled or not displayed',
           });
         }
       });
-
-      const originalCallback = window.google.accounts.id.callback;
-      window.google.accounts.id.callback = async (response) => {
-        try {
-          const credentialResponse = await this.handleCredentialResponse(response);
-          
-          if (!credentialResponse.success) {
-            resolve(credentialResponse);
-            return;
-          }
-
-          const authResponse = await authService.googleRegister(
-            response.credential,
-            userType,
-            clientType,
-            phoneNumber
-          );
-
-          resolve(authResponse);
-        } catch (error) {
-          resolve({
-            success: false,
-            error: 'Google registration failed',
-          });
-        } finally {
-          window.google.accounts.id.callback = originalCallback;
-        }
-      };
     });
   }
 
@@ -237,27 +258,54 @@ class GoogleAuthService {
   }
 
   async linkGoogleAccount() {
+    console.log("Starting Google Account Linking process...");
     if (!this.isInitialized) {
       await this.initializeGoogleAuth();
+      console.log("Google Auth initialized for account linking:", this.isInitialized);
     }
 
     return new Promise((resolve) => {
-      window.google.accounts.id.prompt();
-
       const originalCallback = window.google.accounts.id.callback;
       window.google.accounts.id.callback = async (response) => {
         try {
-          const linkResponse = await authService.linkSocialAccount('google', response.credential);
-          resolve(linkResponse);
+          console.log("Google credential received for account linking:", response ? "yes" : "no");
+          if (response && response.credential) {
+            console.log("Account linking credential length:", response.credential.length);
+          }
+          
+          console.log("About to call authService.linkSocialAccount with credential");
+          try {
+            const linkResponse = await authService.linkSocialAccount('google', response.credential);
+            console.log("Account linking response received:", linkResponse);
+            resolve(linkResponse);
+          } catch (authError) {
+            console.error("Error in authService.linkSocialAccount:", authError);
+            resolve({
+              success: false,
+              error: 'Error linking account: ' + (authError.message || 'Unknown error'),
+            });
+          }
         } catch (error) {
+          console.error("Error in Google account linking flow:", error);
           resolve({
             success: false,
-            error: 'Failed to link Google account',
+            error: 'Failed to link Google account: ' + (error.message || 'Unknown error'),
           });
         } finally {
           window.google.accounts.id.callback = originalCallback;
         }
       };
+
+      window.google.accounts.id.prompt((notification) => {
+        console.log("Google prompt notification for account linking:", notification);
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          console.log("Google Sign-In for account linking was cancelled or not displayed");
+          resolve({
+            success: false,
+            error: 'Google Sign-In was cancelled or not displayed',
+          });
+        }
+      });
     });
   }
 
