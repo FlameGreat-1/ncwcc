@@ -4,17 +4,29 @@ class GoogleAuthService {
   constructor() {
     this.isInitialized = false;
     this.clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    this.googleAuthCallback = null;
   }
 
-  async initializeGoogleAuth() {
+  async initializeGoogleAuth(callbackFn = null) {
     if (this.isInitialized || !this.clientId) {
       return this.isInitialized;
     }
   
     try {
       await this.loadGoogleScript();
+      
+      this.googleAuthCallback = callbackFn;
+      
       await window.google.accounts.id.initialize({
         client_id: this.clientId,
+        callback: (response) => {
+          console.log("Credential received directly in initialize callback");
+          if (this.googleAuthCallback) {
+            this.googleAuthCallback(response);
+          } else {
+            this.handleCredentialResponse(response);
+          }
+        },
         auto_select: false,
         cancel_on_tap_outside: true,
       });
@@ -105,14 +117,9 @@ class GoogleAuthService {
 
   async signInWithGoogle(userType = 'client', clientType = 'general') {
     console.log("Starting Google Sign-In process...");
-    if (!this.isInitialized) {
-      await this.initializeGoogleAuth();
-      console.log("Google Auth initialized:", this.isInitialized);
-    }
-  
-    return new Promise((resolve) => {
-      const originalCallback = window.google.accounts.id.callback;
-      window.google.accounts.id.callback = async (response) => {
+    
+    return new Promise(async (resolve) => {
+      const handleGoogleResponse = async (response) => {
         try {
           console.log("Google credential received:", response ? "yes" : "no");
           if (response && response.credential) {
@@ -151,10 +158,15 @@ class GoogleAuthService {
             success: false,
             error: 'Google authentication failed: ' + (error.message || 'Unknown error'),
           });
-        } finally {
-          window.google.accounts.id.callback = originalCallback;
         }
       };
+      
+      if (!this.isInitialized) {
+        await this.initializeGoogleAuth(handleGoogleResponse);
+        console.log("Google Auth initialized:", this.isInitialized);
+      } else {
+        this.googleAuthCallback = handleGoogleResponse;
+      }
 
       window.google.accounts.id.prompt((notification) => {
         console.log("Google prompt notification:", notification);
@@ -171,14 +183,9 @@ class GoogleAuthService {
   
   async registerWithGoogle(userType = 'client', clientType = 'general', phoneNumber = '') {
     console.log("Starting Google Registration process...");
-    if (!this.isInitialized) {
-      await this.initializeGoogleAuth();
-      console.log("Google Auth initialized for registration:", this.isInitialized);
-    }
-
-    return new Promise((resolve) => {
-      const originalCallback = window.google.accounts.id.callback;
-      window.google.accounts.id.callback = async (response) => {
+    
+    return new Promise(async (resolve) => {
+      const handleGoogleResponse = async (response) => {
         try {
           console.log("Google credential received for registration:", response ? "yes" : "no");
           if (response && response.credential) {
@@ -218,10 +225,15 @@ class GoogleAuthService {
             success: false,
             error: 'Google registration failed: ' + (error.message || 'Unknown error'),
           });
-        } finally {
-          window.google.accounts.id.callback = originalCallback;
         }
       };
+      
+      if (!this.isInitialized) {
+        await this.initializeGoogleAuth(handleGoogleResponse);
+        console.log("Google Auth initialized for registration:", this.isInitialized);
+      } else {
+        this.googleAuthCallback = handleGoogleResponse;
+      }
 
       window.google.accounts.id.prompt((notification) => {
         console.log("Google prompt notification for registration:", notification);
@@ -259,14 +271,9 @@ class GoogleAuthService {
 
   async linkGoogleAccount() {
     console.log("Starting Google Account Linking process...");
-    if (!this.isInitialized) {
-      await this.initializeGoogleAuth();
-      console.log("Google Auth initialized for account linking:", this.isInitialized);
-    }
-
-    return new Promise((resolve) => {
-      const originalCallback = window.google.accounts.id.callback;
-      window.google.accounts.id.callback = async (response) => {
+    
+    return new Promise(async (resolve) => {
+      const handleGoogleResponse = async (response) => {
         try {
           console.log("Google credential received for account linking:", response ? "yes" : "no");
           if (response && response.credential) {
@@ -291,10 +298,15 @@ class GoogleAuthService {
             success: false,
             error: 'Failed to link Google account: ' + (error.message || 'Unknown error'),
           });
-        } finally {
-          window.google.accounts.id.callback = originalCallback;
         }
       };
+      
+      if (!this.isInitialized) {
+        await this.initializeGoogleAuth(handleGoogleResponse);
+        console.log("Google Auth initialized for account linking:", this.isInitialized);
+      } else {
+        this.googleAuthCallback = handleGoogleResponse;
+      }
 
       window.google.accounts.id.prompt((notification) => {
         console.log("Google prompt notification for account linking:", notification);
