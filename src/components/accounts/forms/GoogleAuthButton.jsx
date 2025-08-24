@@ -26,9 +26,9 @@ const GoogleAuthButton = ({
 
   const handleGoogleAuth = async () => {
     if (disabled || isLoading) return;
-
+  
     setIsLoading(true);
-
+  
     try {
       let response;
       
@@ -37,8 +37,10 @@ const GoogleAuthButton = ({
       } else {
         response = await googleLogin(userType, clientType);
       }
-
-      if (response.success) {
+  
+      console.log("Google auth complete response:", response);
+      
+      if (response.success || response.token || (response.user && response.user.id)) {
         onSuccess?.(response);
       } else {
         onError?.(response.error || 'Google authentication failed');
