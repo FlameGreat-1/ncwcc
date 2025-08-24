@@ -118,7 +118,6 @@ class AuthService {
 
   async googleRegister(token, userType = 'client', clientType = 'general', phoneNumber = '') {
     try {
-      console.log("Sending Google register request with token length:", token?.length);
       const response = await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_REGISTER, {
         access_token: token,
         user_type: userType,
@@ -127,10 +126,8 @@ class AuthService {
       });
       
       const data = response.data;
-      console.log("Google register response received:", data);
       
       if (data.token) {
-        // Create a proper user object from the response
         const user = {
           id: data.user_id,
           email: data.email,
@@ -158,11 +155,41 @@ class AuthService {
         errors: {}
       };
     } catch (error) {
-      console.error("Google register error:", error.message);
       if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message || 'Google registration failed';
+        
+        if (errorMessage.includes("already exists") || 
+            (error.response.status === 400 && error.response.data.email)) {
+          
+          try {
+            const loginResponse = await this.googleAuth(token, userType, clientType);
+            if (loginResponse.success) {
+              return {
+                success: true,
+                user: loginResponse.user,
+                token: loginResponse.token,
+                message: 'Signed in with existing account'
+              };
+            }
+            return {
+              success: false,
+              error: 'This email is already registered. Please sign in instead.',
+              accountExists: true,
+              errors: error.response.data
+            };
+          } catch (loginError) {
+            return {
+              success: false,
+              error: 'This email is already registered. Please sign in instead.',
+              accountExists: true,
+              errors: error.response.data
+            };
+          }
+        }
+        
         return {
           success: false,
-          error: error.response.data.message || 'Google registration failed',
+          error: errorMessage,
           errors: error.response.data
         };
       }

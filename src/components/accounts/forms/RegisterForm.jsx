@@ -26,6 +26,7 @@ const RegisterForm = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [focusedFields, setFocusedFields] = useState({});
+  const [showLoginLink, setShowLoginLink] = useState(false);
 
   const { registerUser, loading, error, setError } = useRegister();
   const { isDark } = useTheme();
@@ -161,7 +162,11 @@ const RegisterForm = ({
   };
 
   const handleGoogleError = (error) => {
-    onError?.(error || 'Google registration failed. Please try again.');
+    if (typeof error === 'object' && error.accountExists) {
+      setError('This email is already registered. Please sign in instead.');
+    } else {
+      onError?.(error || 'Google registration failed. Please try again.');
+    }
   };
 
   const getInputClasses = (fieldName, hasError = false) => {
