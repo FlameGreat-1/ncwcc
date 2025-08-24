@@ -155,41 +155,30 @@ class AuthService {
         errors: {}
       };
     } catch (error) {
-      if (error.response && error.response.data) {
-        const errorMessage = error.response.data.message || 'Google registration failed';
+      if (error.response && error.response.status === 400) {
+        const errorData = error.response.data;
+        const errorMsg = errorData.error || '';
         
-        if (errorMessage.includes("already exists") || 
-            (error.response.status === 400 && error.response.data.email)) {
-          
+        if (errorMsg.includes('already exists')) {
           try {
             const loginResponse = await this.googleAuth(token, userType, clientType);
-            if (loginResponse.success) {
-              return {
-                success: true,
-                user: loginResponse.user,
-                token: loginResponse.token,
-                message: 'Signed in with existing account'
-              };
+            if (loginResponse && loginResponse.success) {
+              return loginResponse;
             }
-            return {
-              success: false,
-              error: 'This email is already registered. Please sign in instead.',
-              accountExists: true,
-              errors: error.response.data
-            };
-          } catch (loginError) {
-            return {
-              success: false,
-              error: 'This email is already registered. Please sign in instead.',
-              accountExists: true,
-              errors: error.response.data
-            };
-          }
+          } catch (loginError) {}
+          
+          return {
+            success: false,
+            error: 'This email is already registered. Please sign in instead.',
+            accountExists: true
+          };
         }
-        
+      }
+      
+      if (error.response && error.response.data) {
         return {
           success: false,
-          error: errorMessage,
+          error: error.response.data.message || error.response.data.error || 'Google registration failed',
           errors: error.response.data
         };
       }
@@ -201,7 +190,7 @@ class AuthService {
       };
     }
   }
-  
+
   async socialLogin(provider, accessToken) {
     try {
       const response = await apiService.post(API_ENDPOINTS.AUTH.SOCIAL_LOGIN, {
