@@ -86,10 +86,8 @@ const LoginForm = ({
       onError?.(response.error || 'Login failed');
     }
   };
-
+  
   const handleGoogleSuccess = (response) => {
-    console.log("Google login response:", response);
-    
     const formattedResponse = {
       success: true,
       user: response.user || (response.data && response.data.user) || {},
@@ -100,7 +98,6 @@ const LoginForm = ({
       formattedResponse.user.user_type = response.user_type;
     }
     
-    console.log("Formatted response for parent:", formattedResponse);
     onSuccess?.(formattedResponse);
   };
   

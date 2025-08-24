@@ -72,7 +72,6 @@ class AuthService {
 
   async googleAuth(token, userType = 'client', clientType = 'general') {
     try {
-      console.log("Sending Google auth request with token length:", token?.length);
       const response = await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_AUTH, {
         access_token: token,
         user_type: userType,
@@ -80,7 +79,6 @@ class AuthService {
       });
       
       const data = response.data;
-      console.log("Google auth response received:", data);
       
       if (data.token) {
         this.setAuthData(data.token, data);
@@ -99,7 +97,6 @@ class AuthService {
         errors: {}
       };
     } catch (error) {
-      console.error("Google auth error:", error.message);
       if (error.response && error.response.data) {
         return {
           success: false,
@@ -115,7 +112,7 @@ class AuthService {
       };
     }
   }
-
+  
   async googleRegister(token, userType = 'client', clientType = 'general', phoneNumber = '') {
     try {
       const response = await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_REGISTER, {
@@ -355,7 +352,6 @@ class AuthService {
 
   async linkSocialAccount(provider, token) {
     try {
-      console.log("Linking social account:", provider);
       const response = await apiService.post(API_ENDPOINTS.PROFILE.LINK, {
         provider,
         access_token: token,

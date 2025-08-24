@@ -67,44 +67,32 @@ export const useLogin = () => {
   const { login } = useAuth();
 
   const loginUser = useCallback(async (credentials) => {
-    console.log("🔍 useLogin - Starting login with credentials:", credentials);
     setLoading(true);
     setError(null);
 
     try {
-      console.log("🔍 useLogin - Calling authService.login...");
       const response = await authService.login(credentials);
-      console.log("🔍 useLogin - authService response:", response);
       
       if (response.token && response.user) {
-        console.log("🔍 useLogin - Login successful, calling login()");
-        console.log("🔍 useLogin - User data:", response.user);
-        console.log("🔍 useLogin - Token:", response.token);
-        
         login(response.user, response.token);
         
         const redirectPath = redirectAfterLogin(response.user.user_type);
-        console.log("🔍 useLogin - redirectAfterLogin result:", redirectPath);
         
         const result = {
           success: true,
           user: response.user,
           redirectTo: redirectPath,
         };
-        console.log("🔍 useLogin - Returning result:", result);
         return result;
       } else {
-        console.log("🔍 useLogin - Login failed:", response.message);
         setError(response.message || 'Login failed');
         return { success: false, error: response.message };
       }
     } catch (err) {
-      console.error("🔍 useLogin - Error caught:", err);
       const errorMessage = 'Login failed. Please try again.';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
-      console.log("🔍 useLogin - Finally block");
       setLoading(false);
     }
   }, [login]);
@@ -283,16 +271,13 @@ export const useEmailVerification = () => {
   const { verifyEmail: contextVerifyEmail, resendVerification: contextResendVerification } = useAuth();
 
   const verifyEmail = useCallback(async (token) => {
-    console.log("🔍 useEmailVerification - Using AuthContext verifyEmail");
     setLoading(true);
     setError(null);
 
     try {
       const response = await contextVerifyEmail(token);
-      console.log("🔍 useEmailVerification - Context response:", response);
       return response;
     } catch (err) {
-      console.error("🔍 useEmailVerification - Error:", err);
       setError('Email verification failed. Please try again.');
       return { success: false, error: 'Email verification failed. Please try again.' };
     } finally {
@@ -301,16 +286,13 @@ export const useEmailVerification = () => {
   }, [contextVerifyEmail]);
 
   const resendVerification = useCallback(async (email) => {
-    console.log("🔍 useEmailVerification - Using AuthContext resendVerification");
     setLoading(true);
     setError(null);
 
     try {
       const response = await contextResendVerification(email);
-      console.log("🔍 useEmailVerification - Resend response:", response);
       return response;
     } catch (err) {
-      console.error("🔍 useEmailVerification - Resend error:", err);
       setError('Failed to resend verification email. Please try again.');
       return { success: false, error: 'Failed to resend verification email. Please try again.' };
     } finally {
