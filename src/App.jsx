@@ -92,22 +92,13 @@ const LayoutWrapper = ({ children }) => {
   const isQuoteRoute = location.pathname.startsWith('/quotes');
   const isAccountRoute = location.pathname.startsWith('/accounts');
 
-  console.log('🔍 LayoutWrapper - Current path:', location.pathname);
-  console.log('🔍 LayoutWrapper - isPortalRoute:', isPortalRoute);
-  console.log('🔍 LayoutWrapper - isQuoteRoute:', isQuoteRoute);
-  console.log('🔍 LayoutWrapper - isAccountRoute:', isAccountRoute);
-  console.log('🔍 LayoutWrapper - Should hide Header/Footer:', isPortalRoute || isQuoteRoute || isAccountRoute);
-
   if (isPortalRoute || isQuoteRoute || isAccountRoute) {
-    console.log('🔍 LayoutWrapper - Rendering WITHOUT Header/Footer');
     return (
       <div className="min-h-screen app-bg-primary app-text-primary app-transition">
         {children}
       </div>
     );
   }
-
-  console.log('🔍 LayoutWrapper - Rendering WITH Header/Footer');
 
   return (
     <div className="min-h-screen app-bg-primary app-text-primary flex flex-col app-transition">
@@ -120,46 +111,54 @@ const LayoutWrapper = ({ children }) => {
   );
 };
 
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/about" element={<About />} />
+    <Route path="/services" element={<Services />} />
+    <Route path="/contact" element={<Contact />} />
+    <Route path="/quote" element={<QuoteCalculator />} />
+    <Route path="/gallery" element={<Gallery />} />
+    <Route path="/ndis" element={<NDISInfo />} />
+    <Route path="/faq" element={<FAQ />} />
+    
+    <Route path="/accounts/login" element={<Login />} />
+    <Route path="/accounts/register" element={<Register />} />
+    <Route path="/accounts/password-reset" element={<PasswordReset />} />
+    <Route path="/accounts/email-verification" element={<EmailVerification />} />
+    
+    <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/quotes" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/quotes/create" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/quotes/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/quotes/:id/edit" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/invoices" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/invoices/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/appointments" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/documents" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/messages" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    <Route path="/clients/calculator" element={<ClientRoute><ClientPortal /></ClientRoute>} />
+    
+    <Route path="/quotes" element={<Navigate to="/clients/quotes" replace />} />
+    <Route path="/quotes/create" element={<Navigate to="/clients/quotes/create" replace />} />
+    <Route path="/quotes/:id" element={<Navigate to="/clients/quotes/:id" replace />} />
+    <Route path="/quotes/:id/edit" element={<Navigate to="/clients/quotes/:id/edit" replace />} />
+    
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
+
 const AppContent = () => {
   return (
     <LayoutWrapper>
       <Suspense fallback={<LoadingFallback />}>
-        <ErrorBoundary>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/quote" element={<QuoteCalculator />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/ndis" element={<NDISInfo />} />
-            <Route path="/faq" element={<FAQ />} />
-            
-            <Route path="/accounts/login" element={<Login />} />
-            <Route path="/accounts/register" element={<Register />} />
-            <Route path="/accounts/password-reset" element={<PasswordReset />} />
-            <Route path="/accounts/email-verification" element={<EmailVerification />} />
-            
-            <Route path="/clients/portal" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/quotes" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/quotes/create" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/quotes/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/quotes/:id/edit" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/invoices" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/invoices/:id" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/appointments" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/documents" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/messages" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            <Route path="/clients/calculator" element={<ClientRoute><ClientPortal /></ClientRoute>} />
-            
-            <Route path="/quotes" element={<Navigate to="/clients/quotes" replace />} />
-            <Route path="/quotes/create" element={<Navigate to="/clients/quotes/create" replace />} />
-            <Route path="/quotes/:id" element={<Navigate to="/clients/quotes/:id" replace />} />
-            <Route path="/quotes/:id/edit" element={<Navigate to="/clients/quotes/:id/edit" replace />} />
-            
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </ErrorBoundary>
+        {process.env.NODE_ENV === 'development' ? (
+          <ErrorBoundary>
+            <AppRoutes />
+          </ErrorBoundary>
+        ) : (
+          <AppRoutes />
+        )}
       </Suspense>
     </LayoutWrapper>
   );
