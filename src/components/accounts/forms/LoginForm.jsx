@@ -88,9 +88,22 @@ const LoginForm = ({
   };
 
   const handleGoogleSuccess = (response) => {
-    onSuccess?.(response);
+    console.log("Google login response:", response);
+    
+    const formattedResponse = {
+      success: true,
+      user: response.user || (response.data && response.data.user) || {},
+      redirectTo: response.redirectTo || null
+    };
+    
+    if (!formattedResponse.user.user_type && response.user_type) {
+      formattedResponse.user.user_type = response.user_type;
+    }
+    
+    console.log("Formatted response for parent:", formattedResponse);
+    onSuccess?.(formattedResponse);
   };
-
+  
   const handleGoogleError = (error) => {
     onError?.(error);
   };
