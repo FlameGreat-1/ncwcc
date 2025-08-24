@@ -80,13 +80,24 @@ class AuthService {
       });
       
       const data = response.data;
-      console.log("Google auth response received:", data?.success);
+      console.log("Google auth response received:", data);
       
-      if (data.success && data.data.token) {
+      if (data.token) {
+        this.setAuthData(data.token, data);
+        return {
+          success: true,
+          ...data
+        };
+      } else if (data.success && data.data && data.data.token) {
         this.setAuthData(data.data.token, data.data);
+        return data;
       }
       
-      return data;
+      return {
+        success: false,
+        error: 'Invalid response format',
+        errors: {}
+      };
     } catch (error) {
       console.error("Google auth error:", error.message);
       if (error.response && error.response.data) {
@@ -104,7 +115,7 @@ class AuthService {
       };
     }
   }
-
+  
   async googleRegister(token, userType = 'client', clientType = 'general', phoneNumber = '') {
     try {
       console.log("Sending Google register request with token length:", token?.length);
@@ -122,12 +133,10 @@ class AuthService {
         this.setAuthData(data.token, data);
         return {
           success: true,
-          data: data,
+          user: data.user || data,
           message: data.message || 'Google registration successful'
         };
-      }
-
-      else if (data.success && data.data && data.data.token) {
+      } else if (data.success && data.data && data.data.token) {
         this.setAuthData(data.data.token, data.data);
         return data;
       }
@@ -154,7 +163,7 @@ class AuthService {
       };
     }
   }
-
+  
   async socialLogin(provider, accessToken) {
     try {
       const response = await apiService.post(API_ENDPOINTS.AUTH.SOCIAL_LOGIN, {
@@ -164,11 +173,22 @@ class AuthService {
       
       const data = response.data;
       
-      if (data.success && data.data.token) {
+      if (data.token) {
+        this.setAuthData(data.token, data);
+        return {
+          success: true,
+          ...data
+        };
+      } else if (data.success && data.data && data.data.token) {
         this.setAuthData(data.data.token, data.data);
+        return data;
       }
       
-      return data;
+      return {
+        success: false,
+        error: 'Invalid response format',
+        errors: {}
+      };
     } catch (error) {
       if (error.response && error.response.data) {
         return {
