@@ -116,13 +116,27 @@ class AuthService {
       });
       
       const data = response.data;
-      console.log("Google register response received:", data?.success);
+      console.log("Google register response received:", data);
       
-      if (data.success && data.data.token) {
+      if (data.token) {
+        this.setAuthData(data.token, data);
+        return {
+          success: true,
+          data: data,
+          message: data.message || 'Google registration successful'
+        };
+      }
+
+      else if (data.success && data.data && data.data.token) {
         this.setAuthData(data.data.token, data.data);
+        return data;
       }
       
-      return data;
+      return {
+        success: false,
+        error: 'Invalid response format',
+        errors: {}
+      };
     } catch (error) {
       console.error("Google register error:", error.message);
       if (error.response && error.response.data) {
