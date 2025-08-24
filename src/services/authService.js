@@ -160,13 +160,6 @@ class AuthService {
         const errorMsg = errorData.error || '';
         
         if (errorMsg.includes('already exists')) {
-          try {
-            const loginResponse = await this.googleAuth(token, userType, clientType);
-            if (loginResponse && loginResponse.success) {
-              return loginResponse;
-            }
-          } catch (loginError) {}
-          
           return {
             success: false,
             error: 'This email is already registered. Please sign in instead.',
@@ -190,7 +183,7 @@ class AuthService {
       };
     }
   }
-
+  
   async socialLogin(provider, accessToken) {
     try {
       const response = await apiService.post(API_ENDPOINTS.AUTH.SOCIAL_LOGIN, {
