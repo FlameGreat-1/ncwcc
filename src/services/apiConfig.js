@@ -69,14 +69,10 @@ apiClient.interceptors.request.use(
     if (token && token.trim()) {
       config.headers = config.headers || {};
       config.headers.Authorization = `Token ${token}`;
-      console.log('🔍 Request interceptor added token:', token.substring(0, 10) + '...');
-    } else {
-      console.log('🔍 Request interceptor: No token found');
     }
     return config;
   },
   (error) => {
-    console.error('🔍 Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -87,7 +83,6 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      console.log('🔍 401 error - clearing auth data');
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       window.location.href = '/accounts/login';
@@ -100,7 +95,6 @@ const initializeAuth = () => {
   const token = localStorage.getItem('authToken');
   if (token && token.trim()) {
     apiClient.defaults.headers.common['Authorization'] = `Token ${token}`;
-    console.log('🔍 Auth initialized with token:', token.substring(0, 10) + '...');
   }
 };
 
