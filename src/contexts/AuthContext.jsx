@@ -204,17 +204,25 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = useCallback(async (userType = 'client', clientType = 'general') => {
     setLoading(true);
     clearError();
-
+  
     try {
       const response = await googleAuthService.signInWithGoogle(userType, clientType);
       
       if (response.success) {
-        login(response.data.user, response.data.token);
-        return response;
-      } else {
-        setError(response.error || 'Google login failed');
-        return response;
+        const userData = response.data?.user || response.user;
+        const token = response.data?.token || response.token;
+        
+        if (userData && token) {
+          login(userData, token);
+          return {
+            success: true,
+            data: { user: userData, token: token }
+          };
+        }
       }
+      
+      setError(response.error || 'Google login failed');
+      return response;
     } catch (error) {
       const errorMessage = 'Google login failed. Please try again.';
       setError(errorMessage);
@@ -223,21 +231,29 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   }, [login, setLoading, clearError, setError]);
-
+  
   const registerWithGoogle = useCallback(async (userType = 'client', clientType = 'general', phoneNumber = '') => {
     setLoading(true);
     clearError();
-
+  
     try {
       const response = await googleAuthService.registerWithGoogle(userType, clientType, phoneNumber);
       
       if (response.success) {
-        login(response.data.user, response.data.token);
-        return response;
-      } else {
-        setError(response.error || 'Google registration failed');
-        return response;
+        const userData = response.data?.user || response.user;
+        const token = response.data?.token || response.token;
+        
+        if (userData && token) {
+          login(userData, token);
+          return {
+            success: true,
+            data: { user: userData, token: token }
+          };
+        }
       }
+      
+      setError(response.error || 'Google registration failed');
+      return response;
     } catch (error) {
       const errorMessage = 'Google registration failed. Please try again.';
       setError(errorMessage);
@@ -246,7 +262,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   }, [login, setLoading, clearError, setError]);
-
+  
   const changePassword = useCallback(async (currentPassword, newPassword) => {
     setLoading(true);
     clearError();

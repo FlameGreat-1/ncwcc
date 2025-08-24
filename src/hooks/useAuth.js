@@ -164,16 +164,21 @@ export const useGoogleAuth = () => {
       const response = await googleAuthService.signInWithGoogle(userType, clientType);
       
       if (response.success) {
-        login(response.data.user, response.data.token);
-        return {
-          success: true,
-          user: response.data.user,
-          redirectTo: redirectAfterLogin(response.data.user.user_type),
-        };
-      } else {
-        setError(response.error || 'Google login failed');
-        return { success: false, error: response.error };
+        const userData = response.data?.user || response.user;
+        const token = response.data?.token || response.token;
+        
+        if (userData && token) {
+          login(userData, token);
+          return {
+            success: true,
+            user: userData,
+            redirectTo: redirectAfterLogin(userData.user_type),
+          };
+        }
       }
+      
+      setError(response.error || 'Google login failed');
+      return { success: false, error: response.error };
     } catch (err) {
       const errorMessage = 'Google login failed. Please try again.';
       setError(errorMessage);
@@ -191,16 +196,21 @@ export const useGoogleAuth = () => {
       const response = await googleAuthService.registerWithGoogle(userType, clientType, phoneNumber);
       
       if (response.success) {
-        login(response.data.user, response.data.token);
-        return {
-          success: true,
-          user: response.data.user,
-          redirectTo: redirectAfterLogin(response.data.user.user_type),
-        };
-      } else {
-        setError(response.error || 'Google registration failed');
-        return { success: false, error: response.error };
+        const userData = response.data?.user || response.user;
+        const token = response.data?.token || response.token;
+        
+        if (userData && token) {
+          login(userData, token);
+          return {
+            success: true,
+            user: userData,
+            redirectTo: redirectAfterLogin(userData.user_type),
+          };
+        }
       }
+      
+      setError(response.error || 'Google registration failed');
+      return { success: false, error: response.error };
     } catch (err) {
       const errorMessage = 'Google registration failed. Please try again.';
       setError(errorMessage);
