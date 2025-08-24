@@ -115,7 +115,7 @@ class AuthService {
       };
     }
   }
-  
+
   async googleRegister(token, userType = 'client', clientType = 'general', phoneNumber = '') {
     try {
       console.log("Sending Google register request with token length:", token?.length);
@@ -130,10 +130,21 @@ class AuthService {
       console.log("Google register response received:", data);
       
       if (data.token) {
-        this.setAuthData(data.token, data);
+        // Create a proper user object from the response
+        const user = {
+          id: data.user_id,
+          email: data.email,
+          user_type: data.user_type || userType,
+          client_type: data.client_type || clientType,
+          is_verified: data.is_verified
+        };
+        
+        this.setAuthData(data.token, { user });
+        
         return {
           success: true,
-          user: data.user || data,
+          user: user,
+          token: data.token,
           message: data.message || 'Google registration successful'
         };
       } else if (data.success && data.data && data.data.token) {
