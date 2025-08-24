@@ -37,8 +37,11 @@ const GoogleAuthButton = ({
       } else {
         response = await googleLogin(userType, clientType);
       }
-  
-      console.log("Google auth complete response:", response);
+      
+      if (!response.success && response.accountExists) {
+        onError?.(response.error || 'This email is already registered. Please sign in instead.');
+        return;
+      }
       
       if (response.success || response.token || (response.user && response.user.id)) {
         onSuccess?.(response);
@@ -51,7 +54,7 @@ const GoogleAuthButton = ({
       setIsLoading(false);
     }
   };
-
+  
   const buttonText = mode === 'register' ? 'Sign up with Google' : 'Sign in with Google';
 
   return (
