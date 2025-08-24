@@ -20,7 +20,6 @@ class GoogleAuthService {
       await window.google.accounts.id.initialize({
         client_id: this.clientId,
         callback: (response) => {
-          console.log("Credential received directly in initialize callback");
           if (this.googleAuthCallback) {
             this.googleAuthCallback(response);
           } else {
@@ -33,7 +32,6 @@ class GoogleAuthService {
       this.isInitialized = true;
       return true;
     } catch (error) {
-      console.error('Failed to initialize Google Auth:', error);
       return false;
     }
   }
@@ -57,10 +55,7 @@ class GoogleAuthService {
 
   async handleCredentialResponse(response) {
     try {
-      console.log("handleCredentialResponse called with response:", response ? "yes" : "no");
-      
       if (!response || !response.credential) {
-        console.error("No credential in response");
         return {
           success: false,
           error: 'No credential received from Google',
@@ -68,11 +63,9 @@ class GoogleAuthService {
       }
       
       const credential = response.credential;
-      console.log("Credential received, length:", credential.length);
       
       try {
         const payload = this.parseJWT(credential);
-        console.log("JWT payload parsed successfully:", payload.email);
         
         return {
           success: true,
@@ -80,14 +73,12 @@ class GoogleAuthService {
           credential: credential,
         };
       } catch (parseError) {
-        console.error("Error parsing JWT:", parseError);
         return {
           success: false,
           error: 'Failed to parse Google credential: ' + parseError.message,
         };
       }
     } catch (error) {
-      console.error("General error in handleCredentialResponse:", error);
       return {
         success: false,
         error: 'Failed to process Google credential: ' + error.message,
@@ -97,7 +88,6 @@ class GoogleAuthService {
 
   parseJWT(token) {
     try {
-      console.log("Parsing JWT token...");
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(
@@ -107,53 +97,37 @@ class GoogleAuthService {
           .join('')
       );
       const payload = JSON.parse(jsonPayload);
-      console.log("JWT parsed successfully, email:", payload.email);
       return payload;
     } catch (error) {
-      console.error("Error parsing JWT:", error);
       throw new Error('Invalid JWT token: ' + error.message);
     }
   }
 
   async signInWithGoogle(userType = 'client', clientType = 'general') {
-    console.log("Starting Google Sign-In process...");
-    
     return new Promise(async (resolve) => {
       const handleGoogleResponse = async (response) => {
         try {
-          console.log("Google credential received:", response ? "yes" : "no");
-          if (response && response.credential) {
-            console.log("Credential length:", response.credential.length);
-            console.log("Credential preview:", response.credential.substring(0, 20) + "...");
-          }
-          
           const credentialResponse = await this.handleCredentialResponse(response);
-          console.log("Credential processed:", credentialResponse);
           
           if (!credentialResponse.success) {
-            console.log("Credential processing failed:", credentialResponse.error);
             resolve(credentialResponse);
             return;
           }
   
-          console.log("About to call authService.googleAuth with credential");
           try {
             const authResponse = await authService.googleAuth(
               response.credential,
               userType,
               clientType
             );
-            console.log("Auth response received:", authResponse);
             resolve(authResponse);
           } catch (authError) {
-            console.error("Error in authService.googleAuth:", authError);
             resolve({
               success: false,
               error: 'Error calling backend: ' + (authError.message || 'Unknown error'),
             });
           }
         } catch (error) {
-          console.error("Error in Google auth flow:", error);
           resolve({
             success: false,
             error: 'Google authentication failed: ' + (error.message || 'Unknown error'),
@@ -163,15 +137,12 @@ class GoogleAuthService {
       
       if (!this.isInitialized) {
         await this.initializeGoogleAuth(handleGoogleResponse);
-        console.log("Google Auth initialized:", this.isInitialized);
       } else {
         this.googleAuthCallback = handleGoogleResponse;
       }
 
       window.google.accounts.id.prompt((notification) => {
-        console.log("Google prompt notification:", notification);
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          console.log("Google Sign-In was cancelled or not displayed");
           resolve({
             success: false,
             error: 'Google Sign-In was cancelled or not displayed',
@@ -182,27 +153,16 @@ class GoogleAuthService {
   }
   
   async registerWithGoogle(userType = 'client', clientType = 'general', phoneNumber = '') {
-    console.log("Starting Google Registration process...");
-    
     return new Promise(async (resolve) => {
       const handleGoogleResponse = async (response) => {
         try {
-          console.log("Google credential received for registration:", response ? "yes" : "no");
-          if (response && response.credential) {
-            console.log("Registration credential length:", response.credential.length);
-            console.log("Registration credential preview:", response.credential.substring(0, 20) + "...");
-          }
-          
           const credentialResponse = await this.handleCredentialResponse(response);
-          console.log("Registration credential processed:", credentialResponse);
           
           if (!credentialResponse.success) {
-            console.log("Registration credential processing failed:", credentialResponse.error);
             resolve(credentialResponse);
             return;
           }
 
-          console.log("About to call authService.googleRegister with credential");
           try {
             const authResponse = await authService.googleRegister(
               response.credential,
@@ -210,17 +170,14 @@ class GoogleAuthService {
               clientType,
               phoneNumber
             );
-            console.log("Registration response received:", authResponse);
             resolve(authResponse);
           } catch (authError) {
-            console.error("Error in authService.googleRegister:", authError);
             resolve({
               success: false,
               error: 'Error calling backend for registration: ' + (authError.message || 'Unknown error'),
             });
           }
         } catch (error) {
-          console.error("Error in Google registration flow:", error);
           resolve({
             success: false,
             error: 'Google registration failed: ' + (error.message || 'Unknown error'),
@@ -230,15 +187,12 @@ class GoogleAuthService {
       
       if (!this.isInitialized) {
         await this.initializeGoogleAuth(handleGoogleResponse);
-        console.log("Google Auth initialized for registration:", this.isInitialized);
       } else {
         this.googleAuthCallback = handleGoogleResponse;
       }
 
       window.google.accounts.id.prompt((notification) => {
-        console.log("Google prompt notification for registration:", notification);
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          console.log("Google Sign-In for registration was cancelled or not displayed");
           resolve({
             success: false,
             error: 'Google Sign-In was cancelled or not displayed',
@@ -270,30 +224,19 @@ class GoogleAuthService {
   }
 
   async linkGoogleAccount() {
-    console.log("Starting Google Account Linking process...");
-    
     return new Promise(async (resolve) => {
       const handleGoogleResponse = async (response) => {
         try {
-          console.log("Google credential received for account linking:", response ? "yes" : "no");
-          if (response && response.credential) {
-            console.log("Account linking credential length:", response.credential.length);
-          }
-          
-          console.log("About to call authService.linkSocialAccount with credential");
           try {
             const linkResponse = await authService.linkSocialAccount('google', response.credential);
-            console.log("Account linking response received:", linkResponse);
             resolve(linkResponse);
           } catch (authError) {
-            console.error("Error in authService.linkSocialAccount:", authError);
             resolve({
               success: false,
               error: 'Error linking account: ' + (authError.message || 'Unknown error'),
             });
           }
         } catch (error) {
-          console.error("Error in Google account linking flow:", error);
           resolve({
             success: false,
             error: 'Failed to link Google account: ' + (error.message || 'Unknown error'),
@@ -303,15 +246,12 @@ class GoogleAuthService {
       
       if (!this.isInitialized) {
         await this.initializeGoogleAuth(handleGoogleResponse);
-        console.log("Google Auth initialized for account linking:", this.isInitialized);
       } else {
         this.googleAuthCallback = handleGoogleResponse;
       }
 
       window.google.accounts.id.prompt((notification) => {
-        console.log("Google prompt notification for account linking:", notification);
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          console.log("Google Sign-In for account linking was cancelled or not displayed");
           resolve({
             success: false,
             error: 'Google Sign-In was cancelled or not displayed',
